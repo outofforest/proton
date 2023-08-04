@@ -2,9 +2,12 @@ module build
 
 go 1.19
 
+replace github.com/outofforest/proton => ../
+
 require (
 	github.com/outofforest/build v1.12.1
 	github.com/outofforest/buildgo v0.7.2
+	github.com/outofforest/proton v0.0.0
 )
 
 require (
