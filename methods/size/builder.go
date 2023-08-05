@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	header = `// Size computes the required size of the buffer for marshaling the structure
+	header = `// Size computes the required size of the buffer for marshaling the structure.
 func (m *{{ .TypeName }}) Size() uint64 {
 `
 )

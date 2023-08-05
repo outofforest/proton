@@ -38,11 +38,6 @@ func generate() error {
 		pkg1.MsgSliceFloat32{},
 		pkg1.MsgSliceFloat64{},
 		pkg1.MsgMixed{},
-	); err != nil {
-		return err
-	}
-	if err := proton.Generate(
-		"test/pkg1/custom.proton.go",
 		pkg1.MsgUint64Custom{},
 		pkg1.MsgUint32Custom{},
 		pkg1.MsgUint16Custom{},

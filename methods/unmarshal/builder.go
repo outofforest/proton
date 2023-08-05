@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	header = `// Unmarshal unmarshals the structure
+	header = `// Unmarshal unmarshals the structure.
 func (m *{{ .TypeName }}) Unmarshal(b []byte) uint64 {
 `
 )

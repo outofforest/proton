@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	header = `// Marshal marshals the structure
+	header = `// Marshal marshals the structure.
 func (m *{{ .TypeName }}) Marshal(b []byte) uint64 {
 `
 )
