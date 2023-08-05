@@ -3,6 +3,7 @@ package proton
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"path"
 	"reflect"
@@ -29,15 +30,20 @@ func Generate(filePath string, msgs ...interface{}) error {
 	b := &bytes.Buffer{}
 	var pkg string
 
+	msgTypes := make([]reflect.Type, 0, len(msgs))
 	processed := map[reflect.Type]bool{}
 	stack := make([]reflect.Type, 0, len(msgs))
 	for _, msg := range msgs {
 		msgType := reflect.TypeOf(msg)
 		stack = append(stack, msgType)
+		if !processed[msgType] {
+			msgTypes = append(msgTypes, msgType)
+		}
 		processed[msgType] = true
 	}
 
 	tm := types.NewTypeMap()
+	tm.Import("github.com/pkg/errors")
 
 	for len(stack) > 0 {
 		msgType := stack[len(stack)-1]
@@ -52,7 +58,7 @@ func Generate(filePath string, msgs ...interface{}) error {
 		case pkg == "":
 			pkg = msgType.PkgPath()
 		case pkg != msgType.PkgPath():
-			return errors.New("all the types must belong to the same package")
+			return errors.New("all the msgTypes must belong to the same package")
 		}
 
 		for dep := range dependencies {
@@ -67,8 +73,15 @@ func Generate(filePath string, msgs ...interface{}) error {
 		b.WriteString("\n")
 	}
 
-	out := &bytes.Buffer{}
-	out.WriteString("package " + path.Base(pkg) + "\n")
+	out, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o644)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	defer out.Close()
+
+	if _, err := out.WriteString("package " + path.Base(pkg) + "\n"); err != nil {
+		return errors.WithStack(err)
+	}
 
 	if imports := tm.Imports(); len(imports) > 0 {
 		sdkPkgs := make([]string, 0, len(imports))
@@ -82,20 +95,44 @@ func Generate(filePath string, msgs ...interface{}) error {
 			}
 		}
 
-		out.WriteString("\nimport (\n")
-
-		writeImports(out, sdkPkgs, imports)
-		if len(sdkPkgs) > 0 && len(pkgs) > 0 {
-			out.WriteString("\n")
+		if _, err := out.WriteString("\nimport (\n"); err != nil {
+			return errors.WithStack(err)
 		}
-		writeImports(out, pkgs, imports)
 
-		out.WriteString(")\n")
+		if err := writeImports(out, sdkPkgs, imports); err != nil {
+			return err
+		}
+		if len(sdkPkgs) > 0 && len(pkgs) > 0 {
+			if _, err := out.WriteString("\n"); err != nil {
+				return errors.WithStack(err)
+			}
+		}
+		if err := writeImports(out, pkgs, imports); err != nil {
+			return err
+		}
+
+		if _, err := out.WriteString(")\n"); err != nil {
+			return errors.WithStack(err)
+		}
 	}
 
-	out.Write(b.Bytes())
+	if err := writeMsgConsts(out, msgTypes); err != nil {
+		return errors.WithStack(err)
+	}
 
-	return errors.WithStack(os.WriteFile(filePath, out.Bytes(), 0o600))
+	if err := writeMsgToIDMapper(out, msgTypes); err != nil {
+		return errors.WithStack(err)
+	}
+
+	if err := writeIDToMsgMapper(out, msgTypes); err != nil {
+		return errors.WithStack(err)
+	}
+
+	if _, err := out.Write(b.Bytes()); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
 }
 
 func generateMsg(msgType reflect.Type, tm types.TypeMap) ([]byte, map[reflect.Type]bool, error) {
@@ -158,15 +195,123 @@ func isSDKPkg(pkg string) bool {
 	return sdkPkgs[pkg]
 }
 
-func writeImports(out *bytes.Buffer, pkgs []string, aliases map[string]string) {
+func writeImports(out io.StringWriter, pkgs []string, aliases map[string]string) error {
 	sort.Strings(pkgs)
 	for _, pkg := range pkgs {
-		out.WriteString("	")
+		if _, err := out.WriteString("	"); err != nil {
+			return errors.WithStack(err)
+		}
 		alias := aliases[pkg]
 		if path.Base(pkg) == alias {
-			out.WriteString(fmt.Sprintf("\"%s\"\n", pkg))
+			if _, err := out.WriteString(fmt.Sprintf("\"%s\"\n", pkg)); err != nil {
+				return errors.WithStack(err)
+			}
 		} else {
-			out.WriteString(fmt.Sprintf("%s \"%s\"\n", alias, pkg))
+			if _, err := out.WriteString(fmt.Sprintf("%s \"%s\"\n", alias, pkg)); err != nil {
+				return errors.WithStack(err)
+			}
 		}
 	}
+
+	return nil
+}
+
+func writeMsgConsts(out io.StringWriter, msgTypes []reflect.Type) error {
+	const header = `
+// ID represents the ID of the message.
+type ID uint64
+
+const (
+`
+
+	if _, err := out.WriteString(header); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for i, msgType := range msgTypes {
+		if _, err := out.WriteString(fmt.Sprintf("\t// ID%[1]s is the ID of %[1]s message.\n", msgType.Name())); err != nil {
+			return errors.WithStack(err)
+		}
+		if i == 0 {
+			if _, err := out.WriteString(fmt.Sprintf("\tID%s ID = iota + 1\n", msgType.Name())); err != nil {
+				return errors.WithStack(err)
+			}
+		} else {
+			if _, err := out.WriteString(fmt.Sprintf("\tID%s\n", msgType.Name())); err != nil {
+				return errors.WithStack(err)
+			}
+		}
+	}
+
+	if _, err := out.WriteString(")\n"); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func writeMsgToIDMapper(out io.StringWriter, msgTypes []reflect.Type) error {
+	const header = `
+// MsgToID maps message to its ID.
+func MsgToID(m interface{}) (ID, error) {
+	switch m.(type) {
+`
+	const footer = `	default:
+		return 0, errors.Errorf("unknown message type %T", m)
+	}
+}
+`
+
+	const template = `	case *%[1]s:
+		return ID%[1]s, nil
+`
+
+	if _, err := out.WriteString(header); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, msgType := range msgTypes {
+		if _, err := out.WriteString(fmt.Sprintf(template, msgType.Name())); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if _, err := out.WriteString(footer); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func writeIDToMsgMapper(out io.StringWriter, msgTypes []reflect.Type) error {
+	const header = `
+// IDToMsg maps ID to the corresponding message.
+func IDToMsg(id ID) (interface{}, error) {
+	switch id {
+`
+	const footer = `	default:
+		return nil, errors.Errorf("unknown ID %d", id)
+	}
+}
+`
+
+	const template = `	case ID%[1]s:
+		return &%[1]s{}, nil
+`
+
+	if _, err := out.WriteString(header); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, msgType := range msgTypes {
+		if _, err := out.WriteString(fmt.Sprintf(template, msgType.Name())); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if _, err := out.WriteString(footer); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
 }
