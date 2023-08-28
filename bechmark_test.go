@@ -7,6 +7,9 @@ import (
 	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
 )
 
+// go test -bench=. -run=^$ -cpuprofile profile.out
+// go tool pprof -http="localhost:8000" pprofbin ./profile.out
+
 var _ iface = implValue{}
 var _ iface = &implPointer{}
 
@@ -39,134 +42,189 @@ var methodVar = func(arg string) string {
 var str = ""
 
 func BenchmarkValue(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
 	s := implValue{}
 
 	r := str
 
-	b.ResetTimer()
-	for i := 0; i < 100000; i++ {
-		r = s.Method(r)
+	for bi := 0; bi < b.N; bi++ {
+		b.StartTimer()
+		for i := 0; i < 100000; i++ {
+			r = s.Method(r)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkPointer(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
 	s := &implPointer{}
 
 	r := str
 
-	b.ResetTimer()
-	for i := 0; i < 100000; i++ {
-		r = s.Method(r)
+	for bi := 0; bi < b.N; bi++ {
+		b.StartTimer()
+		for i := 0; i < 100000; i++ {
+			r = s.Method(r)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkInterfaceValue(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
 	var s iface = implValue{}
 
 	r := str
 
-	b.ResetTimer()
-	for i := 0; i < 100000; i++ {
-		r = s.Method(r)
+	for bi := 0; bi < b.N; bi++ {
+		b.StartTimer()
+		for i := 0; i < 100000; i++ {
+			r = s.Method(r)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkInterfacePointer(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
 	var s iface = &implPointer{}
 
 	r := str
 
-	b.ResetTimer()
-	for i := 0; i < 100000; i++ {
-		r = s.Method(r)
+	for bi := 0; bi < b.N; bi++ {
+		b.StartTimer()
+		for i := 0; i < 100000; i++ {
+			r = s.Method(r)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkVarFunction(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
 	r := str
 
-	b.ResetTimer()
-	for i := 0; i < 100000; i++ {
-		r = methodVar(r)
+	for bi := 0; bi < b.N; bi++ {
+		b.StartTimer()
+		for i := 0; i < 100000; i++ {
+			r = methodVar(r)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkFunction(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
 	r := str
 
-	b.ResetTimer()
-	for i := 0; i < 100000; i++ {
-		r = method(r)
+	for bi := 0; bi < b.N; bi++ {
+		b.StartTimer()
+		for i := 0; i < 100000; i++ {
+			r = method(r)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkFunctionInVar(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
 	r := str
 	f := method
 
-	b.ResetTimer()
-	for i := 0; i < 100000; i++ {
-		r = f(r)
+	for bi := 0; bi < b.N; bi++ {
+		b.StartTimer()
+		for i := 0; i < 100000; i++ {
+			r = f(r)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkValueMethodInVar(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
 	r := str
 
 	s := implValue{}
 	f := s.Method
 
-	b.ResetTimer()
-	for i := 0; i < 100000; i++ {
-		r = f(r)
+	for bi := 0; bi < b.N; bi++ {
+		b.StartTimer()
+		for i := 0; i < 100000; i++ {
+			r = f(r)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkPointerMethodInVar(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
 	r := str
 
 	s := &implPointer{}
 	f := s.Method
 
-	b.ResetTimer()
-	for i := 0; i < 100000; i++ {
-		r = f(r)
+	for bi := 0; bi < b.N; bi++ {
+		b.StartTimer()
+		for i := 0; i < 100000; i++ {
+			r = f(r)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkInterfaceValueMethodInVar(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
 	r := str
 
 	var s iface = implValue{}
 	f := s.Method
 
-	b.ResetTimer()
-	for i := 0; i < 100000; i++ {
-		r = f(r)
+	for bi := 0; bi < b.N; bi++ {
+		b.StartTimer()
+		for i := 0; i < 100000; i++ {
+			r = f(r)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
 
 func BenchmarkInterfacePointerMethodInVar(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
 	r := str
 
 	var s iface = &implPointer{}
 	f := s.Method
 
-	b.ResetTimer()
-	for i := 0; i < 100000; i++ {
-		r = f(r)
+	for bi := 0; bi < b.N; bi++ {
+		b.StartTimer()
+		for i := 0; i < 100000; i++ {
+			r = f(r)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
 
 var msg = pkg1.MsgMixed{
@@ -255,14 +313,19 @@ var msg = pkg1.MsgMixed{
 }
 
 func BenchmarkMarshaling(b *testing.B) {
-	buf := make([]byte, msg.Size())
+	b.StopTimer()
+	b.ResetTimer()
 
 	var msg2 pkg1.MsgMixed
 
-	b.ResetTimer()
-	for i := 0; i < 10000; i++ {
-		msg.Marshal(buf)
-		msg2.Unmarshal(buf)
+	for bi := 0; bi < b.N; bi++ {
+		buf := make([]byte, msg.Size())
+
+		b.StartTimer()
+		for i := 0; i < 10000; i++ {
+			msg.Marshal(buf)
+			msg2.Unmarshal(buf)
+		}
+		b.StopTimer()
 	}
-	b.StopTimer()
 }
