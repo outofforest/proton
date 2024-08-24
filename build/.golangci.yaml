@@ -77,6 +77,8 @@ linters:
     - golint
     - nosnakecase
     - depguard
+    - mnd
+    - perfsprint
 
 linters-settings:
   nakedret:

@@ -11,7 +11,7 @@ import (
 // ForEachField iterates over fields in the type and calls a function for each public one
 func ForEachField(msgType reflect.Type, fn func(field reflect.StructField) error) error {
 	numOfFields := msgType.NumField()
-	for i := 0; i < numOfFields; i++ {
+	for i := range numOfFields {
 		field := msgType.Field(i)
 
 		if !field.IsExported() {

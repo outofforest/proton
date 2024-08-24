@@ -848,7 +848,7 @@ func Int64Unmarshal(typeName string) string {
 // AddIndent adds indentation to the code
 func AddIndent(code string, numOfIndentations int) string {
 	var indent string
-	for i := 0; i < numOfIndentations; i++ {
+	for range numOfIndentations {
 		indent += "\t"
 	}
 

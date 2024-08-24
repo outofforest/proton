@@ -51,7 +51,7 @@ func BenchmarkValue(b *testing.B) {
 
 	for bi := 0; bi < b.N; bi++ {
 		b.StartTimer()
-		for i := 0; i < 100000; i++ {
+		for range 100000 {
 			r = s.Method(r)
 		}
 		b.StopTimer()
@@ -68,7 +68,7 @@ func BenchmarkPointer(b *testing.B) {
 
 	for bi := 0; bi < b.N; bi++ {
 		b.StartTimer()
-		for i := 0; i < 100000; i++ {
+		for range 100000 {
 			r = s.Method(r)
 		}
 		b.StopTimer()
@@ -83,9 +83,9 @@ func BenchmarkInterfaceValue(b *testing.B) {
 
 	r := str
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		b.StartTimer()
-		for i := 0; i < 100000; i++ {
+		for range 100000 {
 			r = s.Method(r)
 		}
 		b.StopTimer()
@@ -100,9 +100,9 @@ func BenchmarkInterfacePointer(b *testing.B) {
 
 	r := str
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		b.StartTimer()
-		for i := 0; i < 100000; i++ {
+		for range 100000 {
 			r = s.Method(r)
 		}
 		b.StopTimer()
@@ -115,9 +115,9 @@ func BenchmarkVarFunction(b *testing.B) {
 
 	r := str
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		b.StartTimer()
-		for i := 0; i < 100000; i++ {
+		for range 100000 {
 			r = methodVar(r)
 		}
 		b.StopTimer()
@@ -130,9 +130,9 @@ func BenchmarkFunction(b *testing.B) {
 
 	r := str
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		b.StartTimer()
-		for i := 0; i < 100000; i++ {
+		for range 100000 {
 			r = method(r)
 		}
 		b.StopTimer()
@@ -146,9 +146,9 @@ func BenchmarkFunctionInVar(b *testing.B) {
 	r := str
 	f := method
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		b.StartTimer()
-		for i := 0; i < 100000; i++ {
+		for range 100000 {
 			r = f(r)
 		}
 		b.StopTimer()
@@ -164,9 +164,9 @@ func BenchmarkValueMethodInVar(b *testing.B) {
 	s := implValue{}
 	f := s.Method
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		b.StartTimer()
-		for i := 0; i < 100000; i++ {
+		for range 100000 {
 			r = f(r)
 		}
 		b.StopTimer()
@@ -182,9 +182,9 @@ func BenchmarkPointerMethodInVar(b *testing.B) {
 	s := &implPointer{}
 	f := s.Method
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		b.StartTimer()
-		for i := 0; i < 100000; i++ {
+		for range 100000 {
 			r = f(r)
 		}
 		b.StopTimer()
@@ -200,9 +200,9 @@ func BenchmarkInterfaceValueMethodInVar(b *testing.B) {
 	var s iface = implValue{}
 	f := s.Method
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		b.StartTimer()
-		for i := 0; i < 100000; i++ {
+		for range 100000 {
 			r = f(r)
 		}
 		b.StopTimer()
@@ -218,9 +218,9 @@ func BenchmarkInterfacePointerMethodInVar(b *testing.B) {
 	var s iface = &implPointer{}
 	f := s.Method
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		b.StartTimer()
-		for i := 0; i < 100000; i++ {
+		for range 100000 {
 			r = f(r)
 		}
 		b.StopTimer()
@@ -318,11 +318,11 @@ func BenchmarkMarshaling(b *testing.B) {
 
 	var msg2 pkg1.MsgMixed
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		buf := make([]byte, msg.Size())
 
 		b.StartTimer()
-		for i := 0; i < 10000; i++ {
+		for range 10000 {
 			msg.Marshal(buf)
 			msg2.Unmarshal(buf)
 		}
