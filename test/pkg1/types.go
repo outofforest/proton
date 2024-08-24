@@ -168,6 +168,11 @@ type MsgMap struct {
 	Value map[uint64]uint64
 }
 
+// MsgMapString is used in tests
+type MsgMapString struct {
+	Value map[string]string
+}
+
 // MsgMapCustom is used in tests
 type MsgMapCustom struct {
 	Value test.CustomMap

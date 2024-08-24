@@ -32,6 +32,7 @@ func Generate(_ context.Context, _ build.DepsFunc) error {
 		pkg1.MsgArray{},
 		pkg1.MsgSlice{},
 		pkg1.MsgMap{},
+		pkg1.MsgMapString{},
 		pkg1.MsgStruct{},
 		pkg1.MsgStructAnonymous{},
 		pkg1.MsgArrayUint8{},

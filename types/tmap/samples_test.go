@@ -146,6 +146,31 @@ func Test128(t *testing.T) {
 	requireT.Equal(msg1, msg2)
 }
 
+func TestString(t *testing.T) {
+	requireT := require.New(t)
+
+	msg1 := pkg1.MsgMapString{
+		Value: map[string]string{},
+	}
+
+	for i := range 128 {
+		msg1.Value[fmt.Sprintf("key-%d", i)] = fmt.Sprintf("value-%d", i)
+	}
+
+	requireT.EqualValues(2086, msg1.Size())
+
+	b := make([]byte, msg1.Size())
+	l := msg1.Marshal(b)
+	requireT.Equal(msg1.Size(), l)
+	requireT.Equal([]byte{0x80, 0x01}, b[0:2])
+
+	var msg2 pkg1.MsgMapString
+	l = msg2.Unmarshal(b)
+	requireT.Equal(msg1.Size(), l)
+
+	requireT.Equal(msg1, msg2)
+}
+
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
 
