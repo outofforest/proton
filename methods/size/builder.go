@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/ridge/must"
+	"github.com/samber/lo"
 
 	"github.com/outofforest/proton/helpers"
 	"github.com/outofforest/proton/methods"
@@ -27,7 +27,7 @@ func Build(cfg methods.Config, tm types.TypeMap) []byte {
 	}
 
 	code := &bytes.Buffer{}
-	must.OK(helpers.ForEachField(cfg.Type, func(field reflect.StructField) error {
+	lo.Must0(helpers.ForEachField(cfg.Type, func(field reflect.StructField) error {
 		// Booleans are handled separately as a series of bits
 		if field.Type.Kind() == reflect.Bool {
 			return nil
@@ -64,7 +64,7 @@ func Build(cfg methods.Config, tm types.TypeMap) []byte {
 	}
 
 	if code.Len() > 0 {
-		must.Any(code.WriteTo(b))
+		lo.Must(code.WriteTo(b))
 	}
 
 	b.WriteString("	return n\n}")
