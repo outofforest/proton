@@ -147,7 +147,7 @@ var %[2]s %[4]s
 var %[3]s %[5]s
 `, b.tm.TypeName(b.msgType, b.fieldType), mk, mv, b.tm.TypeName(b.msgType, b.fieldType.Key()), b.tm.TypeName(b.msgType, b.fieldType.Elem()))
 
-	code += "for i := uint64(0); i < l; i++ {\n"
+	code += "for range l {\n"
 
 	buf = &bytes.Buffer{}
 	helpers.Execute(buf, keyTpl, mk)

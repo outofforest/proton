@@ -22,7 +22,7 @@ import (
 )
 
 // Generate generates proton methods for provided types and stores them in a file
-func Generate(filePath string, msgs ...interface{}) error {
+func Generate(filePath string, msgs ...any) error {
 	if len(msgs) == 0 {
 		return nil
 	}
@@ -218,9 +218,6 @@ func writeImports(out io.StringWriter, pkgs []string, aliases map[string]string)
 
 func writeMsgConsts(out io.StringWriter, msgTypes []reflect.Type) error {
 	const header = `
-// ID represents the ID of the message.
-type ID uint64
-
 const (
 `
 
@@ -233,7 +230,7 @@ const (
 			return errors.WithStack(err)
 		}
 		if i == 0 {
-			if _, err := out.WriteString(fmt.Sprintf("\tID%s ID = iota + 1\n", msgType.Name())); err != nil {
+			if _, err := out.WriteString(fmt.Sprintf("\tID%s uint64 = iota + 1\n", msgType.Name())); err != nil {
 				return errors.WithStack(err)
 			}
 		} else {
@@ -253,7 +250,7 @@ const (
 func writeMsgToIDMapper(out io.StringWriter, msgTypes []reflect.Type) error {
 	const header = `
 // MsgToID maps message to its ID.
-func MsgToID(m interface{}) (ID, error) {
+func MsgToID(m any) (uint64, error) {
 	switch m.(type) {
 `
 	const footer = `	default:
@@ -286,7 +283,7 @@ func MsgToID(m interface{}) (ID, error) {
 func writeIDToMsgMapper(out io.StringWriter, msgTypes []reflect.Type) error {
 	const header = `
 // IDToMsg maps ID to the corresponding message.
-func IDToMsg(id ID) (interface{}, error) {
+func IDToMsg(id uint64) (any, error) {
 	switch id {
 `
 	const footer = `	default:

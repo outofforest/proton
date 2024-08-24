@@ -74,7 +74,7 @@ func (b Builder) UnmarshalCodeTemplate() string {
 	elementTpl := b.elementBuilder.UnmarshalCodeTemplate()
 
 	i := types.Var("i")
-	code := fmt.Sprintf("for %[1]s := 0; %[1]s < %[2]d; %[1]s++ {\n", i, b.fieldType.Len())
+	code := fmt.Sprintf("for %[1]s := range %[2]d {\n", i, b.fieldType.Len())
 
 	buf := &bytes.Buffer{}
 	helpers.Execute(buf, elementTpl, fmt.Sprintf("{{ . }}[%s]", i))
