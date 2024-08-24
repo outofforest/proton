@@ -44,6 +44,7 @@ func Generate(filePath string, msgs ...any) error {
 
 	tm := types.NewTypeMap()
 	tm.Import("github.com/pkg/errors")
+	tm.Import("github.com/outofforest/mass")
 
 	for len(stack) > 0 {
 		msgType := stack[len(stack)-1]
@@ -283,23 +284,37 @@ func MsgToID(m any) (uint64, error) {
 func writeIDToMsgMapper(out io.StringWriter, msgTypes []reflect.Type) error {
 	const header = `
 // IDToMsg maps ID to the corresponding message.
-func IDToMsg(id uint64) (any, error) {
-	switch id {
+func IDToMsg() func(id uint64) (any, error) {
 `
-	const footer = `	default:
-		return nil, errors.Errorf("unknown ID %d", id)
+	const footer = `		default:
+			return nil, errors.Errorf("unknown ID %d", id)
+		}
 	}
 }
 `
 
-	const template = `	case ID%[1]s:
-		return &%[1]s{}, nil
+	const template = `		case ID%[1]s:
+			return mass%[1]s.New(), nil
 `
 
 	if _, err := out.WriteString(header); err != nil {
 		return errors.WithStack(err)
 	}
 
+	for _, msgType := range msgTypes {
+		if _, err := out.WriteString(fmt.Sprintf("	var mass%[1]s = mass.New[%[1]s](100)\n", msgType.Name())); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+	if _, err := out.WriteString("\n"); err != nil {
+		return errors.WithStack(err)
+	}
+
+	if _, err := out.WriteString(`	return func(id uint64) (any, error) {
+		switch id {
+`); err != nil {
+		return errors.WithStack(err)
+	}
 	for _, msgType := range msgTypes {
 		if _, err := out.WriteString(fmt.Sprintf(template, msgType.Name())); err != nil {
 			return errors.WithStack(err)
