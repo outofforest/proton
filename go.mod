@@ -3,9 +3,10 @@ module github.com/outofforest/proton
 go 1.22
 
 require (
+	github.com/outofforest/mass v0.1.0
 	github.com/pkg/errors v0.9.1
 	github.com/ridge/must v0.6.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
