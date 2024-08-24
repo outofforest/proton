@@ -37,42 +37,51 @@ func (b Builder) ConstantSize() uint64 {
 
 // SizeCodeTemplate returns code template computing the required size of buffer (above constant size) required to marshal the data
 func (b Builder) SizeCodeTemplate() (string, bool) {
-	code := `l := uint64(len({{ . }}))
-n += l
+	code := `{
+	l := uint64(len({{ . }}))
+	n += l
 `
 
 	buf := &bytes.Buffer{}
 	helpers.Execute(buf, types.UInt64SizeCode(), "l")
-	code += buf.String()
+	code += types.AddIndent(buf.String(), 1)
 
+	code += `
+}`
 	return code, true
 }
 
 // MarshalCodeTemplate returns code template marshaling the data
 func (b Builder) MarshalCodeTemplate() string {
-	code := "l := uint64(len({{ . }}))\n"
+	code := `{
+	l := uint64(len({{ . }}))
+`
 
 	buf := &bytes.Buffer{}
 	helpers.Execute(buf, types.UInt64Marshal(), "l")
-	code += buf.String() + "\n"
+	code += types.AddIndent(buf.String(), 1) + "\n"
 
-	code += `copy(b[o:o+l], {{ . }})
-o += l`
+	code += `	copy(b[o:o+l], {{ . }})
+	o += l
+}`
 
 	return code
 }
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data
 func (b Builder) UnmarshalCodeTemplate() string {
-	code := "var l uint64\n"
+	code := `{
+	var l uint64
+`
 
 	buf := &bytes.Buffer{}
 	helpers.Execute(buf, types.UInt64Unmarshal("uint64"), "l")
-	code += buf.String() + "\n"
+	code += types.AddIndent(buf.String(), 1) + "\n"
 
 	t := b.tm.TypeName(b.msgType, b.fieldType)
-	code += fmt.Sprintf(`{{ . }} = %[1]s(b[o : o+l])
-o += l`, t)
+	code += fmt.Sprintf(`	{{ . }} = %[1]s(b[o : o+l])
+	o += l
+}`, t)
 
 	return code
 }
