@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"text/template"
 
-	"github.com/ridge/must"
+	"github.com/samber/lo"
 )
 
 // ForEachField iterates over fields in the type and calls a function for each public one
@@ -27,5 +27,5 @@ func ForEachField(msgType reflect.Type, fn func(field reflect.StructField) error
 
 // Execute executes a template using provided data
 func Execute(b io.Writer, code string, data any) {
-	must.OK(template.Must(template.New("").Parse(code)).Execute(b, data))
+	lo.Must0(template.Must(template.New("").Parse(code)).Execute(b, data))
 }
