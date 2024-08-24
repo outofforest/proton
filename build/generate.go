@@ -1,6 +1,10 @@
 package build
 
 import (
+	"context"
+
+	"github.com/outofforest/build"
+
 	"github.com/outofforest/proton"
 	"github.com/outofforest/proton/test/pkg1"
 	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
@@ -8,7 +12,8 @@ import (
 	spkg2 "github.com/outofforest/proton/test/pkg2/spkg"
 )
 
-func generate() error {
+// Generate generates protos.
+func Generate(_ context.Context, _ build.DepsFunc) error {
 	if err := proton.Generate(
 		"test/pkg1/types.proton.go",
 		pkg1.MsgUint64{},
