@@ -855,6 +855,14 @@ func AddIndent(code string, numOfIndentations int) string {
 	return indent + strings.ReplaceAll(code, "\n", "\n"+indent)
 }
 
+// Align returns spaces needed to align strings.
+func Align(v string, l int) string {
+	if len(v) >= l {
+		return ""
+	}
+	return strings.Repeat(" ", l-len(v))
+}
+
 // Var generates random variable name with provided prefix
 func Var(prefix string) string {
 	return fmt.Sprintf("%s%d", prefix, rand.Uint64())
