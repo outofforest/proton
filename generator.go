@@ -126,10 +126,6 @@ func Generate(filePath string, msgs ...any) error {
 		return errors.WithStack(err)
 	}
 
-	if err := writeUnmarshaller(out, msgTypes); err != nil {
-		return errors.WithStack(err)
-	}
-
 	if _, err := out.Write(b.Bytes()); err != nil {
 		return errors.WithStack(err)
 	}
@@ -172,6 +168,7 @@ func generateMsg(msgType reflect.Type, tm types.TypeMap) ([]byte, map[reflect.Ty
 	}
 
 	b := &bytes.Buffer{}
+	b.WriteString(fmt.Sprintf("var _ proton.Message = &%s{}\n\n", msgType.Name()))
 	b.Write(size.Build(cfg, tm))
 	b.WriteString("\n\n")
 	b.Write(marshal.Build(cfg, tm))
@@ -250,94 +247,123 @@ const (
 }
 
 func writeMarshaller(out io.StringWriter, msgTypes []reflect.Type) error {
-	const header = `
+	const constructorHeader = `
+var _ proton.Marshaler = Marshaler{}
+
+// NewMarshaler creates marshaler.
+func NewMarshaler(capacity int) Marshaler {
+	return Marshaler{
+`
+	const typeHeader = `
+// Marshaler marshals and unmarshals messages.
+type Marshaler struct {
+`
+
+	const marshalHeader = `
 // Marshal marshals message.
-func Marshal(m proton.Marshalable, buf []byte) (retID, retSize uint64, retErr error) {
+func (m Marshaler) Marshal(msg proton.Marshalable, buf []byte) (retID, retSize uint64, retErr error) {
 	defer func() {
 		if res := recover(); res != nil {
 			retErr = errors.Errorf("marshaling message failed: %s", res)
 		}
 	}()
 
-	switch msg := m.(type) {
+	switch msg2 := msg.(type) {
 `
-	const footer = `	default:
+	const marshalFooter = `	default:
 		return 0, 0, errors.Errorf("unknown message type %T", m)
 	}
 }
 `
 
-	const template = `	case *%[1]s:
-		size := msg.Marshal(buf)
-		return ID%[1]s, size, nil
+	const marshalTemplate = `	case *%[1]s:
+		return ID%[1]s, msg2.Marshal(buf), nil
 `
 
-	if _, err := out.WriteString(header); err != nil {
-		return errors.WithStack(err)
-	}
-
-	for _, msgType := range msgTypes {
-		if _, err := out.WriteString(fmt.Sprintf(template, msgType.Name())); err != nil {
-			return errors.WithStack(err)
-		}
-	}
-
-	if _, err := out.WriteString(footer); err != nil {
-		return errors.WithStack(err)
-	}
-
-	return nil
-}
-
-func writeUnmarshaller(out io.StringWriter, msgTypes []reflect.Type) error {
-	const header = `
+	const unmarshalHeader = `
 // Unmarshal unmarshals message.
-func Unmarshal() func(id uint64, buf []byte) (any, uint64, error) {
-`
-	const footer = `		default:
-			return nil, 0, errors.Errorf("unknown ID %d", id)
+func (m Marshaler) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64, retErr error) {
+	defer func() {
+		if res := recover(); res != nil {
+			retErr = errors.Errorf("unmarshaling message failed: %s", res)
 		}
+	}()
+
+	switch id {
+`
+	const unmarshalFooter = `	default:
+		return nil, 0, errors.Errorf("unknown ID %d", id)
 	}
 }
 `
 
-	const template = `		case ID%[1]s:
-			msg := mass%[1]s.New()
-			size := msg.Unmarshal(buf)
-			return msg, size, nil
+	const unmarshalTemplate = `	case ID%[1]s:
+		msg := m.mass%[1]s.New()
+		return msg, msg.Unmarshal(buf), nil
 `
 
-	if _, err := out.WriteString(header); err != nil {
+	var longestName int
+	for _, msgType := range msgTypes {
+		if len(msgType.Name()) > longestName {
+			longestName = len(msgType.Name())
+		}
+	}
+
+	if _, err := out.WriteString(constructorHeader); err != nil {
 		return errors.WithStack(err)
 	}
 
 	for _, msgType := range msgTypes {
-		if _, err := out.WriteString(fmt.Sprintf("	var mass%[1]s = mass.New[%[1]s](100)\n", msgType.Name())); err != nil {
+		if _, err := out.WriteString(fmt.Sprintf("		mass%[1]s:%[2]s mass.New[%[1]s](capacity),\n",
+			msgType.Name(), types.Align(msgType.Name(), longestName))); err != nil {
 			return errors.WithStack(err)
 		}
 	}
-	if _, err := out.WriteString("\n"); err != nil {
+
+	if _, err := out.WriteString("	}\n}\n"); err != nil {
 		return errors.WithStack(err)
 	}
 
-	if _, err := out.WriteString(`	return func(id uint64, buf []byte) (retMsg any, retSize uint64, retErr error) {
-		defer func() {
-			if res := recover(); res != nil {
-				retErr = errors.Errorf("unmarshaling message failed: %s", res)
-			}
-		}()
-
-		switch id {
-`); err != nil {
+	if _, err := out.WriteString(typeHeader); err != nil {
 		return errors.WithStack(err)
 	}
+
 	for _, msgType := range msgTypes {
-		if _, err := out.WriteString(fmt.Sprintf(template, msgType.Name())); err != nil {
+		if _, err := out.WriteString(fmt.Sprintf("	mass%[1]s%[2]s *mass.Mass[%[1]s]\n",
+			msgType.Name(), types.Align(msgType.Name(), longestName))); err != nil {
 			return errors.WithStack(err)
 		}
 	}
 
-	if _, err := out.WriteString(footer); err != nil {
+	if _, err := out.WriteString("}\n"); err != nil {
+		return errors.WithStack(err)
+	}
+
+	if _, err := out.WriteString(marshalHeader); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, msgType := range msgTypes {
+		if _, err := out.WriteString(fmt.Sprintf(marshalTemplate, msgType.Name())); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if _, err := out.WriteString(marshalFooter); err != nil {
+		return errors.WithStack(err)
+	}
+
+	if _, err := out.WriteString(unmarshalHeader); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, msgType := range msgTypes {
+		if _, err := out.WriteString(fmt.Sprintf(unmarshalTemplate, msgType.Name())); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if _, err := out.WriteString(unmarshalFooter); err != nil {
 		return errors.WithStack(err)
 	}
 
