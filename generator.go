@@ -248,20 +248,20 @@ const (
 
 func writeMarshaller(out io.StringWriter, msgTypes []reflect.Type) error {
 	const constructorHeader = `
-var _ proton.Marshaler = Marshaler{}
+var _ proton.Marshaller = Marshaller{}
 
-// NewMarshaler creates marshaler.
-func NewMarshaler(capacity int) Marshaler {
-	return Marshaler{
+// NewMarshaller creates marshaller.
+func NewMarshaller(capacity int) Marshaller {
+	return Marshaller{
 `
 	const typeHeader = `
-// Marshaler marshals and unmarshals messages.
-type Marshaler struct {
+// Marshaller marshals and unmarshals messages.
+type Marshaller struct {
 `
 
 	const marshalHeader = `
 // Marshal marshals message.
-func (m Marshaler) Marshal(msg proton.Marshalable, buf []byte) (retID, retSize uint64, retErr error) {
+func (m Marshaller) Marshal(msg proton.Marshallable, buf []byte) (retID, retSize uint64, retErr error) {
 	defer func() {
 		if res := recover(); res != nil {
 			retErr = errors.Errorf("marshaling message failed: %s", res)
@@ -282,7 +282,7 @@ func (m Marshaler) Marshal(msg proton.Marshalable, buf []byte) (retID, retSize u
 
 	const unmarshalHeader = `
 // Unmarshal unmarshals message.
-func (m Marshaler) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64, retErr error) {
+func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64, retErr error) {
 	defer func() {
 		if res := recover(); res != nil {
 			retErr = errors.Errorf("unmarshaling message failed: %s", res)

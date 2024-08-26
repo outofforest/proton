@@ -10,10 +10,10 @@ import (
 	"github.com/outofforest/proton/test/pkg2"
 )
 
-func TestMarshaler(t *testing.T) {
+func TestMarshaller(t *testing.T) {
 	requireT := require.New(t)
 
-	m := pkg1.NewMarshaler(100)
+	m := pkg1.NewMarshaller(100)
 
 	msg1 := &pkg1.MsgMapString{
 		Value: map[string]string{},
@@ -35,10 +35,10 @@ func TestMarshaler(t *testing.T) {
 	requireT.Equal(msg1, msg2.(*pkg1.MsgMapString))
 }
 
-func TestMarshalerUnknownType(t *testing.T) {
+func TestMarshallerUnknownType(t *testing.T) {
 	requireT := require.New(t)
 
-	m := pkg1.NewMarshaler(100)
+	m := pkg1.NewMarshaller(100)
 
 	b := make([]byte, 100)
 	msgID, msgSize, err := m.Marshal(&pkg2.SubMsg{}, b)
