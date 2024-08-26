@@ -44,6 +44,7 @@ func Generate(filePath string, msgs ...any) error {
 
 	tm := types.NewTypeMap()
 	tm.Import("github.com/pkg/errors")
+	tm.Import("github.com/outofforest/proton")
 	tm.Import("github.com/outofforest/mass")
 
 	for len(stack) > 0 {
@@ -121,11 +122,11 @@ func Generate(filePath string, msgs ...any) error {
 		return errors.WithStack(err)
 	}
 
-	if err := writeMsgToIDMapper(out, msgTypes); err != nil {
+	if err := writeMarshaller(out, msgTypes); err != nil {
 		return errors.WithStack(err)
 	}
 
-	if err := writeIDToMsgMapper(out, msgTypes); err != nil {
+	if err := writeUnmarshaller(out, msgTypes); err != nil {
 		return errors.WithStack(err)
 	}
 
@@ -248,20 +249,27 @@ const (
 	return nil
 }
 
-func writeMsgToIDMapper(out io.StringWriter, msgTypes []reflect.Type) error {
+func writeMarshaller(out io.StringWriter, msgTypes []reflect.Type) error {
 	const header = `
-// MsgToID maps message to its ID.
-func MsgToID(m any) (uint64, error) {
-	switch m.(type) {
+// Marshal marshals message.
+func Marshal(m proton.Marshalable, buf []byte) (retID, retSize uint64, retErr error) {
+	defer func() {
+		if res := recover(); res != nil {
+			retErr = errors.Errorf("marshaling message failed: %s", res)
+		}
+	}()
+
+	switch msg := m.(type) {
 `
 	const footer = `	default:
-		return 0, errors.Errorf("unknown message type %T", m)
+		return 0, 0, errors.Errorf("unknown message type %T", m)
 	}
 }
 `
 
 	const template = `	case *%[1]s:
-		return ID%[1]s, nil
+		size := msg.Marshal(buf)
+		return ID%[1]s, size, nil
 `
 
 	if _, err := out.WriteString(header); err != nil {
@@ -281,20 +289,22 @@ func MsgToID(m any) (uint64, error) {
 	return nil
 }
 
-func writeIDToMsgMapper(out io.StringWriter, msgTypes []reflect.Type) error {
+func writeUnmarshaller(out io.StringWriter, msgTypes []reflect.Type) error {
 	const header = `
-// IDToMsg maps ID to the corresponding message.
-func IDToMsg() func(id uint64) (any, error) {
+// Unmarshal unmarshals message.
+func Unmarshal() func(id uint64, buf []byte) (any, uint64, error) {
 `
 	const footer = `		default:
-			return nil, errors.Errorf("unknown ID %d", id)
+			return nil, 0, errors.Errorf("unknown ID %d", id)
 		}
 	}
 }
 `
 
 	const template = `		case ID%[1]s:
-			return mass%[1]s.New(), nil
+			msg := mass%[1]s.New()
+			size := msg.Unmarshal(buf)
+			return msg, size, nil
 `
 
 	if _, err := out.WriteString(header); err != nil {
@@ -310,7 +320,13 @@ func IDToMsg() func(id uint64) (any, error) {
 		return errors.WithStack(err)
 	}
 
-	if _, err := out.WriteString(`	return func(id uint64) (any, error) {
+	if _, err := out.WriteString(`	return func(id uint64, buf []byte) (retMsg any, retSize uint64, retErr error) {
+		defer func() {
+			if res := recover(); res != nil {
+				retErr = errors.Errorf("unmarshaling message failed: %s", res)
+			}
+		}()
+
 		switch id {
 `); err != nil {
 		return errors.WithStack(err)
