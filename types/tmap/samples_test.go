@@ -1,4 +1,4 @@
-package tmap
+package tmap_test
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/outofforest/proton/test"
+	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 )
 
@@ -175,11 +175,11 @@ func TestCustom(t *testing.T) {
 	requireT := require.New(t)
 
 	msg1 := pkg1.MsgMapCustom{
-		Value: test.CustomMap{},
+		Value: custom.Map{},
 	}
 
-	for i := test.CustomInt32(1); i <= 128; i++ {
-		msg1.Value[test.CustomString(fmt.Sprintf("key%d", i))] = i
+	for i := custom.Int32(1); i <= 128; i++ {
+		msg1.Value[custom.String(fmt.Sprintf("key%d", i))] = i
 	}
 
 	requireT.EqualValues(983, msg1.Size())

@@ -1,11 +1,11 @@
-package tslice
+package tslice_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/outofforest/proton/test"
+	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 )
 
@@ -198,7 +198,7 @@ func TestCustom(t *testing.T) {
 	requireT := require.New(t)
 
 	msg1 := pkg1.MsgSliceCustom{
-		Value: test.CustomSlice{1, 10, 30, 100, 5000, 45543, 4323432432, 32849023843243, 432748732984732},
+		Value: custom.Slice{1, 10, 30, 100, 5000, 45543, 4323432432, 32849023843243, 432748732984732},
 	}
 
 	requireT.EqualValues(29, msg1.Size())

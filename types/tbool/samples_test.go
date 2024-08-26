@@ -1,4 +1,4 @@
-package tbool
+package tbool_test
 
 import (
 	"testing"

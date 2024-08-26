@@ -1,4 +1,4 @@
-package tstruct
+package tstruct_test
 
 import (
 	"testing"

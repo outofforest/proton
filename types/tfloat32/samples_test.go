@@ -1,4 +1,4 @@
-package tfloat32
+package tfloat32_test
 
 import (
 	"math"

@@ -1,11 +1,11 @@
-package tarrayint8
+package tarrayint8_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/outofforest/proton/test"
+	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 )
 
@@ -55,7 +55,7 @@ func TestCustom(t *testing.T) {
 	requireT := require.New(t)
 
 	msg1 := pkg1.MsgArrayInt8Custom{
-		Value: test.CustomArrayInt8{-128, 127, -1, 0, 1},
+		Value: custom.ArrayInt8{-128, 127, -1, 0, 1},
 	}
 
 	requireT.EqualValues(5, msg1.Size())

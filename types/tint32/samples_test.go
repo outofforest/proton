@@ -1,4 +1,4 @@
-package tint32
+package tint32_test
 
 import (
 	"testing"

@@ -1,11 +1,11 @@
-package proton
+package test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/outofforest/proton/test"
+	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
 )
@@ -142,7 +142,7 @@ func TestCustom(t *testing.T) {
 	requireT := require.New(t)
 
 	msg1 := pkg1.MsgMixedCustom{
-		Value: test.CustomMixed{
+		Value: custom.Mixed{
 			{
 				{
 					{2: {1, 2}, 4: {435, 545}},

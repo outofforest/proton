@@ -1,4 +1,4 @@
-package tint64
+package tint64_test
 
 import (
 	"testing"

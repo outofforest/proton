@@ -1,4 +1,4 @@
-package tint8
+package tint8_test
 
 import (
 	"testing"
