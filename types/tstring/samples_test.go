@@ -1,4 +1,4 @@
-package tstring
+package tstring_test
 
 import (
 	"testing"

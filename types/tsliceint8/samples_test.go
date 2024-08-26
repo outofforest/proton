@@ -1,11 +1,11 @@
-package tsliceint8
+package tsliceint8_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/outofforest/proton/test"
+	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 )
 
@@ -57,7 +57,7 @@ func TestCustom(t *testing.T) {
 	requireT := require.New(t)
 
 	msg1 := pkg1.MsgSliceInt8Custom{
-		Value: test.CustomSliceInt8{-128, 127, -1, 0, 1},
+		Value: custom.SliceInt8{-128, 127, -1, 0, 1},
 	}
 
 	requireT.EqualValues(6, msg1.Size())

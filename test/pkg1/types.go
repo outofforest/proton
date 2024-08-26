@@ -1,7 +1,7 @@
 package pkg1
 
 import (
-	"github.com/outofforest/proton/test"
+	"github.com/outofforest/proton/test/custom"
 	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
 	"github.com/outofforest/proton/test/pkg2"
 	spkg2 "github.com/outofforest/proton/test/pkg2/spkg"
@@ -14,7 +14,7 @@ type MsgUint64 struct {
 
 // MsgUint64Custom is used in tests
 type MsgUint64Custom struct {
-	Value test.CustomUint64
+	Value custom.Uint64
 }
 
 // MsgUint32 is used in tests
@@ -24,7 +24,7 @@ type MsgUint32 struct {
 
 // MsgUint32Custom is used in tests
 type MsgUint32Custom struct {
-	Value test.CustomUint32
+	Value custom.Uint32
 }
 
 // MsgUint16 is used in tests
@@ -34,7 +34,7 @@ type MsgUint16 struct {
 
 // MsgUint16Custom is used in tests
 type MsgUint16Custom struct {
-	Value test.CustomUint16
+	Value custom.Uint16
 }
 
 // MsgUint8 is used in tests
@@ -44,7 +44,7 @@ type MsgUint8 struct {
 
 // MsgUint8Custom is used in tests
 type MsgUint8Custom struct {
-	Value test.CustomUint8
+	Value custom.Uint8
 }
 
 // MsgInt64 is used in tests
@@ -54,7 +54,7 @@ type MsgInt64 struct {
 
 // MsgInt64Custom is used in tests
 type MsgInt64Custom struct {
-	Value test.CustomInt64
+	Value custom.Int64
 }
 
 // MsgInt32 is used in tests
@@ -64,7 +64,7 @@ type MsgInt32 struct {
 
 // MsgInt32Custom is used in tests
 type MsgInt32Custom struct {
-	Value test.CustomInt32
+	Value custom.Int32
 }
 
 // MsgInt16 is used in tests
@@ -74,7 +74,7 @@ type MsgInt16 struct {
 
 // MsgInt16Custom is used in tests
 type MsgInt16Custom struct {
-	Value test.CustomInt16
+	Value custom.Int16
 }
 
 // MsgInt8 is used in tests
@@ -84,7 +84,7 @@ type MsgInt8 struct {
 
 // MsgInt8Custom is used in tests
 type MsgInt8Custom struct {
-	Value test.CustomInt8
+	Value custom.Int8
 }
 
 // MsgBool3 is used in tests
@@ -110,7 +110,7 @@ type MsgBool10 struct {
 
 // MsgBoolCustom is used in tests
 type MsgBoolCustom struct {
-	Value test.CustomBool
+	Value custom.Bool
 }
 
 // MsgFloat64 is used in tests
@@ -120,7 +120,7 @@ type MsgFloat64 struct {
 
 // MsgFloat64Custom is used in tests
 type MsgFloat64Custom struct {
-	Value test.CustomFloat64
+	Value custom.Float64
 }
 
 // MsgFloat32 is used in tests
@@ -130,7 +130,7 @@ type MsgFloat32 struct {
 
 // MsgFloat32Custom is used in tests
 type MsgFloat32Custom struct {
-	Value test.CustomFloat32
+	Value custom.Float32
 }
 
 // MsgString is used in tests
@@ -140,7 +140,7 @@ type MsgString struct {
 
 // MsgStringCustom is used in tests
 type MsgStringCustom struct {
-	Value test.CustomString
+	Value custom.String
 }
 
 // MsgArray is used in tests
@@ -150,7 +150,7 @@ type MsgArray struct {
 
 // MsgArrayCustom is used in tests
 type MsgArrayCustom struct {
-	Value test.CustomArray
+	Value custom.Array
 }
 
 // MsgSlice is used in tests
@@ -160,7 +160,7 @@ type MsgSlice struct {
 
 // MsgSliceCustom is used in tests
 type MsgSliceCustom struct {
-	Value test.CustomSlice
+	Value custom.Slice
 }
 
 // MsgMap is used in tests
@@ -175,7 +175,7 @@ type MsgMapString struct {
 
 // MsgMapCustom is used in tests
 type MsgMapCustom struct {
-	Value test.CustomMap
+	Value custom.Map
 }
 
 // MsgStruct is used in tests
@@ -197,12 +197,12 @@ type MsgArrayUint8 struct {
 
 // MsgArrayUint8Custom is used in tests
 type MsgArrayUint8Custom struct {
-	Value test.CustomArrayUint8
+	Value custom.ArrayUint8
 }
 
 // MsgArrayUint8Custom2 is used in tests
 type MsgArrayUint8Custom2 struct {
-	Value test.CustomArrayCustomUint8
+	Value custom.ArrayCustomUint8
 }
 
 // MsgArrayInt8 is used in tests
@@ -212,7 +212,7 @@ type MsgArrayInt8 struct {
 
 // MsgArrayInt8Custom is used in tests
 type MsgArrayInt8Custom struct {
-	Value test.CustomArrayInt8
+	Value custom.ArrayInt8
 }
 
 // MsgArrayFloat32 is used in tests
@@ -222,7 +222,7 @@ type MsgArrayFloat32 struct {
 
 // MsgArrayFloat32Custom is used in tests
 type MsgArrayFloat32Custom struct {
-	Value test.CustomArrayFloat32
+	Value custom.ArrayFloat32
 }
 
 // MsgArrayFloat64 is used in tests
@@ -232,7 +232,7 @@ type MsgArrayFloat64 struct {
 
 // MsgArrayFloat64Custom is used in tests
 type MsgArrayFloat64Custom struct {
-	Value test.CustomArrayFloat64
+	Value custom.ArrayFloat64
 }
 
 // MsgSliceUint8 is used in tests
@@ -242,12 +242,12 @@ type MsgSliceUint8 struct {
 
 // MsgSliceUint8Custom is used in tests
 type MsgSliceUint8Custom struct {
-	Value test.CustomSliceUint8
+	Value custom.SliceUint8
 }
 
 // MsgSliceUint8Custom2 is used in tests
 type MsgSliceUint8Custom2 struct {
-	Value test.CustomSliceCustomUint8
+	Value custom.SliceCustomUint8
 }
 
 // MsgSliceInt8 is used in tests
@@ -257,7 +257,7 @@ type MsgSliceInt8 struct {
 
 // MsgSliceInt8Custom is used in tests
 type MsgSliceInt8Custom struct {
-	Value test.CustomSliceInt8
+	Value custom.SliceInt8
 }
 
 // MsgSliceFloat32 is used in tests
@@ -267,7 +267,7 @@ type MsgSliceFloat32 struct {
 
 // MsgSliceFloat32Custom is used in tests
 type MsgSliceFloat32Custom struct {
-	Value test.CustomSliceFloat32
+	Value custom.SliceFloat32
 }
 
 // MsgSliceFloat64 is used in tests
@@ -277,7 +277,7 @@ type MsgSliceFloat64 struct {
 
 // MsgSliceFloat64Custom is used in tests
 type MsgSliceFloat64Custom struct {
-	Value test.CustomSliceFloat64
+	Value custom.SliceFloat64
 }
 
 // MsgMixed is used in tests
@@ -294,7 +294,7 @@ type MsgMixed struct {
 
 // MsgMixedCustom is used in tests
 type MsgMixedCustom struct {
-	Value test.CustomMixed
+	Value custom.Mixed
 }
 
 // SubMsg is used in tests

@@ -1,4 +1,4 @@
-package tfloat64
+package tfloat64_test
 
 import (
 	"math"

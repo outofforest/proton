@@ -1,11 +1,11 @@
-package tslicefloat32
+package tslicefloat32_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/outofforest/proton/test"
+	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 )
 
@@ -58,7 +58,7 @@ func TestCustom(t *testing.T) {
 	requireT := require.New(t)
 
 	msg1 := pkg1.MsgSliceFloat32Custom{
-		Value: test.CustomSliceFloat32{-128.23, 127.78, -1.2, 0., 1.1},
+		Value: custom.SliceFloat32{-128.23, 127.78, -1.2, 0., 1.1},
 	}
 
 	requireT.EqualValues(21, msg1.Size())

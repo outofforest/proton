@@ -1,11 +1,11 @@
-package tarray
+package tarray_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/outofforest/proton/test"
+	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 )
 
@@ -76,7 +76,7 @@ func TestCustom(t *testing.T) {
 	requireT := require.New(t)
 
 	msg1 := pkg1.MsgArrayCustom{
-		Value: test.CustomArray{53454, 89898},
+		Value: custom.Array{53454, 89898},
 	}
 
 	requireT.EqualValues(6, msg1.Size())

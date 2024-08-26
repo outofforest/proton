@@ -1,4 +1,4 @@
-package tuint64
+package tuint64_test
 
 import (
 	"testing"
