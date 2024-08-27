@@ -3,7 +3,7 @@ module github.com/outofforest/proton
 go 1.22
 
 require (
-	github.com/outofforest/mass v0.1.0
+	github.com/outofforest/mass v0.1.2
 	github.com/pkg/errors v0.9.1
 	github.com/samber/lo v1.47.0
 	github.com/stretchr/testify v1.9.0

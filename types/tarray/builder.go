@@ -9,7 +9,7 @@ import (
 	"github.com/outofforest/proton/types"
 )
 
-// New returns new code builder
+// New returns new code builder.
 func New(msgType, fieldType reflect.Type, elementBuilder types.BuilderFactory) Builder {
 	return Builder{
 		msgType:        msgType,
@@ -18,24 +18,25 @@ func New(msgType, fieldType reflect.Type, elementBuilder types.BuilderFactory) B
 	}
 }
 
-// Builder generates the code
+// Builder generates the code.
 type Builder struct {
 	msgType        reflect.Type
 	fieldType      reflect.Type
 	elementBuilder types.BuilderFactory
 }
 
-// Dependencies returns the list of other types which code must be generated for
+// Dependencies returns the list of other types which code must be generated for.
 func (b Builder) Dependencies() []reflect.Type {
 	return b.elementBuilder.Dependencies()
 }
 
-// ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content
+// ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content.
 func (b Builder) ConstantSize() uint64 {
 	return uint64(b.fieldType.Len()) * b.elementBuilder.ConstantSize()
 }
 
-// SizeCodeTemplate returns code template computing the required size of buffer (above constant size) required to marshal the data
+// SizeCodeTemplate returns code template computing the required size of buffer
+// (above constant size) required to marshal the data.
 func (b Builder) SizeCodeTemplate() (string, bool) {
 	elementTpl, elementOK := b.elementBuilder.SizeCodeTemplate()
 	if !elementOK {
@@ -53,7 +54,7 @@ func (b Builder) SizeCodeTemplate() (string, bool) {
 	return code, true
 }
 
-// MarshalCodeTemplate returns code template marshaling the data
+// MarshalCodeTemplate returns code template marshaling the data.
 func (b Builder) MarshalCodeTemplate() string {
 	elementTpl := b.elementBuilder.MarshalCodeTemplate()
 
@@ -69,7 +70,7 @@ func (b Builder) MarshalCodeTemplate() string {
 	return code
 }
 
-// UnmarshalCodeTemplate returns code template unmarshaling the data
+// UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate() string {
 	elementTpl := b.elementBuilder.UnmarshalCodeTemplate()
 

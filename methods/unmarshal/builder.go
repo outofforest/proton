@@ -19,7 +19,7 @@ func (m *{{ .TypeName }}) Unmarshal(b []byte) uint64 {
 `
 )
 
-// Build generates code of Unmarshal method
+// Build generates code of Unmarshal method.
 func Build(cfg methods.Config, tm types.TypeMap) []byte {
 	code := &bytes.Buffer{}
 

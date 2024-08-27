@@ -32,7 +32,7 @@ import (
 	"github.com/outofforest/proton/types/tuint8"
 )
 
-// Get returns builder for particular type
+// Get returns builder for particular type.
 func Get(msgType, fieldType reflect.Type, tm types.TypeMap) (types.BuilderFactory, error) {
 	switch fieldType.Kind() {
 	case reflect.Bool:

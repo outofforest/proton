@@ -19,7 +19,7 @@ func (m *{{ .TypeName }}) Marshal(b []byte) uint64 {
 `
 )
 
-// Build generates code of Marshal method
+// Build generates code of Marshal method.
 func Build(cfg methods.Config, tm types.TypeMap) []byte {
 	code := &bytes.Buffer{}
 

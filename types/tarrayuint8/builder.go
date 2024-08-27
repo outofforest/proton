@@ -7,7 +7,7 @@ import (
 	"github.com/outofforest/proton/types"
 )
 
-// New returns new code builder
+// New returns new code builder.
 func New(fieldType reflect.Type, tm types.TypeMap) Builder {
 	return Builder{
 		fieldType: fieldType,
@@ -15,23 +15,23 @@ func New(fieldType reflect.Type, tm types.TypeMap) Builder {
 	}
 }
 
-// Builder generates the code
+// Builder generates the code.
 type Builder struct {
 	fieldType reflect.Type
 	tm        types.TypeMap
 }
 
-// Dependencies returns the list of other types which code must be generated for
+// Dependencies returns the list of other types which code must be generated for.
 func (b Builder) Dependencies() []reflect.Type {
 	return nil
 }
 
-// ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content
+// ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content.
 func (b Builder) ConstantSize() uint64 {
 	return uint64(b.fieldType.Len())
 }
 
-// MarshalCodeTemplate returns code template marshaling the data
+// MarshalCodeTemplate returns code template marshaling the data.
 func (b Builder) MarshalCodeTemplate() string {
 	unsafe := b.tm.Import("unsafe")
 
@@ -43,7 +43,7 @@ o += %[2]d`, unsafe, b.fieldType.Len())
 o += %[2]d`, unsafe, b.fieldType.Len())
 }
 
-// UnmarshalCodeTemplate returns code template unmarshaling the data
+// UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate() string {
 	unsafe := b.tm.Import("unsafe")
 

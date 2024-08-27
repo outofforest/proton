@@ -21,7 +21,7 @@ import (
 	"github.com/outofforest/proton/types/factory"
 )
 
-// Generate generates proton methods for provided types and stores them in a file
+// Generate generates proton methods for provided types and stores them in a file.
 func Generate(filePath string, msgs ...any) error {
 	if len(msgs) == 0 {
 		return nil
@@ -85,6 +85,7 @@ func Generate(filePath string, msgs ...any) error {
 		return errors.WithStack(err)
 	}
 
+	//nolint:nestif
 	if imports := tm.Imports(); len(imports) > 0 {
 		sdkPkgs := make([]string, 0, len(imports))
 		pkgs := make([]string, 0, len(imports))

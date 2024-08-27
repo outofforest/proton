@@ -6,7 +6,7 @@ import (
 	"github.com/outofforest/proton/types"
 )
 
-// New returns new code builder
+// New returns new code builder.
 func New(msgType, fieldType reflect.Type, tm types.TypeMap) Builder {
 	return Builder{
 		msgType:   msgType,
@@ -15,34 +15,35 @@ func New(msgType, fieldType reflect.Type, tm types.TypeMap) Builder {
 	}
 }
 
-// Builder generates the code
+// Builder generates the code.
 type Builder struct {
 	msgType   reflect.Type
 	fieldType reflect.Type
 	tm        types.TypeMap
 }
 
-// Dependencies returns the list of other types which code must be generated for
+// Dependencies returns the list of other types which code must be generated for.
 func (b Builder) Dependencies() []reflect.Type {
 	return nil
 }
 
-// ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content
+// ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content.
 func (b Builder) ConstantSize() uint64 {
 	return 1 // size always takes at least one byte
 }
 
-// SizeCodeTemplate returns code template computing the required size of buffer (above constant size) required to marshal the data
+// SizeCodeTemplate returns code template computing the required size of buffer
+// (above constant size) required to marshal the data.
 func (b Builder) SizeCodeTemplate() (string, bool) {
 	return types.UInt32SizeCode(), true
 }
 
-// MarshalCodeTemplate returns code template marshaling the data
+// MarshalCodeTemplate returns code template marshaling the data.
 func (b Builder) MarshalCodeTemplate() string {
 	return types.UInt32Marshal()
 }
 
-// UnmarshalCodeTemplate returns code template unmarshaling the data
+// UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate() string {
 	return types.UInt32Unmarshal(b.tm.TypeName(b.msgType, b.fieldType))
 }
