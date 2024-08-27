@@ -9,7 +9,7 @@ import (
 // Cases when varint takes one byte are ignored because they should be handled in more optimal way by
 // `ConstantSize` method of the builders.
 
-// UInt16SizeCode generates code to get size of varint for uint16
+// UInt16SizeCode generates code to get size of varint for uint16.
 func UInt16SizeCode() string {
 	return `{
 	vi := {{ . }}
@@ -23,7 +23,7 @@ func UInt16SizeCode() string {
 }`
 }
 
-// UInt16Marshal generates code to marshal varint for uint16
+// UInt16Marshal generates code to marshal varint for uint16.
 func UInt16Marshal() string {
 	return `{
 	vi := {{ . }}
@@ -50,7 +50,7 @@ func UInt16Marshal() string {
 }`
 }
 
-// UInt16Unmarshal generates code to unmarshal varint for uint16
+// UInt16Unmarshal generates code to unmarshal varint for uint16.
 func UInt16Unmarshal(typeName string) string {
 	return fmt.Sprintf(`{
 	vi := %[1]s(b[o] & 0x7F)
@@ -69,7 +69,7 @@ func UInt16Unmarshal(typeName string) string {
 }`, typeName)
 }
 
-// UInt32SizeCode generates code to get size of varint for uint32
+// UInt32SizeCode generates code to get size of varint for uint32.
 func UInt32SizeCode() string {
 	return `{
 	vi := {{ . }}
@@ -87,7 +87,7 @@ func UInt32SizeCode() string {
 }`
 }
 
-// UInt32Marshal generates code to marshal varint for uint32
+// UInt32Marshal generates code to marshal varint for uint32.
 func UInt32Marshal() string {
 	return `{
 	vi := {{ . }}
@@ -141,7 +141,7 @@ func UInt32Marshal() string {
 }`
 }
 
-// UInt32Unmarshal generates code to unmarshal varint for uint32
+// UInt32Unmarshal generates code to unmarshal varint for uint32.
 func UInt32Unmarshal(typeName string) string {
 	return fmt.Sprintf(`{
 	vi := %[1]s(b[o] & 0x7F)
@@ -170,7 +170,7 @@ func UInt32Unmarshal(typeName string) string {
 }`, typeName)
 }
 
-// UInt64SizeCode generates code to get size of varint for uint64
+// UInt64SizeCode generates code to get size of varint for uint64.
 func UInt64SizeCode() string {
 	// For last byte last bit is used for data, not for continuation flag.
 	// That's why we may fit 64-bit number in 9 bytes, not 10.
@@ -199,7 +199,7 @@ func UInt64SizeCode() string {
 }`
 }
 
-// UInt64Marshal generates code to marshal varint for uint64
+// UInt64Marshal generates code to marshal varint for uint64.
 func UInt64Marshal() string {
 	return `{
 	vi := {{ . }}
@@ -343,7 +343,7 @@ func UInt64Marshal() string {
 }`
 }
 
-// UInt64Unmarshal generates code to unmarshal varint for uint64
+// UInt64Unmarshal generates code to unmarshal varint for uint64.
 func UInt64Unmarshal(typeName string) string {
 	return fmt.Sprintf(`{
 	vi := %[1]s(b[o] & 0x7F)
@@ -392,7 +392,7 @@ func UInt64Unmarshal(typeName string) string {
 }`, typeName)
 }
 
-// Int16SizeCode generates code to get size of varint for int16
+// Int16SizeCode generates code to get size of varint for int16.
 func Int16SizeCode() string {
 	return `{
 	vi := uint16({{ . }}) << 1
@@ -409,7 +409,7 @@ func Int16SizeCode() string {
 }`
 }
 
-// Int16Marshal generates code to marshal varint for int16
+// Int16Marshal generates code to marshal varint for int16.
 func Int16Marshal() string {
 	return `{
 	vi := uint16({{ . }}) << 1
@@ -439,7 +439,7 @@ func Int16Marshal() string {
 }`
 }
 
-// Int16Unmarshal generates code to unmarshal varint for int16
+// Int16Unmarshal generates code to unmarshal varint for int16.
 func Int16Unmarshal(typeName string) string {
 	return fmt.Sprintf(`{
 	vi := uint16(b[o] & 0x7F)
@@ -464,7 +464,7 @@ func Int16Unmarshal(typeName string) string {
 }`, typeName)
 }
 
-// Int32SizeCode generates code to get size of varint for int32
+// Int32SizeCode generates code to get size of varint for int32.
 func Int32SizeCode() string {
 	return `{
 	vi := uint32({{ . }}) << 1
@@ -485,7 +485,7 @@ func Int32SizeCode() string {
 }`
 }
 
-// Int32Marshal generates code to marshal varint for int32
+// Int32Marshal generates code to marshal varint for int32.
 func Int32Marshal() string {
 	return `{
 	vi := uint32({{ . }}) << 1
@@ -542,7 +542,7 @@ func Int32Marshal() string {
 }`
 }
 
-// Int32Unmarshal generates code to unmarshal varint for int32
+// Int32Unmarshal generates code to unmarshal varint for int32.
 func Int32Unmarshal(typeName string) string {
 	return fmt.Sprintf(`{
 	vi := uint32(b[o] & 0x7F)
@@ -577,7 +577,7 @@ func Int32Unmarshal(typeName string) string {
 }`, typeName)
 }
 
-// Int64SizeCode generates code to get size of varint for int64
+// Int64SizeCode generates code to get size of varint for int64.
 func Int64SizeCode() string {
 	return `{
 	vi := uint64({{ . }}) << 1
@@ -608,7 +608,7 @@ func Int64SizeCode() string {
 }`
 }
 
-// Int64Marshal generates code to marshal varint for int64
+// Int64Marshal generates code to marshal varint for int64.
 func Int64Marshal() string {
 	return `{
 	vi := uint64({{ . }}) << 1
@@ -785,7 +785,7 @@ func Int64Marshal() string {
 }`
 }
 
-// Int64Unmarshal generates code to unmarshal varint for int64
+// Int64Unmarshal generates code to unmarshal varint for int64.
 func Int64Unmarshal(typeName string) string {
 	return fmt.Sprintf(`{
 	vi := uint64(b[o] & 0x7F)
@@ -845,7 +845,7 @@ func Int64Unmarshal(typeName string) string {
 }`, typeName)
 }
 
-// AddIndent adds indentation to the code
+// AddIndent adds indentation to the code.
 func AddIndent(code string, numOfIndentations int) string {
 	var indent string
 	for range numOfIndentations {
@@ -863,7 +863,7 @@ func Align(v string, l int) string {
 	return strings.Repeat(" ", l-len(v))
 }
 
-// Var generates random variable name with provided prefix
+// Var generates random variable name with provided prefix.
 func Var(prefix string) string {
 	return fmt.Sprintf("%s%d", prefix, rand.Uint64())
 }

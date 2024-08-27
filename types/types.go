@@ -7,7 +7,7 @@ import (
 	"reflect"
 )
 
-// BuilderFactory is the interface every type builder must implement
+// BuilderFactory is the interface every type builder must implement.
 type BuilderFactory interface {
 	Dependencies() []reflect.Type
 	ConstantSize() uint64
@@ -16,7 +16,8 @@ type BuilderFactory interface {
 	UnmarshalCodeTemplate() string
 }
 
-// BuilderFactoryConstant is the relaxed interface implemented by builders representing types requiring only constant size of buffer
+// BuilderFactoryConstant is the relaxed interface implemented by builders representing types requiring only
+// constant size of buffer.
 type BuilderFactoryConstant interface {
 	Dependencies() []reflect.Type
 	ConstantSize() uint64
@@ -24,7 +25,8 @@ type BuilderFactoryConstant interface {
 	UnmarshalCodeTemplate() string
 }
 
-// BuilderFactoryNonConstant is the relaxed interface implemented by builders representing types requiring only non-constant size of buffer
+// BuilderFactoryNonConstant is the relaxed interface implemented by builders representing types requiring only
+// non-constant size of buffer.
 type BuilderFactoryNonConstant interface {
 	Dependencies() []reflect.Type
 	SizeCodeTemplate() string
@@ -32,7 +34,7 @@ type BuilderFactoryNonConstant interface {
 	UnmarshalCodeTemplate() string
 }
 
-// NewTypeMap creates new type map
+// NewTypeMap creates new type map.
 func NewTypeMap() TypeMap {
 	return TypeMap{
 		imports: map[string]string{},
@@ -40,13 +42,13 @@ func NewTypeMap() TypeMap {
 	}
 }
 
-// TypeMap implements type mapping required by go code
+// TypeMap implements type mapping required by go code.
 type TypeMap struct {
 	imports map[string]string
 	aliases map[string]bool
 }
 
-// TypeName generates a type name for type
+// TypeName generates a type name for type.
 func (tm TypeMap) TypeName(parentType, childType reflect.Type) string {
 	switch childType.Kind() {
 	case reflect.Array:
@@ -65,7 +67,7 @@ func (tm TypeMap) TypeName(parentType, childType reflect.Type) string {
 		case childType.PkgPath() != "":
 			return tm.Import(childType.PkgPath()) + "." + childType.Name()
 		default:
-			return fmt.Sprintf("[]%s", tm.TypeName(parentType, childType.Elem()))
+			return "[]" + tm.TypeName(parentType, childType.Elem())
 		}
 	case reflect.Map:
 		switch {
@@ -84,7 +86,7 @@ func (tm TypeMap) TypeName(parentType, childType reflect.Type) string {
 	}
 }
 
-// Import adds package to the list of imports
+// Import adds package to the list of imports.
 func (tm TypeMap) Import(pkg string) string {
 	if alias := tm.imports[pkg]; alias != "" {
 		return alias
@@ -100,7 +102,7 @@ func (tm TypeMap) Import(pkg string) string {
 	return pkgBase
 }
 
-// Imports returns the list of collected imports
+// Imports returns the list of collected imports.
 func (tm TypeMap) Imports() map[string]string {
 	return tm.imports
 }

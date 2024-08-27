@@ -19,7 +19,7 @@ func (m *{{ .TypeName }}) Size() uint64 {
 `
 )
 
-// Build generates code of Size method
+// Build generates code of Size method.
 func Build(cfg methods.Config, tm types.TypeMap) []byte {
 	var n uint64
 	if cfg.NumOfBooleanFields > 0 {

@@ -9,7 +9,7 @@ import (
 	"github.com/outofforest/proton/types"
 )
 
-// New returns new code builder
+// New returns new code builder.
 func New(msgType, fieldType reflect.Type, keyBuilder, elementBuilder types.BuilderFactory, tm types.TypeMap) Builder {
 	return Builder{
 		msgType:        msgType,
@@ -20,7 +20,7 @@ func New(msgType, fieldType reflect.Type, keyBuilder, elementBuilder types.Build
 	}
 }
 
-// Builder generates the code
+// Builder generates the code.
 type Builder struct {
 	msgType        reflect.Type
 	fieldType      reflect.Type
@@ -29,7 +29,7 @@ type Builder struct {
 	tm             types.TypeMap
 }
 
-// Dependencies returns the list of other types which code must be generated for
+// Dependencies returns the list of other types which code must be generated for.
 func (b Builder) Dependencies() []reflect.Type {
 	dependencies := map[reflect.Type]bool{}
 	for _, d := range b.keyBuilder.Dependencies() {
@@ -46,12 +46,13 @@ func (b Builder) Dependencies() []reflect.Type {
 	return res
 }
 
-// ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content
+// ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content.
 func (b Builder) ConstantSize() uint64 {
 	return 1 // covers the first byte of length
 }
 
-// SizeCodeTemplate returns code template computing the required size of buffer (above constant size) required to marshal the data
+// SizeCodeTemplate returns code template computing the required size of buffer
+// (above constant size) required to marshal the data.
 func (b Builder) SizeCodeTemplate() (string, bool) {
 	code := "l := uint64(len({{ . }}))\n"
 
@@ -102,7 +103,7 @@ func (b Builder) SizeCodeTemplate() (string, bool) {
 	return code, true
 }
 
-// MarshalCodeTemplate returns code template marshaling the data
+// MarshalCodeTemplate returns code template marshaling the data.
 func (b Builder) MarshalCodeTemplate() string {
 	keyTpl := b.keyBuilder.MarshalCodeTemplate()
 	elementTpl := b.elementBuilder.MarshalCodeTemplate()
@@ -128,7 +129,7 @@ func (b Builder) MarshalCodeTemplate() string {
 	return code
 }
 
-// UnmarshalCodeTemplate returns code template unmarshaling the data
+// UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate() string {
 	keyTpl := b.keyBuilder.UnmarshalCodeTemplate()
 	elementTpl := b.elementBuilder.UnmarshalCodeTemplate()
@@ -145,7 +146,8 @@ func (b Builder) UnmarshalCodeTemplate() string {
 	code += fmt.Sprintf(`{{ . }} = make(%[1]s, l)
 var %[2]s %[4]s
 var %[3]s %[5]s
-`, b.tm.TypeName(b.msgType, b.fieldType), mk, mv, b.tm.TypeName(b.msgType, b.fieldType.Key()), b.tm.TypeName(b.msgType, b.fieldType.Elem()))
+`, b.tm.TypeName(b.msgType, b.fieldType), mk, mv, b.tm.TypeName(b.msgType, b.fieldType.Key()), b.tm.TypeName(b.msgType,
+		b.fieldType.Elem()))
 
 	code += "for range l {\n"
 

@@ -8,7 +8,7 @@ import (
 	"github.com/samber/lo"
 )
 
-// ForEachField iterates over fields in the type and calls a function for each public one
+// ForEachField iterates over fields in the type and calls a function for each public one.
 func ForEachField(msgType reflect.Type, fn func(field reflect.StructField) error) error {
 	numOfFields := msgType.NumField()
 	for i := range numOfFields {
@@ -25,7 +25,7 @@ func ForEachField(msgType reflect.Type, fn func(field reflect.StructField) error
 	return nil
 }
 
-// Execute executes a template using provided data
+// Execute executes a template using provided data.
 func Execute(b io.Writer, code string, data any) {
 	lo.Must0(template.Must(template.New("").Parse(code)).Execute(b, data))
 }
