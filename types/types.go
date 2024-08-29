@@ -2,7 +2,6 @@ package types
 
 import (
 	"fmt"
-	"math/rand"
 	"path"
 	"reflect"
 )
@@ -11,9 +10,9 @@ import (
 type BuilderFactory interface {
 	Dependencies() []reflect.Type
 	ConstantSize() uint64
-	SizeCodeTemplate() (string, bool)
-	MarshalCodeTemplate() string
-	UnmarshalCodeTemplate() string
+	SizeCodeTemplate(varIndex *uint64) (string, bool)
+	MarshalCodeTemplate(varIndex *uint64) string
+	UnmarshalCodeTemplate(varIndex *uint64) string
 }
 
 // BuilderFactoryConstant is the relaxed interface implemented by builders representing types requiring only
@@ -21,31 +20,33 @@ type BuilderFactory interface {
 type BuilderFactoryConstant interface {
 	Dependencies() []reflect.Type
 	ConstantSize() uint64
-	MarshalCodeTemplate() string
-	UnmarshalCodeTemplate() string
+	MarshalCodeTemplate(varIndex *uint64) string
+	UnmarshalCodeTemplate(varIndex *uint64) string
 }
 
 // BuilderFactoryNonConstant is the relaxed interface implemented by builders representing types requiring only
 // non-constant size of buffer.
 type BuilderFactoryNonConstant interface {
 	Dependencies() []reflect.Type
-	SizeCodeTemplate() string
-	MarshalCodeTemplate() string
-	UnmarshalCodeTemplate() string
+	SizeCodeTemplate(varIndex *uint64) string
+	MarshalCodeTemplate(varIndex *uint64) string
+	UnmarshalCodeTemplate(varIndex *uint64) string
 }
 
 // NewTypeMap creates new type map.
 func NewTypeMap() TypeMap {
 	return TypeMap{
-		imports: map[string]string{},
-		aliases: map[string]bool{},
+		imports:     map[string]string{},
+		aliases:     map[string]bool{},
+		importIndex: new(uint64),
 	}
 }
 
 // TypeMap implements type mapping required by go code.
 type TypeMap struct {
-	imports map[string]string
-	aliases map[string]bool
+	imports     map[string]string
+	aliases     map[string]bool
+	importIndex *uint64
 }
 
 // TypeName generates a type name for type.
@@ -94,8 +95,9 @@ func (tm TypeMap) Import(pkg string) string {
 
 	base := path.Base(pkg)
 	pkgBase := base
-	for tm.aliases[pkgBase] {
-		pkgBase = fmt.Sprintf("%s%d", base, rand.Uint64())
+	if tm.aliases[pkgBase] {
+		*tm.importIndex++
+		pkgBase = fmt.Sprintf("%s%d", base, *tm.importIndex)
 	}
 	tm.aliases[pkgBase] = true
 	tm.imports[pkg] = pkgBase

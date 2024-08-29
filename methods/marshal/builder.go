@@ -54,7 +54,7 @@ func Build(cfg methods.Config, tm types.TypeMap) []byte {
 			return err
 		}
 
-		marshalCode := builder.MarshalCodeTemplate()
+		marshalCode := builder.MarshalCodeTemplate(new(uint64))
 
 		code.WriteString("	{\n		// " + field.Name + "\n\n")
 		helpers.Execute(code, types.AddIndent(marshalCode, 2), "m."+field.Name)

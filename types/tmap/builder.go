@@ -53,7 +53,7 @@ func (b Builder) ConstantSize() uint64 {
 
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
-func (b Builder) SizeCodeTemplate() (string, bool) {
+func (b Builder) SizeCodeTemplate(varIndex *uint64) (string, bool) {
 	code := "l := uint64(len({{ . }}))\n"
 
 	buf := &bytes.Buffer{}
@@ -65,16 +65,16 @@ func (b Builder) SizeCodeTemplate() (string, bool) {
 		code += fmt.Sprintf("n += l * %d", constSize)
 	}
 
-	keyTpl, keyOK := b.keyBuilder.SizeCodeTemplate()
-	elementTpl, elementOK := b.elementBuilder.SizeCodeTemplate()
+	keyTpl, keyOK := b.keyBuilder.SizeCodeTemplate(varIndex)
+	elementTpl, elementOK := b.elementBuilder.SizeCodeTemplate(varIndex)
 
 	if keyOK || elementOK {
 		if constSize > 0 {
 			code += "\n"
 		}
 
-		mk := types.Var("mk")
-		mv := types.Var("mv")
+		mk := types.Var("mk", varIndex)
+		mv := types.Var("mv", varIndex)
 		switch {
 		case keyOK && elementOK:
 			code += fmt.Sprintf("for %[1]s, %[2]s := range {{ . }} {\n", mk, mv)
@@ -104,16 +104,16 @@ func (b Builder) SizeCodeTemplate() (string, bool) {
 }
 
 // MarshalCodeTemplate returns code template marshaling the data.
-func (b Builder) MarshalCodeTemplate() string {
-	keyTpl := b.keyBuilder.MarshalCodeTemplate()
-	elementTpl := b.elementBuilder.MarshalCodeTemplate()
+func (b Builder) MarshalCodeTemplate(varIndex *uint64) string {
+	keyTpl := b.keyBuilder.MarshalCodeTemplate(varIndex)
+	elementTpl := b.elementBuilder.MarshalCodeTemplate(varIndex)
 
 	buf := &bytes.Buffer{}
 	helpers.Execute(buf, types.UInt64Marshal(), "uint64(len({{ . }}))")
 	code := buf.String() + "\n"
 
-	mk := types.Var("mk")
-	mv := types.Var("mv")
+	mk := types.Var("mk", varIndex)
+	mv := types.Var("mv", varIndex)
 	code += fmt.Sprintf("for %[1]s, %[2]s := range {{ . }} {\n", mk, mv)
 
 	buf = &bytes.Buffer{}
@@ -130,9 +130,9 @@ func (b Builder) MarshalCodeTemplate() string {
 }
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
-func (b Builder) UnmarshalCodeTemplate() string {
-	keyTpl := b.keyBuilder.UnmarshalCodeTemplate()
-	elementTpl := b.elementBuilder.UnmarshalCodeTemplate()
+func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
+	keyTpl := b.keyBuilder.UnmarshalCodeTemplate(varIndex)
+	elementTpl := b.elementBuilder.UnmarshalCodeTemplate(varIndex)
 
 	code := "var l uint64\n"
 
@@ -140,8 +140,8 @@ func (b Builder) UnmarshalCodeTemplate() string {
 	helpers.Execute(buf, types.UInt64Unmarshal("uint64"), "l")
 	code += buf.String() + "\n"
 
-	mk := types.Var("mk")
-	mv := types.Var("mv")
+	mk := types.Var("mk", varIndex)
+	mv := types.Var("mv", varIndex)
 
 	code += fmt.Sprintf(`{{ . }} = make(%[1]s, l)
 var %[2]s %[4]s

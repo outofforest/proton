@@ -39,7 +39,7 @@ func (b Builder) ConstantSize() uint64 {
 
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
-func (b Builder) SizeCodeTemplate() (string, bool) {
+func (b Builder) SizeCodeTemplate(varIndex *uint64) (string, bool) {
 	code := "l := uint64(len({{ . }}))\n"
 
 	buf := &bytes.Buffer{}
@@ -54,7 +54,7 @@ func (b Builder) SizeCodeTemplate() (string, bool) {
 		code += "n += l"
 	}
 
-	elementTpl, elementOK := b.elementBuilder.SizeCodeTemplate()
+	elementTpl, elementOK := b.elementBuilder.SizeCodeTemplate(varIndex)
 
 	if !elementOK {
 		return code, true
@@ -64,7 +64,7 @@ func (b Builder) SizeCodeTemplate() (string, bool) {
 		code += "\n"
 	}
 
-	sv := types.Var("sv")
+	sv := types.Var("sv", varIndex)
 	code += fmt.Sprintf("for _, %s := range {{ . }} {\n", sv)
 
 	buf = &bytes.Buffer{}
@@ -76,14 +76,14 @@ func (b Builder) SizeCodeTemplate() (string, bool) {
 }
 
 // MarshalCodeTemplate returns code template marshaling the data.
-func (b Builder) MarshalCodeTemplate() string {
-	elementTpl := b.elementBuilder.MarshalCodeTemplate()
+func (b Builder) MarshalCodeTemplate(varIndex *uint64) string {
+	elementTpl := b.elementBuilder.MarshalCodeTemplate(varIndex)
 
 	buf := &bytes.Buffer{}
 	helpers.Execute(buf, types.UInt64Marshal(), "uint64(len({{ . }}))")
 	code := buf.String() + "\n"
 
-	sv := types.Var("sv")
+	sv := types.Var("sv", varIndex)
 	code += fmt.Sprintf("for _, %s := range {{ . }} {\n", sv)
 
 	buf = &bytes.Buffer{}
@@ -96,8 +96,8 @@ func (b Builder) MarshalCodeTemplate() string {
 }
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
-func (b Builder) UnmarshalCodeTemplate() string {
-	elementTpl := b.elementBuilder.UnmarshalCodeTemplate()
+func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
+	elementTpl := b.elementBuilder.UnmarshalCodeTemplate(varIndex)
 
 	code := "var l uint64\n"
 
@@ -108,7 +108,7 @@ func (b Builder) UnmarshalCodeTemplate() string {
 	code += fmt.Sprintf(`{{ . }} = make(%[1]s, l)
 `, b.tm.TypeName(b.msgType, b.fieldType))
 
-	i := types.Var("i")
+	i := types.Var("i", varIndex)
 	code += fmt.Sprintf("for %[1]s := range l {\n", i)
 
 	buf = &bytes.Buffer{}
