@@ -2,7 +2,6 @@ package types
 
 import (
 	"fmt"
-	"math/rand"
 	"strings"
 )
 
@@ -864,6 +863,7 @@ func Align(v string, l int) string {
 }
 
 // Var generates random variable name with provided prefix.
-func Var(prefix string) string {
-	return fmt.Sprintf("%s%d", prefix, rand.Uint64())
+func Var(prefix string, varIndex *uint64) string {
+	*varIndex++
+	return fmt.Sprintf("%s%d", prefix, *varIndex)
 }

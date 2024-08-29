@@ -40,7 +40,7 @@ func Build(cfg methods.Config, tm types.TypeMap) []byte {
 
 		n += builder.ConstantSize()
 
-		sizeCode, ok := builder.SizeCodeTemplate()
+		sizeCode, ok := builder.SizeCodeTemplate(new(uint64))
 		if ok {
 			code.WriteString("	{\n		// " + field.Name + "\n\n")
 			helpers.Execute(code, types.AddIndent(sizeCode, 2), "m."+field.Name)

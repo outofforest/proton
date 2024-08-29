@@ -23,16 +23,16 @@ func (b Builder) Dependencies() []reflect.Type {
 
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
-func (b Builder) SizeCodeTemplate() string {
+func (b Builder) SizeCodeTemplate(_ *uint64) string {
 	return "n += {{ . }}.Size()"
 }
 
 // MarshalCodeTemplate returns code template marshaling the data.
-func (b Builder) MarshalCodeTemplate() string {
+func (b Builder) MarshalCodeTemplate(_ *uint64) string {
 	return "o += {{ . }}.Marshal(b[o:])"
 }
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
-func (b Builder) UnmarshalCodeTemplate() string {
+func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
 	return "o += {{ . }}.Unmarshal(b[o:])"
 }

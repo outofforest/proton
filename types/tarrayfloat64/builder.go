@@ -32,14 +32,14 @@ func (b Builder) ConstantSize() uint64 {
 }
 
 // MarshalCodeTemplate returns code template marshaling the data.
-func (b Builder) MarshalCodeTemplate() string {
+func (b Builder) MarshalCodeTemplate(_ *uint64) string {
 	unsafe := b.tm.Import("unsafe")
 	return fmt.Sprintf(`copy(b[o:o+%[2]d], %[1]s.Slice((*byte)(%[1]s.Pointer(&{{ . }}[0])), %[2]d))
 o += %[2]d`, unsafe, b.fieldType.Len()*8)
 }
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
-func (b Builder) UnmarshalCodeTemplate() string {
+func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
 	unsafe := b.tm.Import("unsafe")
 	return fmt.Sprintf(`copy(%[1]s.Slice((*byte)(%[1]s.Pointer(&{{ . }}[0])), %[2]d), b[o:o+%[2]d])
 o += %[2]d`, unsafe, b.fieldType.Len()*8)

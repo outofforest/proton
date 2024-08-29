@@ -34,16 +34,16 @@ func (b Builder) ConstantSize() uint64 {
 
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
-func (b Builder) SizeCodeTemplate() (string, bool) {
+func (b Builder) SizeCodeTemplate(_ *uint64) (string, bool) {
 	return types.Int64SizeCode(), true
 }
 
 // MarshalCodeTemplate returns code template marshaling the data.
-func (b Builder) MarshalCodeTemplate() string {
+func (b Builder) MarshalCodeTemplate(_ *uint64) string {
 	return types.Int64Marshal()
 }
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
-func (b Builder) UnmarshalCodeTemplate() string {
+func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
 	return types.Int64Unmarshal(b.tm.TypeName(b.msgType, b.fieldType))
 }

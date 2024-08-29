@@ -21,7 +21,7 @@ func (b Builder) ConstantSize() uint64 {
 }
 
 // MarshalCodeTemplate returns code template marshaling the data.
-func (b Builder) MarshalCodeTemplate() string {
+func (b Builder) MarshalCodeTemplate(_ *uint64) string {
 	return `if {{ . }} {
 	b[o] = 0x01
 } else {
@@ -31,7 +31,7 @@ o++`
 }
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
-func (b Builder) UnmarshalCodeTemplate() string {
+func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
 	return `{{ . }} = b[o] != 0x00
 o++`
 }
