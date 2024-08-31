@@ -81,21 +81,22 @@ func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
 	helpers.Execute(buf, types.UInt64Unmarshal("uint64"), "l")
 	code += buf.String() + "\n"
 
-	code += fmt.Sprintf(`{{ . }} = make(%[1]s, l)
-`, b.tm.TypeName(b.msgType, b.fieldType))
-
-	unsafe := b.tm.Import("unsafe")
-	code += "if l > 0 {\n	"
+	code += "if l > 0 {\n"
 
 	if b.fieldType.Elem().Name() == "uint8" {
-		code += fmt.Sprintf(`copy(%[1]s.Slice(&{{ . }}[0], l), b[o:o+l])
-	o += l`, unsafe)
+		code += `	{{ . }} = b[o:o+l]`
 	} else {
-		code += fmt.Sprintf(`copy(%[1]s.Slice((*byte)(&{{ . }}[0]), l), b[o:o+l])
-	o += l`, unsafe)
+		unsafe := b.tm.Import("unsafe")
+		code += fmt.Sprintf(`	{{ . }} = make(%[1]s, l)
+`, b.tm.TypeName(b.msgType, b.fieldType))
+		code += fmt.Sprintf(`	copy(%[1]s.Slice((*byte)(&{{ . }}[0]), l), b[o:o+l])`, unsafe)
 	}
 
-	code += "\n}"
+	code += `
+	o += l
+} else {
+	{{ . }} = nil
+}`
 
 	return code
 }
