@@ -10,37 +10,6 @@ import (
 // go test -bench=. -run=^$ -cpuprofile profile.out
 // go tool pprof -http="localhost:8000" pprofbin ./profile.out
 
-var _ iface = implValue{}
-var _ iface = &implPointer{}
-
-type iface interface {
-	Method(arg string) string
-}
-
-type implValue struct {
-}
-
-func (i implValue) Method(arg string) string {
-	return arg
-}
-
-type implPointer struct {
-}
-
-func (i *implPointer) Method(arg string) string {
-	return arg
-}
-
-func method(arg string) string {
-	return arg
-}
-
-var methodVar = func(arg string) string {
-	return arg
-}
-
-var str = ""
-
 func BenchmarkValue(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
@@ -227,126 +196,184 @@ func BenchmarkInterfacePointerMethodInVar(b *testing.B) {
 	}
 }
 
-var msg = pkg1.MsgMixed{
-	Value1: map[string]spkg1.SubMsg{
-		"aa": {
-			Value: 143443,
-		},
-		"fdfsdsd": {
-			Value: 433,
-		},
-		"frewrwerwerwedfsdsd": {
-			Value: -433,
-		},
-		"dfsdfsd": {
-			Value: 100000,
-		},
-		"dsjklfjdsklfjdslkjflsdkfsfjlskdjflskdjfkldsjklfsdjklfjsdlkslioisufsdlf": {
-			Value: 43423423,
-		},
-	},
-	Value2: map[uint8][]string{
-		4: {"aafsdfsd", "fdsfsdfdsbb", "fdsfsdfsdfstwsfsdfsdfdsfdsfsd", "fdfsdfsdffdsfds"},
-		1: {"fdsfsdfsdfsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdsfsdfsddfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsdfsdfsdfsdffdsfds"},
-		8: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
-		10: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
-		41: {"aafsdfsd", "fdsfsdfdsbb", "fdsfsdfsdfstwsfsdfsdfdsfdsfsd", "fdfsdfsdffdsfds"},
-		11: {"fdsfsdfsdfsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdsfsdfsddfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsdfsdfsdfsdffdsfds"},
-		81: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
-		110: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
-		42: {"aafsdfsd", "fdsfsdfdsbb", "fdsfsdfsdfstwsfsdfsdfdsfdsfsd", "fdfsdfsdffdsfds"},
-		13: {"fdsfsdfsdfsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdsfsdfsddfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsdfsdfsdfsdffdsfds"},
-		84: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
-		105: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
-		234: {"aafsdfsd", "fdsfsdfdsbb", "fdsfsdfsdfstwsfsdfsdfdsfdsfsd", "fdfsdfsdffdsfds"},
-		12: {"fdsfsdfsdfsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdsfsdfsddfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsdfsdfsdfsdffdsfds"},
-		85: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
-		15: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
-			"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
-	},
-	Value3: [][32]uint16{
-		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-			30, 31},
-		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-			30, 31},
-		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-			30, 31},
-		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-			30, 31},
-		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-			30, 31},
-		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-			30, 31},
-		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-			30, 31},
-		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-			30, 31},
-		{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-			30, 31},
-	},
-	Value4: [12]map[int8]float32{
-		{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
-		{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
-		{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
-		{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
-		{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
-		{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
-	},
-	Value5: [][3][]map[int16][2]int64{
-		{
-			{
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-			},
-			{
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-			},
-			{
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-				{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
-			},
-		},
-	},
-	Value6: true,
-	Value7: true,
-	Value8: "fdfsd",
-}
-
-func BenchmarkMarshaling(b *testing.B) {
+func BenchmarkMarshalingMixed(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
 	var msg2 pkg1.MsgMixed
+	buf := make([]byte, msgMixed.Size())
 
+	b.StartTimer()
 	for range b.N {
-		buf := make([]byte, msg.Size())
-
-		b.StartTimer()
-		for range 10000 {
-			msg.Marshal(buf)
-			msg2.Unmarshal(buf)
-		}
-		b.StopTimer()
+		msgMixed.Marshal(buf)
+		msg2.Unmarshal(buf)
 	}
+	b.StopTimer()
 }
+
+func BenchmarkMarshalingByteSlices(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
+	var msg2 pkg1.MsgSliceUint8
+	buf := make([]byte, msgBytes.Size())
+
+	b.StartTimer()
+	for range b.N {
+		msgBytes.Marshal(buf)
+		msg2.Unmarshal(buf)
+	}
+	b.StopTimer()
+}
+
+var (
+	msgMixed = pkg1.MsgMixed{
+		Value1: map[string]spkg1.SubMsg{
+			"aa": {
+				Value: 143443,
+			},
+			"fdfsdsd": {
+				Value: 433,
+			},
+			"frewrwerwerwedfsdsd": {
+				Value: -433,
+			},
+			"dfsdfsd": {
+				Value: 100000,
+			},
+			"dsjklfjdsklfjdslkjflsdkfsfjlskdjflskdjfkldsjklfsdjklfjsdlkslioisufsdlf": {
+				Value: 43423423,
+			},
+		},
+		Value2: map[uint8][]string{
+			4: {"aafsdfsd", "fdsfsdfdsbb", "fdsfsdfsdfstwsfsdfsdfdsfdsfsd", "fdfsdfsdffdsfds"},
+			1: {"fdsfsdfsdfsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdsfsdfsddfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsdfsdfsdfsdffdsfds"},
+			8: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
+			10: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
+			41: {"aafsdfsd", "fdsfsdfdsbb", "fdsfsdfsdfstwsfsdfsdfdsfdsfsd", "fdfsdfsdffdsfds"},
+			11: {"fdsfsdfsdfsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdsfsdfsddfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsdfsdfsdfsdffdsfds"},
+			81: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
+			110: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
+			42: {"aafsdfsd", "fdsfsdfdsbb", "fdsfsdfsdfstwsfsdfsdfdsfdsfsd", "fdfsdfsdffdsfds"},
+			13: {"fdsfsdfsdfsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdsfsdfsddfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsdfsdfsdfsdffdsfds"},
+			84: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
+			105: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
+			234: {"aafsdfsd", "fdsfsdfdsbb", "fdsfsdfsdfstwsfsdfsdfdsfdsfsd", "fdfsdfsdffdsfds"},
+			12: {"fdsfsdfsdfsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdsfsdfsddfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsdfsdfsdfsdffdsfds"},
+			85: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
+			15: {"fdsfsdsdaafsdfsd", "fdsfsdffsdfsdfdsdsbb", "fdsfsfdfsdfstwsfsdfsdfdsfdsfsd",
+				"fdfdsfsfsdfsdfsdfsfsfsdsddfsdfsdfsdffdsfds"},
+		},
+		Value3: [][32]uint16{
+			{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+				30, 31},
+			{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+				30, 31},
+			{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+				30, 31},
+			{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+				30, 31},
+			{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+				30, 31},
+			{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+				30, 31},
+			{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+				30, 31},
+			{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+				30, 31},
+			{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+				30, 31},
+		},
+		Value4: [12]map[int8]float32{
+			{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
+			{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
+			{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
+			{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
+			{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
+			{0: 1., 2: 5., 10: 11., 12: 56, 89: 100, 54: 43, 125: 435},
+		},
+		Value5: [][3][]map[int16][2]int64{
+			{
+				{
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+				},
+				{
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+				},
+				{
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+					{2: {1, 2}, 4: {14321, 553234234232}, 40: {14321, 553234234232}},
+				},
+			},
+		},
+		Value6: true,
+		Value7: true,
+		Value8: "fdfsd",
+	}
+	msgBytes = pkg1.MsgSliceUint8{
+		Value: []uint8{
+			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+		},
+	}
+)
+
+var _ iface = implValue{}
+var _ iface = &implPointer{}
+
+type iface interface {
+	Method(arg string) string
+}
+
+type implValue struct {
+}
+
+func (i implValue) Method(arg string) string {
+	return arg
+}
+
+type implPointer struct {
+}
+
+func (i *implPointer) Method(arg string) string {
+	return arg
+}
+
+func method(arg string) string {
+	return arg
+}
+
+var methodVar = func(arg string) string {
+	return arg
+}
+
+var str = ""
