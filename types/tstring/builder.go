@@ -71,6 +71,7 @@ func (b Builder) MarshalCodeTemplate(_ *uint64) string {
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
+	unsafe := b.tm.Import("unsafe")
 	code := `{
 	var l uint64
 `
@@ -79,10 +80,19 @@ func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
 	helpers.Execute(buf, types.UInt64Unmarshal("uint64"), "l")
 	code += types.AddIndent(buf.String(), 1) + "\n"
 
-	t := b.tm.TypeName(b.msgType, b.fieldType)
-	code += fmt.Sprintf(`	{{ . }} = %[1]s(b[o : o+l])
-	o += l
-}`, t)
+	code += `	if l > 0 {
+`
+	if b.fieldType.Name() == "string" {
+		code += fmt.Sprintf("		{{ . }} = %[1]s.String((*byte)(%[1]s.Pointer(&b[o])), l)\n", unsafe)
+	} else {
+		code += fmt.Sprintf("		{{ . }} = %[2]s(%[1]s.String((*byte)(%[1]s.Pointer(&b[o])), l))\n", unsafe,
+			b.tm.TypeName(b.msgType, b.fieldType))
+	}
+	code += `		o += l
+	} else {
+		{{ . }} = "" 
+	}
+}`
 
 	return code
 }

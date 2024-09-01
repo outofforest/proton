@@ -226,6 +226,21 @@ func BenchmarkMarshalingByteSlices(b *testing.B) {
 	b.StopTimer()
 }
 
+func BenchmarkMarshalingStrings(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
+	var msg2 pkg1.MsgString
+	buf := make([]byte, msgStrings.Size())
+
+	b.StartTimer()
+	for range b.N {
+		msgStrings.Marshal(buf)
+		msg2.Unmarshal(buf)
+	}
+	b.StopTimer()
+}
+
 var (
 	msgMixed = pkg1.MsgMixed{
 		Value1: map[string]spkg1.SubMsg{
@@ -344,6 +359,10 @@ var (
 			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
 			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
 		},
+	}
+	msgStrings = pkg1.MsgString{
+		//nolint:lll
+		Value: "fdfsdfdsgfdlghfdkghkdfhkdfhkjghdfkhgkjdfhgkjdfhkjdgfhkjhdfkjhgkjdfhkjdfhkjdfhkjhfdkjhkjdfhkjdfhkjfdghkjhfdkjhgkjdfhkjdfhkjghfdkjhgdfkjhkjfdhkjfhkjghdfkjhdfkhgkjsfysdfydgdfkghdfkjghkfd",
 	}
 )
 
