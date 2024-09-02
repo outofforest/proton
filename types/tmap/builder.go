@@ -143,25 +143,31 @@ func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
 	mk := types.Var("mk", varIndex)
 	mv := types.Var("mv", varIndex)
 
-	code += fmt.Sprintf(`{{ . }} = make(%[1]s, l)
-var %[2]s %[4]s
-var %[3]s %[5]s
+	code += fmt.Sprintf(`if l > 0 {
+	{{ . }} = make(%[1]s, l)
+
+	var %[2]s %[4]s
+	var %[3]s %[5]s
+
+	for range l {
 `, b.tm.TypeName(b.msgType, b.fieldType), mk, mv, b.tm.TypeName(b.msgType, b.fieldType.Key()), b.tm.TypeName(b.msgType,
 		b.fieldType.Elem()))
 
-	code += "for range l {\n"
-
 	buf = &bytes.Buffer{}
 	helpers.Execute(buf, keyTpl, mk)
-	code += types.AddIndent(buf.String(), 1) + "\n"
+	code += types.AddIndent(buf.String(), 2) + "\n"
 
 	buf = &bytes.Buffer{}
 	helpers.Execute(buf, elementTpl, mv)
-	code += types.AddIndent(buf.String(), 1) + "\n"
+	code += types.AddIndent(buf.String(), 2) + "\n"
 
-	code += fmt.Sprintf("	{{ . }}[%[1]s] = %[2]s", mk, mv)
+	code += fmt.Sprintf("		{{ . }}[%[1]s] = %[2]s", mk, mv)
 
-	code += "\n}"
+	code += `
+	}
+} else {
+	{{ . }} = nil
+}`
 
 	return code
 }

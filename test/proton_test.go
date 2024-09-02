@@ -63,10 +63,10 @@ func TestDefault(t *testing.T) {
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(pkg1.MsgMixed{
-		Value1: map[string]spkg1.SubMsg{},
-		Value2: map[uint8][]string{},
+		Value1: nil,
+		Value2: nil,
 		Value3: nil,
-		Value4: [12]map[int8]float32{{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
+		Value4: [12]map[int8]float32{nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil},
 		Value5: nil,
 	}, msg2)
 }
