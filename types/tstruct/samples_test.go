@@ -51,7 +51,7 @@ func TestDefault(t *testing.T) {
 			Value3: nil,
 		},
 		Value2: pkg2.SubMsg{
-			Value1: map[bool]string{},
+			Value1: nil,
 		},
 	}, msg2)
 }
@@ -97,7 +97,7 @@ func TestEmpty(t *testing.T) {
 			Value3: nil,
 		},
 		Value2: pkg2.SubMsg{
-			Value1: map[bool]string{},
+			Value1: nil,
 		},
 	}, msg2)
 }
@@ -191,7 +191,7 @@ func TestAnonymousDefault(t *testing.T) {
 			Value3: nil,
 		},
 		Value2: pkg2.SubMsg{
-			Value1: map[bool]string{},
+			Value1: nil,
 		},
 	}, msg2)
 }
@@ -237,7 +237,7 @@ func TestAnonymousEmpty(t *testing.T) {
 			Value3: nil,
 		},
 		Value2: pkg2.SubMsg{
-			Value1: map[bool]string{},
+			Value1: nil,
 		},
 	}, msg2)
 }
