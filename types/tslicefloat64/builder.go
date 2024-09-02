@@ -74,14 +74,14 @@ func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
 	helpers.Execute(buf, types.UInt64Unmarshal("uint64"), "l")
 	code += buf.String() + "\n"
 
-	code += fmt.Sprintf(`{{ . }} = make(%[1]s, l)
-`, b.tm.TypeName(b.msgType, b.fieldType))
-
 	unsafe := b.tm.Import("unsafe")
 	code += fmt.Sprintf(`if l > 0 {
+	{{ . }} = make(%[2]s, l)
 	copy(%[1]s.Slice((*byte)(%[1]s.Pointer(&{{ . }}[0])), l*8), b[o:o+l*8])
 	o += l * 8
-}`, unsafe)
+} else {
+	{{ . }} = nil
+}`, unsafe, b.tm.TypeName(b.msgType, b.fieldType))
 
 	return code
 }

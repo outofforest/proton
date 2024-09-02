@@ -27,7 +27,7 @@ func TestDefault(t *testing.T) {
 	l = msg2.Unmarshal(b)
 	requireT.Equal(msg1.Size(), l)
 
-	requireT.Equal(pkg1.MsgSlice{Value: []bool{}}, msg2)
+	requireT.Equal(pkg1.MsgSlice{}, msg2)
 }
 
 func TestEmpty(t *testing.T) {
@@ -50,7 +50,7 @@ func TestEmpty(t *testing.T) {
 	l = msg2.Unmarshal(b)
 	requireT.Equal(msg1.Size(), l)
 
-	requireT.Equal(msg1, msg2)
+	requireT.Equal(pkg1.MsgSlice{}, msg2)
 }
 
 func Test1(t *testing.T) {

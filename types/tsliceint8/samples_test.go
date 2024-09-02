@@ -27,9 +27,7 @@ func TestDefault(t *testing.T) {
 	l = msg2.Unmarshal(b)
 	requireT.Equal(msg1.Size(), l)
 
-	requireT.Equal(pkg1.MsgSliceInt8{
-		Value: []int8{},
-	}, msg2)
+	requireT.Equal(pkg1.MsgSliceInt8{}, msg2)
 }
 
 func Test1(t *testing.T) {
