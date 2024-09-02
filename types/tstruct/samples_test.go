@@ -46,9 +46,9 @@ func TestDefault(t *testing.T) {
 
 	requireT.Equal(pkg1.MsgStruct{
 		Value1: pkg1.SubMsg{
-			Value1: []float32{},
-			Value2: []spkg1.SubMsg{},
-			Value3: []spkg2.SubMsg{},
+			Value1: nil,
+			Value2: nil,
+			Value3: nil,
 		},
 		Value2: pkg2.SubMsg{
 			Value1: map[bool]string{},
@@ -90,7 +90,16 @@ func TestEmpty(t *testing.T) {
 	l = msg2.Unmarshal(b)
 	requireT.Equal(msg1.Size(), l)
 
-	requireT.Equal(msg1, msg2)
+	requireT.Equal(pkg1.MsgStruct{
+		Value1: pkg1.SubMsg{
+			Value1: nil,
+			Value2: nil,
+			Value3: nil,
+		},
+		Value2: pkg2.SubMsg{
+			Value1: map[bool]string{},
+		},
+	}, msg2)
 }
 
 func Test1(t *testing.T) {
@@ -177,9 +186,9 @@ func TestAnonymousDefault(t *testing.T) {
 
 	requireT.Equal(pkg1.MsgStructAnonymous{
 		SubMsg: pkg1.SubMsg{
-			Value1: []float32{},
-			Value2: []spkg1.SubMsg{},
-			Value3: []spkg2.SubMsg{},
+			Value1: nil,
+			Value2: nil,
+			Value3: nil,
 		},
 		Value2: pkg2.SubMsg{
 			Value1: map[bool]string{},
@@ -221,7 +230,16 @@ func TestAnonymousEmpty(t *testing.T) {
 	l = msg2.Unmarshal(b)
 	requireT.Equal(msg1.Size(), l)
 
-	requireT.Equal(msg1, msg2)
+	requireT.Equal(pkg1.MsgStructAnonymous{
+		SubMsg: pkg1.SubMsg{
+			Value1: nil,
+			Value2: nil,
+			Value3: nil,
+		},
+		Value2: pkg2.SubMsg{
+			Value1: map[bool]string{},
+		},
+	}, msg2)
 }
 
 func TestAnonymous1(t *testing.T) {

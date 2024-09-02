@@ -241,6 +241,21 @@ func BenchmarkMarshalingStrings(b *testing.B) {
 	b.StopTimer()
 }
 
+func BenchmarkMarshalingEmptySlices(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
+	var msg pkg1.MsgSlice
+	buf := make([]byte, msg.Size())
+
+	b.StartTimer()
+	for range b.N {
+		msg.Marshal(buf)
+		msg.Unmarshal(buf)
+	}
+	b.StopTimer()
+}
+
 var (
 	msgMixed = pkg1.MsgMixed{
 		Value1: map[string]spkg1.SubMsg{
