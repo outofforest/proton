@@ -3,6 +3,7 @@ package test
 import (
 	"testing"
 
+	"github.com/outofforest/mass"
 	"github.com/outofforest/proton/test/pkg1"
 	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
 )
@@ -203,10 +204,32 @@ func BenchmarkMarshalingMixed(b *testing.B) {
 	var msg2 pkg1.MsgMixed
 	buf := make([]byte, msgMixed.Size())
 
+	mass1 := mass.New[string](100)
+	mass2 := mass.New[[32]uint16](100)
+	mass3 := mass.New[[3][]map[int16][2]int64](100)
+	mass4 := mass.New[map[int16][2]int64](100)
+
 	b.StartTimer()
 	for range b.N {
 		msgMixed.Marshal(buf)
-		msg2.Unmarshal(buf)
+		msg2.Unmarshal(buf, mass1, mass2, mass3, mass4)
+	}
+	b.StopTimer()
+}
+
+func BenchmarkMarshalingSlices(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
+	var msg2 pkg1.MsgSlice
+	buf := make([]byte, msgSlice.Size())
+
+	mass := mass.New[bool](1000)
+
+	b.StartTimer()
+	for range b.N {
+		msgSlice.Marshal(buf)
+		msg2.Unmarshal(buf, mass)
 	}
 	b.StopTimer()
 }
@@ -248,10 +271,12 @@ func BenchmarkMarshalingEmptySlices(b *testing.B) {
 	var msg pkg1.MsgSlice
 	buf := make([]byte, msg.Size())
 
+	mass := mass.New[bool](100)
+
 	b.StartTimer()
 	for range b.N {
 		msg.Marshal(buf)
-		msg.Unmarshal(buf)
+		msg.Unmarshal(buf, mass)
 	}
 	b.StopTimer()
 }
@@ -393,6 +418,9 @@ var (
 	msgStrings = pkg1.MsgString{
 		//nolint:lll
 		Value: "fdfsdfdsgfdlghfdkghkdfhkdfhkjghdfkhgkjdfhgkjdfhkjdgfhkjhdfkjhgkjdfhkjdfhkjdfhkjhfdkjhkjdfhkjdfhkjfdghkjhfdkjhgkjdfhkjdfhkjghfdkjhgdfkjhkjfdhkjfhkjghdfkjhdfkhgkjsfysdfydgdfkghdfkjghkfd",
+	}
+	msgSlice = pkg1.MsgSlice{
+		Value: make([]bool, 10),
 	}
 )
 

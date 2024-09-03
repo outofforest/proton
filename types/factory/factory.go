@@ -33,6 +33,8 @@ import (
 )
 
 // Get returns builder for particular type.
+//
+//nolint:gocyclo
 func Get(msgType, fieldType reflect.Type, tm types.TypeMap) (types.BuilderFactory, error) {
 	switch fieldType.Kind() {
 	case reflect.Bool:
@@ -107,7 +109,19 @@ func Get(msgType, fieldType reflect.Type, tm types.TypeMap) (types.BuilderFactor
 	case reflect.String:
 		return tstring.New(msgType, fieldType, tm), nil
 	case reflect.Struct:
-		return newNonConstantAdapter(tstruct.New(fieldType)), nil
+		fieldCount := fieldType.NumField()
+		fieldBuilders := make([]types.BuilderFactory, 0, fieldCount)
+
+		for i := range fieldCount {
+			fieldType := fieldType.Field(i).Type
+			fieldBuilder, err := Get(msgType, fieldType, tm)
+			if err != nil {
+				return nil, err
+			}
+			fieldBuilders = append(fieldBuilders, fieldBuilder)
+		}
+
+		return newNonConstantAdapter(tstruct.New(msgType, fieldType, fieldBuilders, tm)), nil
 	default:
 		return nil, errors.Errorf("unsupported type %s", fieldType.Name())
 	}
@@ -125,6 +139,10 @@ type constantAdapter struct {
 
 func (b constantAdapter) Dependencies() []reflect.Type {
 	return b.builder.Dependencies()
+}
+
+func (b constantAdapter) Allocators() []reflect.Type {
+	return b.builder.Allocators()
 }
 
 func (b constantAdapter) ConstantSize() uint64 {
@@ -155,6 +173,10 @@ type nonConstantAdapter struct {
 
 func (b nonConstantAdapter) Dependencies() []reflect.Type {
 	return b.builder.Dependencies()
+}
+
+func (b nonConstantAdapter) Allocators() []reflect.Type {
+	return b.builder.Allocators()
 }
 
 func (b nonConstantAdapter) ConstantSize() uint64 {

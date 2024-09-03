@@ -16,5 +16,4 @@ type Message interface {
 	Marshallable
 
 	Size() uint64
-	Unmarshal(b []byte) uint64
 }

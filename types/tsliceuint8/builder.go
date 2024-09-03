@@ -9,6 +9,8 @@ import (
 	"github.com/outofforest/proton/types"
 )
 
+const uint8Name = "uint8"
+
 // New returns new code builder.
 func New(msgType, fieldType reflect.Type, tm types.TypeMap) Builder {
 	return Builder{
@@ -28,6 +30,14 @@ type Builder struct {
 // Dependencies returns the list of other types which code must be generated for.
 func (b Builder) Dependencies() []reflect.Type {
 	return nil
+}
+
+// Allocators returns the list of types for which massive allocators are needed.
+func (b Builder) Allocators() []reflect.Type {
+	if b.fieldType.Elem().Name() == uint8Name {
+		return nil
+	}
+	return []reflect.Type{b.fieldType.Elem()}
 }
 
 // ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content.
@@ -60,7 +70,7 @@ func (b Builder) MarshalCodeTemplate(_ *uint64) string {
 	unsafe := b.tm.Import("unsafe")
 	code += "if l > 0 {\n	"
 
-	if b.fieldType.Elem().Name() == "uint8" {
+	if b.fieldType.Elem().Name() == uint8Name {
 		code += fmt.Sprintf(`copy(b[o:o+l], %[1]s.Slice(&{{ . }}[0], l))
 	o += l`, unsafe)
 	} else {
@@ -83,12 +93,12 @@ func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
 
 	code += "if l > 0 {\n"
 
-	if b.fieldType.Elem().Name() == "uint8" {
+	if b.fieldType.Elem().Name() == uint8Name {
 		code += `	{{ . }} = b[o:o+l]`
 	} else {
 		unsafe := b.tm.Import("unsafe")
-		code += fmt.Sprintf(`	{{ . }} = make(%[1]s, l)
-`, b.tm.TypeName(b.msgType, b.fieldType))
+		code += fmt.Sprintf(`	{{ . }} = %[2]s.NewSlice(l)
+`, b.tm.TypeName(b.msgType, b.fieldType), b.tm.VarName(b.msgType, b.fieldType.Elem(), "mass"))
 		code += fmt.Sprintf(`	copy(%[1]s.Slice((*byte)(&{{ . }}[0]), l), b[o:o+l])`, unsafe)
 	}
 

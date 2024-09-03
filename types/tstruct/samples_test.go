@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/outofforest/mass"
 	"github.com/outofforest/proton/test/pkg1"
 	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
 	"github.com/outofforest/proton/test/pkg2"
@@ -41,7 +42,8 @@ func TestDefault(t *testing.T) {
 			Value1: map[bool]string{false: "bb"},
 		},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[float32](10), mass.New[spkg1.SubMsg](10),
+		mass.New[spkg2.SubMsg](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(pkg1.MsgStruct{
@@ -87,7 +89,8 @@ func TestEmpty(t *testing.T) {
 			Value1: map[bool]string{true: "aa"},
 		},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[float32](10), mass.New[spkg1.SubMsg](10),
+		mass.New[spkg2.SubMsg](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(pkg1.MsgStruct{
@@ -145,7 +148,8 @@ func Test1(t *testing.T) {
 		0x73, 0x66, 0x64, 0x73, 0xA0, 0xAA, 0x03}, b)
 
 	var msg2 pkg1.MsgStruct
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[float32](10), mass.New[spkg1.SubMsg](10),
+		mass.New[spkg2.SubMsg](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)
@@ -181,7 +185,8 @@ func TestAnonymousDefault(t *testing.T) {
 			Value1: map[bool]string{false: "bb"},
 		},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[float32](10), mass.New[spkg1.SubMsg](10),
+		mass.New[spkg2.SubMsg](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(pkg1.MsgStructAnonymous{
@@ -227,7 +232,8 @@ func TestAnonymousEmpty(t *testing.T) {
 			Value1: map[bool]string{true: "aa"},
 		},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[float32](10), mass.New[spkg1.SubMsg](10),
+		mass.New[spkg2.SubMsg](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(pkg1.MsgStructAnonymous{
@@ -285,7 +291,8 @@ func TestAnonymous1(t *testing.T) {
 		0x73, 0x66, 0x64, 0x73, 0xA0, 0xAA, 0x03}, b)
 
 	var msg2 pkg1.MsgStructAnonymous
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[float32](10), mass.New[spkg1.SubMsg](10),
+		mass.New[spkg2.SubMsg](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)

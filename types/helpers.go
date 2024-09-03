@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 )
 
@@ -862,8 +863,22 @@ func Align(v string, l int) string {
 	return strings.Repeat(" ", l-len(v))
 }
 
-// Var generates random variable name with provided prefix.
+// Var generates unique variable name with provided prefix.
 func Var(prefix string, varIndex *uint64) string {
 	*varIndex++
 	return fmt.Sprintf("%s%d", prefix, *varIndex)
+}
+
+// MergeTypes merges two sets of types.
+func MergeTypes(existingTypes []reflect.Type, newTypes []reflect.Type) []reflect.Type {
+loop:
+	for _, newType := range newTypes {
+		for _, existingType := range existingTypes {
+			if newType == existingType {
+				continue loop
+			}
+		}
+		existingTypes = append(existingTypes, newType)
+	}
+	return existingTypes
 }

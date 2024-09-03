@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/outofforest/mass"
 	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
@@ -59,7 +60,8 @@ func TestDefault(t *testing.T) {
 		Value7: true,
 		Value8: "fdfsd",
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[string](10), mass.New[[32]uint16](10),
+		mass.New[[3][]map[int16][2]int64](10), mass.New[map[int16][2]int64](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(pkg1.MsgMixed{
@@ -137,7 +139,8 @@ func Test1(t *testing.T) {
 	requireT.Equal(msg1.Size(), l)
 
 	var msg2 pkg1.MsgMixed
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[string](10), mass.New[[32]uint16](10),
+		mass.New[[3][]map[int16][2]int64](10), mass.New[map[int16][2]int64](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)
@@ -184,7 +187,8 @@ func TestCustom(t *testing.T) {
 	requireT.Equal(msg1.Size(), l)
 
 	var msg2 pkg1.MsgMixedCustom
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[[3][]map[int16]custom.Array](10),
+		mass.New[map[int16]custom.Array](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)

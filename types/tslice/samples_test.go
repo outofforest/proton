@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/outofforest/mass"
 	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 )
@@ -24,7 +25,7 @@ func TestDefault(t *testing.T) {
 	msg2 := pkg1.MsgSlice{
 		Value: []bool{true, true, true},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[bool](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(pkg1.MsgSlice{}, msg2)
@@ -47,7 +48,7 @@ func TestEmpty(t *testing.T) {
 	msg2 := pkg1.MsgSlice{
 		Value: []bool{true, true, true},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[bool](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(pkg1.MsgSlice{}, msg2)
@@ -70,7 +71,7 @@ func Test1(t *testing.T) {
 	msg2 := pkg1.MsgSlice{
 		Value: []bool{false, false},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[bool](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)
@@ -93,7 +94,7 @@ func Test2(t *testing.T) {
 	msg2 := pkg1.MsgSlice{
 		Value: []bool{true, true},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[bool](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)
@@ -116,7 +117,7 @@ func Test3(t *testing.T) {
 	msg2 := pkg1.MsgSlice{
 		Value: []bool{false, true, false},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[bool](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)
@@ -154,7 +155,7 @@ func Test127Items(t *testing.T) {
 	msg2 := pkg1.MsgSlice{
 		Value: []bool{false, true, false},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[bool](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)
@@ -193,7 +194,7 @@ func Test128Items(t *testing.T) {
 	msg2 := pkg1.MsgSlice{
 		Value: []bool{false, true, false},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[bool](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)
@@ -215,7 +216,7 @@ func TestCustom(t *testing.T) {
 		0xAB, 0xF7, 0x96, 0x93, 0x84, 0xBC, 0x07, 0x9C, 0xDB, 0x86, 0xD4, 0xD2, 0xB2, 0x62}, b)
 
 	var msg2 pkg1.MsgSliceCustom
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[custom.Uint64](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)
