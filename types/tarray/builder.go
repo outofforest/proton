@@ -30,6 +30,11 @@ func (b Builder) Dependencies() []reflect.Type {
 	return b.elementBuilder.Dependencies()
 }
 
+// Allocators returns the list of types for which massive allocators are needed.
+func (b Builder) Allocators() []reflect.Type {
+	return b.elementBuilder.Allocators()
+}
+
 // ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content.
 func (b Builder) ConstantSize() uint64 {
 	return uint64(b.fieldType.Len()) * b.elementBuilder.ConstantSize()

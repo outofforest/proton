@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/outofforest/mass"
 	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 )
@@ -24,7 +25,7 @@ func TestDefault(t *testing.T) {
 	msg2 := pkg1.MsgSliceFloat64{
 		Value: []float64{-128.23, 127.78, -1.2, 0., 1.1},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[float64](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(pkg1.MsgSliceFloat64{}, msg2)
@@ -47,7 +48,7 @@ func Test1(t *testing.T) {
 		0x9A, 0x99, 0x99, 0x99, 0x99, 0x99, 0xF1, 0x3F}, b)
 
 	var msg2 pkg1.MsgSliceFloat64
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[float64](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)
@@ -70,7 +71,7 @@ func TestCustom(t *testing.T) {
 		0x9A, 0x99, 0x99, 0x99, 0x99, 0x99, 0xF1, 0x3F}, b)
 
 	var msg2 pkg1.MsgSliceFloat64Custom
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[custom.Float64](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)

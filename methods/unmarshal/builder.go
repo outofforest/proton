@@ -13,14 +13,8 @@ import (
 	"github.com/outofforest/proton/types/factory"
 )
 
-const (
-	header = `// Unmarshal unmarshals the structure.
-func (m *{{ .TypeName }}) Unmarshal(b []byte) uint64 {
-`
-)
-
 // Build generates code of Unmarshal method.
-func Build(cfg methods.Config, tm types.TypeMap) []byte {
+func Build(cfg methods.Config, tm types.TypeMap) ([]byte, []reflect.Type) {
 	code := &bytes.Buffer{}
 
 	offset := methods.BitMapLength(cfg.NumOfBooleanFields)
@@ -31,6 +25,7 @@ func Build(cfg methods.Config, tm types.TypeMap) []byte {
 	}
 
 	var boolIndex uint64
+	allocators := []reflect.Type{}
 	lo.Must0(helpers.ForEachField(cfg.Type, func(field reflect.StructField) error {
 		if field.Type.Kind() == reflect.Bool {
 			byteIndex, bitIndex := methods.BitMapPosition(boolIndex)
@@ -50,6 +45,8 @@ func Build(cfg methods.Config, tm types.TypeMap) []byte {
 			return err
 		}
 
+		allocators = types.MergeTypes(allocators, builder.Allocators())
+
 		marshalCode := builder.UnmarshalCodeTemplate(new(uint64))
 
 		code.WriteString("	{\n		// " + field.Name + "\n\n")
@@ -61,16 +58,26 @@ func Build(cfg methods.Config, tm types.TypeMap) []byte {
 	}))
 
 	b := &bytes.Buffer{}
-	helpers.Execute(b, header, struct {
-		TypeName string
-	}{
-		TypeName: cfg.Type.Name(),
-	})
+
+	b.WriteString(fmt.Sprintf(`// Unmarshal unmarshals the structure.
+func (m *%[1]s) Unmarshal(
+	b []byte,
+`, cfg.Type.Name()))
+
+	for _, allocator := range allocators {
+		b.WriteString(fmt.Sprintf("	%[1]s *mass.Mass[%[2]s],\n",
+			tm.VarName(cfg.Type, allocator, "mass"),
+			tm.TypeName(cfg.Type, allocator),
+		))
+	}
+
+	b.WriteString(`) uint64 {
+`)
 
 	if code.Len() > 0 {
 		lo.Must(code.WriteTo(b))
 	}
 
 	b.WriteString("\n	return o\n}")
-	return b.Bytes()
+	return b.Bytes(), allocators
 }

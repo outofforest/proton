@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/outofforest/mass"
 	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 )
@@ -68,7 +69,7 @@ func TestCustomDefault(t *testing.T) {
 	msg2 := pkg1.MsgSliceUint8Custom2{
 		Value: custom.SliceCustomUint8{255, 255, 255, 255, 255},
 	}
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[custom.Uint8](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(pkg1.MsgSliceUint8Custom2{}, msg2)
@@ -110,7 +111,7 @@ func TestCustom2(t *testing.T) {
 	requireT.Equal([]byte{0x05, 0xFF, 0xFE, 0xFD, 0x00, 0x01}, b)
 
 	var msg2 pkg1.MsgSliceUint8Custom2
-	l = msg2.Unmarshal(b)
+	l = msg2.Unmarshal(b, mass.New[custom.Uint8](10))
 	requireT.Equal(msg1.Size(), l)
 
 	requireT.Equal(msg1, msg2)
