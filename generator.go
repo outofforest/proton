@@ -73,7 +73,7 @@ func Generate(filePath string, msgs ...any) error {
 			})
 		}
 
-		for dep := range dependencies {
+		for _, dep := range dependencies {
 			if !processed[dep] {
 				stack = append(stack, dep)
 				processed[dep] = true
@@ -144,7 +144,7 @@ func Generate(filePath string, msgs ...any) error {
 	return nil
 }
 
-func generateMsg(msgType reflect.Type, tm types.TypeMap) ([]byte, map[reflect.Type]struct{}, []reflect.Type, error) {
+func generateMsg(msgType reflect.Type, tm types.TypeMap) ([]byte, []reflect.Type, []reflect.Type, error) {
 	pkg := msgType.PkgPath()
 	if msgType.Kind() != reflect.Struct {
 		return nil, nil, nil, errors.Errorf("type %s is not a struct", msgType)
@@ -154,7 +154,8 @@ func generateMsg(msgType reflect.Type, tm types.TypeMap) ([]byte, map[reflect.Ty
 		Type: msgType,
 	}
 
-	dependencies := map[reflect.Type]struct{}{}
+	dependencies := []reflect.Type{}
+	dependenciesMap := map[reflect.Type]struct{}{}
 
 	err := helpers.ForEachField(msgType, func(field reflect.StructField) error {
 		builder, err := factory.Get(msgType, field.Type, tm)
@@ -166,7 +167,10 @@ func generateMsg(msgType reflect.Type, tm types.TypeMap) ([]byte, map[reflect.Ty
 			if d.PkgPath() != pkg {
 				continue
 			}
-			dependencies[d] = struct{}{}
+			if _, exists := dependenciesMap[d]; !exists {
+				dependenciesMap[d] = struct{}{}
+				dependencies = append(dependencies, d)
+			}
 		}
 
 		if field.Type.Kind() == reflect.Bool {
