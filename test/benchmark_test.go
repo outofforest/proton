@@ -79,21 +79,6 @@ func BenchmarkInterfacePointer(b *testing.B) {
 	}
 }
 
-func BenchmarkVarFunction(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
-	r := str
-
-	for range b.N {
-		b.StartTimer()
-		for range 100000 {
-			r = methodVar(r)
-		}
-		b.StopTimer()
-	}
-}
-
 func BenchmarkFunction(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
@@ -104,6 +89,21 @@ func BenchmarkFunction(b *testing.B) {
 		b.StartTimer()
 		for range 100000 {
 			r = method(r)
+		}
+		b.StopTimer()
+	}
+}
+
+func BenchmarkVarFunction(b *testing.B) {
+	b.StopTimer()
+	b.ResetTimer()
+
+	r := str
+
+	for range b.N {
+		b.StartTimer()
+		for range 100000 {
+			r = methodVar(r)
 		}
 		b.StopTimer()
 	}
