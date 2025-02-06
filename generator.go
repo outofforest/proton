@@ -2,6 +2,7 @@ package proton
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -19,10 +20,17 @@ import (
 	"github.com/outofforest/proton/methods/unmarshal"
 	"github.com/outofforest/proton/types"
 	"github.com/outofforest/proton/types/factory"
+	"github.com/outofforest/run"
 )
 
 // Generate generates proton methods for provided types and stores them in a file.
-func Generate(filePath string, msgs ...any) error {
+func Generate(filePath string, msgs ...any) {
+	run.New().Run(context.Background(), "generator", func(ctx context.Context) error {
+		return generate(filePath, msgs...)
+	})
+}
+
+func generate(filePath string, msgs ...any) error {
 	if len(msgs) == 0 {
 		return nil
 	}

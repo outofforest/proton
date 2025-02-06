@@ -1,19 +1,14 @@
-package build
+package main
 
 import (
-	"context"
-
-	"github.com/outofforest/build/v2/pkg/types"
 	"github.com/outofforest/proton"
 	"github.com/outofforest/proton/test/pkg1"
-	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
-	"github.com/outofforest/proton/test/pkg2"
-	spkg2 "github.com/outofforest/proton/test/pkg2/spkg"
 )
 
-func generate(_ context.Context, _ types.DepsFunc) error {
-	if err := proton.Generate(
-		"test/pkg1/types.proton.go",
+//go:generate go run .
+
+func main() {
+	proton.Generate("../types.proton.go",
 		pkg1.MsgUint64{},
 		pkg1.MsgUint32{},
 		pkg1.MsgUint16{},
@@ -68,24 +63,5 @@ func generate(_ context.Context, _ types.DepsFunc) error {
 		pkg1.MsgSliceFloat32Custom{},
 		pkg1.MsgSliceFloat64Custom{},
 		pkg1.MsgMixedCustom{},
-	); err != nil {
-		return err
-	}
-
-	if err := proton.Generate(
-		"test/pkg2/types.proton.go",
-		pkg2.SubMsg{},
-	); err != nil {
-		return err
-	}
-	if err := proton.Generate(
-		"test/pkg1/spkg/types.proton.go",
-		spkg1.SubMsg{},
-	); err != nil {
-		return err
-	}
-	return proton.Generate(
-		"test/pkg2/spkg/types.proton.go",
-		spkg2.SubMsg{},
 	)
 }
