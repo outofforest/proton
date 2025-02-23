@@ -3,12 +3,14 @@ package main
 import (
 	"github.com/outofforest/proton"
 	"github.com/outofforest/proton/test/pkg1"
+	"github.com/outofforest/proton/test/pkg2"
 )
 
 //go:generate go run .
 
 func main() {
 	proton.Generate("../types.proton.go",
+		pkg2.SubMsg{},
 		pkg1.MsgUint64{},
 		pkg1.MsgUint32{},
 		pkg1.MsgUint16{},

@@ -8,9 +8,8 @@ import (
 )
 
 // New returns new code builder.
-func New(msgType, fieldType reflect.Type, fieldBuilders []types.BuilderFactory, tm types.TypeMap) Builder {
+func New(fieldType reflect.Type, fieldBuilders []types.BuilderFactory, tm *types.TypeMap) Builder {
 	return Builder{
-		msgType:       msgType,
 		fieldType:     fieldType,
 		fieldBuilders: fieldBuilders,
 		tm:            tm,
@@ -19,10 +18,9 @@ func New(msgType, fieldType reflect.Type, fieldBuilders []types.BuilderFactory, 
 
 // Builder generates the code.
 type Builder struct {
-	msgType       reflect.Type
 	fieldType     reflect.Type
 	fieldBuilders []types.BuilderFactory
-	tm            types.TypeMap
+	tm            *types.TypeMap
 }
 
 // Dependencies returns the list of other types which code must be generated for.
@@ -42,21 +40,22 @@ func (b Builder) Allocators() []reflect.Type {
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCodeTemplate(_ *uint64) string {
-	return "n += {{ . }}.Size()"
+	return fmt.Sprintf("n += %[1]s(&{{ . }})", b.tm.VarName(b.fieldType, "size"))
 }
 
 // MarshalCodeTemplate returns code template marshaling the data.
 func (b Builder) MarshalCodeTemplate(_ *uint64) string {
-	return "o += {{ . }}.Marshal(b[o:])"
+	return fmt.Sprintf("o += %[1]s(&{{ . }}, b[o:])", b.tm.VarName(b.fieldType, "marshal"))
 }
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
-	code := `o += {{ . }}.Unmarshal(
+	code := fmt.Sprintf(`o += %[1]s(
+	&{{ . }},
 	b[o:],
-`
+`, b.tm.VarName(b.fieldType, "unmarshal"))
 	for _, allocator := range b.Allocators() {
-		code += fmt.Sprintf("	%[1]s,\n", b.tm.VarName(b.msgType, allocator, "mass"))
+		code += fmt.Sprintf("	%[1]s,\n", b.tm.VarName(allocator, "mass"))
 	}
 
 	code += `)`

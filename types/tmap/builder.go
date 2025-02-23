@@ -10,9 +10,8 @@ import (
 )
 
 // New returns new code builder.
-func New(msgType, fieldType reflect.Type, keyBuilder, elementBuilder types.BuilderFactory, tm types.TypeMap) Builder {
+func New(fieldType reflect.Type, keyBuilder, elementBuilder types.BuilderFactory, tm *types.TypeMap) Builder {
 	return Builder{
-		msgType:        msgType,
 		fieldType:      fieldType,
 		keyBuilder:     keyBuilder,
 		elementBuilder: elementBuilder,
@@ -22,11 +21,10 @@ func New(msgType, fieldType reflect.Type, keyBuilder, elementBuilder types.Build
 
 // Builder generates the code.
 type Builder struct {
-	msgType        reflect.Type
 	fieldType      reflect.Type
 	keyBuilder     types.BuilderFactory
 	elementBuilder types.BuilderFactory
-	tm             types.TypeMap
+	tm             *types.TypeMap
 }
 
 // Dependencies returns the list of other types which code must be generated for.
@@ -155,8 +153,7 @@ func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
 	var %[3]s %[5]s
 
 	for range l {
-`, b.tm.TypeName(b.msgType, b.fieldType), mk, mv, b.tm.TypeName(b.msgType, b.fieldType.Key()), b.tm.TypeName(b.msgType,
-		b.fieldType.Elem()))
+`, b.tm.TypeName(b.fieldType), mk, mv, b.tm.TypeName(b.fieldType.Key()), b.tm.TypeName(b.fieldType.Elem()))
 
 	buf = &bytes.Buffer{}
 	helpers.Execute(buf, keyTpl, mk)

@@ -10,9 +10,8 @@ import (
 )
 
 // New returns new code builder.
-func New(msgType, fieldType reflect.Type, elementBuilder types.BuilderFactory) Builder {
+func New(fieldType reflect.Type, elementBuilder types.BuilderFactory) Builder {
 	return Builder{
-		msgType:        msgType,
 		fieldType:      fieldType,
 		elementBuilder: elementBuilder,
 	}
@@ -20,7 +19,6 @@ func New(msgType, fieldType reflect.Type, elementBuilder types.BuilderFactory) B
 
 // Builder generates the code.
 type Builder struct {
-	msgType        reflect.Type
 	fieldType      reflect.Type
 	elementBuilder types.BuilderFactory
 }

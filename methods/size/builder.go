@@ -14,13 +14,12 @@ import (
 )
 
 const (
-	header = `// Size computes the required size of the buffer for marshaling the structure.
-func (m *{{ .TypeName }}) Size() uint64 {
+	header = `func {{ .FuncName }}(m *{{ .TypeName }}) uint64 {
 `
 )
 
 // Build generates code of Size method.
-func Build(cfg methods.Config, tm types.TypeMap) []byte {
+func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 	var n uint64
 	if cfg.NumOfBooleanFields > 0 {
 		n += methods.BitMapLength(cfg.NumOfBooleanFields)
@@ -33,7 +32,7 @@ func Build(cfg methods.Config, tm types.TypeMap) []byte {
 			return nil
 		}
 
-		builder, err := factory.Get(cfg.Type, field.Type, tm)
+		builder, err := factory.Get(field.Type, tm)
 		if err != nil {
 			return err
 		}
@@ -52,9 +51,11 @@ func Build(cfg methods.Config, tm types.TypeMap) []byte {
 
 	b := &bytes.Buffer{}
 	helpers.Execute(b, header, struct {
+		FuncName string
 		TypeName string
 	}{
-		TypeName: cfg.Type.Name(),
+		FuncName: tm.VarName(cfg.Type, "size"),
+		TypeName: tm.TypeName(cfg.Type),
 	})
 
 	if n > 0 {

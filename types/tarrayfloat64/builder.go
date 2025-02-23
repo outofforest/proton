@@ -8,7 +8,7 @@ import (
 )
 
 // New returns new code builder.
-func New(fieldType reflect.Type, tm types.TypeMap) Builder {
+func New(fieldType reflect.Type, tm *types.TypeMap) Builder {
 	return Builder{
 		fieldType: fieldType,
 		tm:        tm,
@@ -18,7 +18,7 @@ func New(fieldType reflect.Type, tm types.TypeMap) Builder {
 // Builder generates the code.
 type Builder struct {
 	fieldType reflect.Type
-	tm        types.TypeMap
+	tm        *types.TypeMap
 }
 
 // Dependencies returns the list of other types which code must be generated for.

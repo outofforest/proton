@@ -14,7 +14,7 @@ import (
 )
 
 // Build generates code of Unmarshal method.
-func Build(cfg methods.Config, tm types.TypeMap) ([]byte, []reflect.Type) {
+func Build(cfg methods.Config, tm *types.TypeMap) ([]byte, []reflect.Type) {
 	code := &bytes.Buffer{}
 
 	offset := methods.BitMapLength(cfg.NumOfBooleanFields)
@@ -40,7 +40,7 @@ func Build(cfg methods.Config, tm types.TypeMap) ([]byte, []reflect.Type) {
 			return nil
 		}
 
-		builder, err := factory.Get(cfg.Type, field.Type, tm)
+		builder, err := factory.Get(field.Type, tm)
 		if err != nil {
 			return err
 		}
@@ -59,15 +59,15 @@ func Build(cfg methods.Config, tm types.TypeMap) ([]byte, []reflect.Type) {
 
 	b := &bytes.Buffer{}
 
-	b.WriteString(fmt.Sprintf(`// Unmarshal unmarshals the structure.
-func (m *%[1]s) Unmarshal(
+	b.WriteString(fmt.Sprintf(`func %[1]s(
+	m *%[2]s,
 	b []byte,
-`, cfg.Type.Name()))
+`, tm.VarName(cfg.Type, "unmarshal"), tm.TypeName(cfg.Type)))
 
 	for _, allocator := range allocators {
 		b.WriteString(fmt.Sprintf("	%[1]s *mass.Mass[%[2]s],\n",
-			tm.VarName(cfg.Type, allocator, "mass"),
-			tm.TypeName(cfg.Type, allocator),
+			tm.VarName(allocator, "mass"),
+			tm.TypeName(allocator),
 		))
 	}
 

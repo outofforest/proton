@@ -12,9 +12,8 @@ import (
 const uint8Name = "uint8"
 
 // New returns new code builder.
-func New(msgType, fieldType reflect.Type, tm types.TypeMap) Builder {
+func New(fieldType reflect.Type, tm *types.TypeMap) Builder {
 	return Builder{
-		msgType:   msgType,
 		fieldType: fieldType,
 		tm:        tm,
 	}
@@ -22,9 +21,8 @@ func New(msgType, fieldType reflect.Type, tm types.TypeMap) Builder {
 
 // Builder generates the code.
 type Builder struct {
-	msgType   reflect.Type
 	fieldType reflect.Type
-	tm        types.TypeMap
+	tm        *types.TypeMap
 }
 
 // Dependencies returns the list of other types which code must be generated for.
@@ -98,7 +96,7 @@ func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
 	} else {
 		unsafe := b.tm.Import("unsafe")
 		code += fmt.Sprintf(`	{{ . }} = %[2]s.NewSlice(l)
-`, b.tm.TypeName(b.msgType, b.fieldType), b.tm.VarName(b.msgType, b.fieldType.Elem(), "mass"))
+`, b.tm.TypeName(b.fieldType), b.tm.VarName(b.fieldType.Elem(), "mass"))
 		code += fmt.Sprintf(`	copy(%[1]s.Slice((*byte)(&{{ . }}[0]), l), b[o:o+l])`, unsafe)
 	}
 
