@@ -35,30 +35,30 @@ import (
 // Get returns builder for particular type.
 //
 //nolint:gocyclo
-func Get(msgType, fieldType reflect.Type, tm types.TypeMap) (types.BuilderFactory, error) {
+func Get(fieldType reflect.Type, tm *types.TypeMap) (types.BuilderFactory, error) {
 	switch fieldType.Kind() {
 	case reflect.Bool:
 		return newConstantAdapter(tbool.New()), nil
 	case reflect.Int8:
-		return newConstantAdapter(tint8.New(msgType, fieldType, tm)), nil
+		return newConstantAdapter(tint8.New(fieldType, tm)), nil
 	case reflect.Int16:
-		return tint16.New(msgType, fieldType, tm), nil
+		return tint16.New(fieldType, tm), nil
 	case reflect.Int32:
-		return tint32.New(msgType, fieldType, tm), nil
+		return tint32.New(fieldType, tm), nil
 	case reflect.Int64:
-		return tint64.New(msgType, fieldType, tm), nil
+		return tint64.New(fieldType, tm), nil
 	case reflect.Uint8:
-		return newConstantAdapter(tuint8.New(msgType, fieldType, tm)), nil
+		return newConstantAdapter(tuint8.New(fieldType, tm)), nil
 	case reflect.Uint16:
-		return tuint16.New(msgType, fieldType, tm), nil
+		return tuint16.New(fieldType, tm), nil
 	case reflect.Uint32:
-		return tuint32.New(msgType, fieldType, tm), nil
+		return tuint32.New(fieldType, tm), nil
 	case reflect.Uint64:
-		return tuint64.New(msgType, fieldType, tm), nil
+		return tuint64.New(fieldType, tm), nil
 	case reflect.Float32:
-		return newConstantAdapter(tfloat32.New(msgType, fieldType, tm)), nil
+		return newConstantAdapter(tfloat32.New(fieldType, tm)), nil
 	case reflect.Float64:
-		return newConstantAdapter(tfloat64.New(msgType, fieldType, tm)), nil
+		return newConstantAdapter(tfloat64.New(fieldType, tm)), nil
 	case reflect.Array:
 		switch fieldType.Elem().Kind() {
 		case reflect.Uint8:
@@ -70,58 +70,58 @@ func Get(msgType, fieldType reflect.Type, tm types.TypeMap) (types.BuilderFactor
 		case reflect.Float64:
 			return newConstantAdapter(tarrayfloat64.New(fieldType, tm)), nil
 		default:
-			elementBuilder, err := Get(msgType, fieldType.Elem(), tm)
+			elementBuilder, err := Get(fieldType.Elem(), tm)
 			if err != nil {
 				return nil, err
 			}
-			return tarray.New(msgType, fieldType, elementBuilder), nil
+			return tarray.New(fieldType, elementBuilder), nil
 		}
 	case reflect.Map:
-		keyBuilder, err := Get(msgType, fieldType.Key(), tm)
+		keyBuilder, err := Get(fieldType.Key(), tm)
 		if err != nil {
 			return nil, err
 		}
 
-		elementBuilder, err := Get(msgType, fieldType.Elem(), tm)
+		elementBuilder, err := Get(fieldType.Elem(), tm)
 		if err != nil {
 			return nil, err
 		}
 
-		return tmap.New(msgType, fieldType, keyBuilder, elementBuilder, tm), nil
+		return tmap.New(fieldType, keyBuilder, elementBuilder, tm), nil
 	case reflect.Slice:
 		switch fieldType.Elem().Kind() {
 		case reflect.Uint8:
-			return tsliceuint8.New(msgType, fieldType, tm), nil
+			return tsliceuint8.New(fieldType, tm), nil
 		case reflect.Int8:
-			return tsliceint8.New(msgType, fieldType, tm), nil
+			return tsliceint8.New(fieldType, tm), nil
 		case reflect.Float32:
-			return tslicefloat32.New(msgType, fieldType, tm), nil
+			return tslicefloat32.New(fieldType, tm), nil
 		case reflect.Float64:
-			return tslicefloat64.New(msgType, fieldType, tm), nil
+			return tslicefloat64.New(fieldType, tm), nil
 		default:
-			elementBuilder, err := Get(msgType, fieldType.Elem(), tm)
+			elementBuilder, err := Get(fieldType.Elem(), tm)
 			if err != nil {
 				return nil, err
 			}
 
-			return tslice.New(msgType, fieldType, elementBuilder, tm), nil
+			return tslice.New(fieldType, elementBuilder, tm), nil
 		}
 	case reflect.String:
-		return tstring.New(msgType, fieldType, tm), nil
+		return tstring.New(fieldType, tm), nil
 	case reflect.Struct:
 		fieldCount := fieldType.NumField()
 		fieldBuilders := make([]types.BuilderFactory, 0, fieldCount)
 
 		for i := range fieldCount {
 			fieldType := fieldType.Field(i).Type
-			fieldBuilder, err := Get(msgType, fieldType, tm)
+			fieldBuilder, err := Get(fieldType, tm)
 			if err != nil {
 				return nil, err
 			}
 			fieldBuilders = append(fieldBuilders, fieldBuilder)
 		}
 
-		return newNonConstantAdapter(tstruct.New(msgType, fieldType, fieldBuilders, tm)), nil
+		return newNonConstantAdapter(tstruct.New(fieldType, fieldBuilders, tm)), nil
 	default:
 		return nil, errors.Errorf("unsupported type %s", fieldType.Name())
 	}

@@ -7,11 +7,13 @@ import (
 	"io"
 	"os"
 	"path"
+	"path/filepath"
 	"reflect"
 	"sort"
 	"strings"
 
 	"github.com/pkg/errors"
+	"golang.org/x/mod/modfile"
 
 	"github.com/outofforest/proton/helpers"
 	"github.com/outofforest/proton/methods"
@@ -36,7 +38,10 @@ func generate(filePath string, msgs ...any) error {
 	}
 
 	b := &bytes.Buffer{}
-	var pkg string
+	pkg, err := findPkg(filePath)
+	if err != nil {
+		return err
+	}
 
 	msgTypes := make([]reflect.Type, 0, len(msgs))
 	processed := map[reflect.Type]bool{}
@@ -52,7 +57,7 @@ func generate(filePath string, msgs ...any) error {
 		roots[msgType] = true
 	}
 
-	tm := types.NewTypeMap()
+	tm := types.NewTypeMap(pkg)
 	tm.Import("github.com/pkg/errors")
 	tm.Import("github.com/outofforest/proton")
 	tm.Import("github.com/outofforest/mass")
@@ -65,13 +70,6 @@ func generate(filePath string, msgs ...any) error {
 		code, dependencies, allocators, err := generateMsg(msgType, tm)
 		if err != nil {
 			return err
-		}
-
-		switch {
-		case pkg == "":
-			pkg = msgType.PkgPath()
-		case pkg != msgType.PkgPath():
-			return errors.New("all the msgTypes must belong to the same package")
 		}
 
 		if roots[msgType] {
@@ -152,8 +150,7 @@ func generate(filePath string, msgs ...any) error {
 	return nil
 }
 
-func generateMsg(msgType reflect.Type, tm types.TypeMap) ([]byte, []reflect.Type, []reflect.Type, error) {
-	pkg := msgType.PkgPath()
+func generateMsg(msgType reflect.Type, tm *types.TypeMap) ([]byte, []reflect.Type, []reflect.Type, error) {
 	if msgType.Kind() != reflect.Struct {
 		return nil, nil, nil, errors.Errorf("type %s is not a struct", msgType)
 	}
@@ -166,15 +163,12 @@ func generateMsg(msgType reflect.Type, tm types.TypeMap) ([]byte, []reflect.Type
 	dependenciesMap := map[reflect.Type]struct{}{}
 
 	err := helpers.ForEachField(msgType, func(field reflect.StructField) error {
-		builder, err := factory.Get(msgType, field.Type, tm)
+		builder, err := factory.Get(field.Type, tm)
 		if err != nil {
 			return err
 		}
 
 		for _, d := range builder.Dependencies() {
-			if d.PkgPath() != pkg {
-				continue
-			}
 			if _, exists := dependenciesMap[d]; !exists {
 				dependenciesMap[d] = struct{}{}
 				dependencies = append(dependencies, d)
@@ -191,7 +185,6 @@ func generateMsg(msgType reflect.Type, tm types.TypeMap) ([]byte, []reflect.Type
 	}
 
 	b := &bytes.Buffer{}
-	b.WriteString(fmt.Sprintf("var _ proton.Message = &%s{}\n\n", msgType.Name()))
 	b.Write(size.Build(cfg, tm))
 	b.WriteString("\n\n")
 	b.Write(marshal.Build(cfg, tm))
@@ -239,7 +232,7 @@ func writeImports(out io.StringWriter, pkgs []string, aliases map[string]string)
 	return nil
 }
 
-func writeMsgConsts(out io.StringWriter, msgTypes []reflect.Type, tm types.TypeMap) error {
+func writeMsgConsts(out io.StringWriter, msgTypes []reflect.Type, tm *types.TypeMap) error {
 	const header = `
 const (
 `
@@ -249,11 +242,7 @@ const (
 	}
 
 	for i, msgType := range msgTypes {
-		varName := tm.VarName(msgType, msgType, "ID")
-		if _, err := out.WriteString(fmt.Sprintf("\t// %[1]s is the ID of %[2]s message.\n",
-			varName, msgType.Name())); err != nil {
-			return errors.WithStack(err)
-		}
+		varName := tm.VarName(msgType, "id")
 		if i == 0 {
 			if _, err := out.WriteString(fmt.Sprintf("\t%s uint64 = iota + 1\n", varName)); err != nil {
 				return errors.WithStack(err)
@@ -272,9 +261,7 @@ const (
 	return nil
 }
 
-func writeMarshaller(out io.StringWriter, msgInfos []msgInfo, tm types.TypeMap) error {
-	anyType := msgInfos[0].Type
-
+func writeMarshaller(out io.StringWriter, msgInfos []msgInfo, tm *types.TypeMap) error {
 	allocators := []reflect.Type{}
 	for _, msgInfo := range msgInfos {
 		allocators = append(allocators, msgInfo.Type)
@@ -295,9 +282,24 @@ func NewMarshaller(capacity uint64) Marshaller {
 type Marshaller struct {
 `
 
+	const sizeHeader = `
+// Size computes the size of marshalled message.
+func (m Marshaller) Size(msg any) (uint64, error) {
+	switch msg2 := msg.(type) {
+`
+	const sizeFooter = `	default:
+		return 0, errors.Errorf("unknown message type %T", msg)
+	}
+}
+`
+
+	const sizeTemplate = `	case *%[1]s:
+		return %[2]s(msg2), nil
+`
+
 	const marshalHeader = `
 // Marshal marshals message.
-func (m Marshaller) Marshal(msg proton.Marshallable, buf []byte) (retID, retSize uint64, retErr error) {
+func (m Marshaller) Marshal(msg any, buf []byte) (retID, retSize uint64, retErr error) {
 	defer func() {
 		if res := recover(); res != nil {
 			retErr = errors.Errorf("marshaling message failed: %s", res)
@@ -307,13 +309,13 @@ func (m Marshaller) Marshal(msg proton.Marshallable, buf []byte) (retID, retSize
 	switch msg2 := msg.(type) {
 `
 	const marshalFooter = `	default:
-		return 0, 0, errors.Errorf("unknown message type %T", m)
+		return 0, 0, errors.Errorf("unknown message type %T", msg)
 	}
 }
 `
 
 	const marshalTemplate = `	case *%[1]s:
-		return %[2]s, msg2.Marshal(buf), nil
+		return %[2]s, %[3]s(msg2, buf), nil
 `
 
 	const unmarshalHeader = `
@@ -335,7 +337,7 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 
 	var longestName int
 	for _, t := range allocators {
-		varName := tm.VarName(anyType, t, "mass")
+		varName := tm.VarName(t, "mass")
 		if len(varName) > longestName {
 			longestName = len(varName)
 		}
@@ -346,10 +348,10 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 	}
 
 	for _, t := range allocators {
-		varName := tm.VarName(anyType, t, "mass")
+		varName := tm.VarName(t, "mass")
 		if _, err := out.WriteString(fmt.Sprintf("		%[1]s:%[2]s mass.New[%[3]s](capacity),\n",
 			varName, types.Align(varName, longestName),
-			tm.TypeName(anyType, t))); err != nil {
+			tm.TypeName(t))); err != nil {
 			return errors.WithStack(err)
 		}
 	}
@@ -363,10 +365,10 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 	}
 
 	for _, t := range allocators {
-		varName := tm.VarName(anyType, t, "mass")
+		varName := tm.VarName(t, "mass")
 		if _, err := out.WriteString(fmt.Sprintf("	%[1]s%[2]s *mass.Mass[%[3]s]\n",
 			varName, types.Align(varName, longestName),
-			tm.TypeName(anyType, t))); err != nil {
+			tm.TypeName(t))); err != nil {
 			return errors.WithStack(err)
 		}
 	}
@@ -375,13 +377,28 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 		return errors.WithStack(err)
 	}
 
+	if _, err := out.WriteString(sizeHeader); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, msgInfo := range msgInfos {
+		if _, err := out.WriteString(fmt.Sprintf(sizeTemplate, tm.TypeName(msgInfo.Type),
+			tm.VarName(msgInfo.Type, "size"))); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if _, err := out.WriteString(sizeFooter); err != nil {
+		return errors.WithStack(err)
+	}
+
 	if _, err := out.WriteString(marshalHeader); err != nil {
 		return errors.WithStack(err)
 	}
 
 	for _, msgInfo := range msgInfos {
-		if _, err := out.WriteString(fmt.Sprintf(marshalTemplate, msgInfo.Type.Name(),
-			tm.VarName(anyType, msgInfo.Type, "ID"))); err != nil {
+		if _, err := out.WriteString(fmt.Sprintf(marshalTemplate, tm.TypeName(msgInfo.Type),
+			tm.VarName(msgInfo.Type, "id"), tm.VarName(msgInfo.Type, "marshal"))); err != nil {
 			return errors.WithStack(err)
 		}
 	}
@@ -395,17 +412,19 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 	}
 
 	for _, msgInfo := range msgInfos {
-		if _, err := out.WriteString(fmt.Sprintf(`	case %[1]s:
-		msg := m.%[2]s.New()
-		return msg, msg.Unmarshal(
+		if _, err := out.WriteString(fmt.Sprintf(`	case %[2]s:
+		msg := m.%[3]s.New()
+		return msg, %[1]s(
+			msg,
 			buf,
-`, tm.VarName(anyType, msgInfo.Type, "ID"), tm.VarName(anyType, msgInfo.Type, "mass"))); err != nil {
+`, tm.VarName(msgInfo.Type, "unmarshal"), tm.VarName(msgInfo.Type, "id"),
+			tm.VarName(msgInfo.Type, "mass"))); err != nil {
 			return errors.WithStack(err)
 		}
 
 		for _, t := range msgInfo.Allocators {
 			if _, err := out.WriteString(fmt.Sprintf("			m.%[1]s,\n",
-				tm.VarName(anyType, t, "mass"))); err != nil {
+				tm.VarName(t, "mass"))); err != nil {
 				return errors.WithStack(err)
 			}
 		}
@@ -425,4 +444,39 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 type msgInfo struct {
 	Type       reflect.Type
 	Allocators []reflect.Type
+}
+
+func findPkg(filePath string) (string, error) {
+	absFilePath, err := filepath.Abs(filePath)
+	if err != nil {
+		return "", errors.WithStack(err)
+	}
+	dir := filepath.Dir(absFilePath)
+	origDir := dir
+
+	var module string
+loop:
+	for {
+		modFile := filepath.Join(dir, "go.mod")
+		modData, err := os.ReadFile(modFile)
+		switch {
+		case errors.Is(err, os.ErrNotExist):
+		case err != nil:
+			return "", errors.WithStack(err)
+		default:
+			modF, err := modfile.Parse(modFile, modData, nil)
+			if err != nil {
+				return "", errors.WithStack(err)
+			}
+			module = modF.Module.Mod.Path
+			break loop
+		}
+
+		if dir == "/" {
+			return "", errors.New("go.mod not found")
+		}
+		dir = filepath.Dir(dir)
+	}
+
+	return module + strings.TrimPrefix(origDir, dir), nil
 }

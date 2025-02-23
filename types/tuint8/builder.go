@@ -8,9 +8,8 @@ import (
 )
 
 // New returns new code builder.
-func New(msgType, fieldType reflect.Type, tm types.TypeMap) Builder {
+func New(fieldType reflect.Type, tm *types.TypeMap) Builder {
 	return Builder{
-		msgType:   msgType,
 		fieldType: fieldType,
 		tm:        tm,
 	}
@@ -18,9 +17,8 @@ func New(msgType, fieldType reflect.Type, tm types.TypeMap) Builder {
 
 // Builder generates the code.
 type Builder struct {
-	msgType   reflect.Type
 	fieldType reflect.Type
-	tm        types.TypeMap
+	tm        *types.TypeMap
 }
 
 // Dependencies returns the list of other types which code must be generated for.
@@ -40,7 +38,7 @@ func (b Builder) ConstantSize() uint64 {
 
 // MarshalCodeTemplate returns code template marshaling the data.
 func (b Builder) MarshalCodeTemplate(_ *uint64) string {
-	t := b.tm.TypeName(b.msgType, b.fieldType)
+	t := b.tm.TypeName(b.fieldType)
 	if t == "uint8" {
 		return `b[o] = {{ . }}
 o++`
@@ -51,7 +49,7 @@ o++`
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
-	t := b.tm.TypeName(b.msgType, b.fieldType)
+	t := b.tm.TypeName(b.fieldType)
 	if t == "uint8" {
 		return `{{ . }} = b[o]
 o++`

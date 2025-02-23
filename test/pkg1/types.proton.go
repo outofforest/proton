@@ -3,123 +3,72 @@ package pkg1
 import (
 	"unsafe"
 
+	"github.com/pkg/errors"
+
 	"github.com/outofforest/mass"
 	"github.com/outofforest/proton"
 	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1/spkg"
-	spkg1 "github.com/outofforest/proton/test/pkg2/spkg"
-	"github.com/pkg/errors"
+	"github.com/outofforest/proton/test/pkg2"
+	spkg6 "github.com/outofforest/proton/test/pkg2/spkg"
 )
 
 const (
-	// IDMsgUint64 is the ID of MsgUint64 message.
-	IDMsgUint64 uint64 = iota + 1
-	// IDMsgUint32 is the ID of MsgUint32 message.
-	IDMsgUint32
-	// IDMsgUint16 is the ID of MsgUint16 message.
-	IDMsgUint16
-	// IDMsgUint8 is the ID of MsgUint8 message.
-	IDMsgUint8
-	// IDMsgInt64 is the ID of MsgInt64 message.
-	IDMsgInt64
-	// IDMsgInt32 is the ID of MsgInt32 message.
-	IDMsgInt32
-	// IDMsgInt16 is the ID of MsgInt16 message.
-	IDMsgInt16
-	// IDMsgInt8 is the ID of MsgInt8 message.
-	IDMsgInt8
-	// IDMsgBool3 is the ID of MsgBool3 message.
-	IDMsgBool3
-	// IDMsgBool10 is the ID of MsgBool10 message.
-	IDMsgBool10
-	// IDMsgFloat64 is the ID of MsgFloat64 message.
-	IDMsgFloat64
-	// IDMsgFloat32 is the ID of MsgFloat32 message.
-	IDMsgFloat32
-	// IDMsgString is the ID of MsgString message.
-	IDMsgString
-	// IDMsgArray is the ID of MsgArray message.
-	IDMsgArray
-	// IDMsgSlice is the ID of MsgSlice message.
-	IDMsgSlice
-	// IDMsgMap is the ID of MsgMap message.
-	IDMsgMap
-	// IDMsgMapString is the ID of MsgMapString message.
-	IDMsgMapString
-	// IDMsgStruct is the ID of MsgStruct message.
-	IDMsgStruct
-	// IDMsgStructAnonymous is the ID of MsgStructAnonymous message.
-	IDMsgStructAnonymous
-	// IDMsgArrayUint8 is the ID of MsgArrayUint8 message.
-	IDMsgArrayUint8
-	// IDMsgArrayInt8 is the ID of MsgArrayInt8 message.
-	IDMsgArrayInt8
-	// IDMsgArrayFloat32 is the ID of MsgArrayFloat32 message.
-	IDMsgArrayFloat32
-	// IDMsgArrayFloat64 is the ID of MsgArrayFloat64 message.
-	IDMsgArrayFloat64
-	// IDMsgSliceUint8 is the ID of MsgSliceUint8 message.
-	IDMsgSliceUint8
-	// IDMsgSliceInt8 is the ID of MsgSliceInt8 message.
-	IDMsgSliceInt8
-	// IDMsgSliceFloat32 is the ID of MsgSliceFloat32 message.
-	IDMsgSliceFloat32
-	// IDMsgSliceFloat64 is the ID of MsgSliceFloat64 message.
-	IDMsgSliceFloat64
-	// IDMsgMixed is the ID of MsgMixed message.
-	IDMsgMixed
-	// IDMsgUint64Custom is the ID of MsgUint64Custom message.
-	IDMsgUint64Custom
-	// IDMsgUint32Custom is the ID of MsgUint32Custom message.
-	IDMsgUint32Custom
-	// IDMsgUint16Custom is the ID of MsgUint16Custom message.
-	IDMsgUint16Custom
-	// IDMsgUint8Custom is the ID of MsgUint8Custom message.
-	IDMsgUint8Custom
-	// IDMsgInt64Custom is the ID of MsgInt64Custom message.
-	IDMsgInt64Custom
-	// IDMsgInt32Custom is the ID of MsgInt32Custom message.
-	IDMsgInt32Custom
-	// IDMsgInt16Custom is the ID of MsgInt16Custom message.
-	IDMsgInt16Custom
-	// IDMsgInt8Custom is the ID of MsgInt8Custom message.
-	IDMsgInt8Custom
-	// IDMsgBoolCustom is the ID of MsgBoolCustom message.
-	IDMsgBoolCustom
-	// IDMsgFloat64Custom is the ID of MsgFloat64Custom message.
-	IDMsgFloat64Custom
-	// IDMsgFloat32Custom is the ID of MsgFloat32Custom message.
-	IDMsgFloat32Custom
-	// IDMsgStringCustom is the ID of MsgStringCustom message.
-	IDMsgStringCustom
-	// IDMsgArrayCustom is the ID of MsgArrayCustom message.
-	IDMsgArrayCustom
-	// IDMsgSliceCustom is the ID of MsgSliceCustom message.
-	IDMsgSliceCustom
-	// IDMsgMapCustom is the ID of MsgMapCustom message.
-	IDMsgMapCustom
-	// IDMsgArrayUint8Custom is the ID of MsgArrayUint8Custom message.
-	IDMsgArrayUint8Custom
-	// IDMsgArrayUint8Custom2 is the ID of MsgArrayUint8Custom2 message.
-	IDMsgArrayUint8Custom2
-	// IDMsgArrayInt8Custom is the ID of MsgArrayInt8Custom message.
-	IDMsgArrayInt8Custom
-	// IDMsgArrayFloat32Custom is the ID of MsgArrayFloat32Custom message.
-	IDMsgArrayFloat32Custom
-	// IDMsgArrayFloat64Custom is the ID of MsgArrayFloat64Custom message.
-	IDMsgArrayFloat64Custom
-	// IDMsgSliceUint8Custom is the ID of MsgSliceUint8Custom message.
-	IDMsgSliceUint8Custom
-	// IDMsgSliceUint8Custom2 is the ID of MsgSliceUint8Custom2 message.
-	IDMsgSliceUint8Custom2
-	// IDMsgSliceInt8Custom is the ID of MsgSliceInt8Custom message.
-	IDMsgSliceInt8Custom
-	// IDMsgSliceFloat32Custom is the ID of MsgSliceFloat32Custom message.
-	IDMsgSliceFloat32Custom
-	// IDMsgSliceFloat64Custom is the ID of MsgSliceFloat64Custom message.
-	IDMsgSliceFloat64Custom
-	// IDMsgMixedCustom is the ID of MsgMixedCustom message.
-	IDMsgMixedCustom
+	id51 uint64 = iota + 1
+	id72
+	id71
+	id70
+	id69
+	id68
+	id67
+	id66
+	id65
+	id64
+	id63
+	id62
+	id61
+	id60
+	id59
+	id57
+	id56
+	id55
+	id54
+	id52
+	id49
+	id48
+	id47
+	id46
+	id45
+	id43
+	id41
+	id39
+	id34
+	id32
+	id31
+	id30
+	id29
+	id28
+	id27
+	id26
+	id25
+	id24
+	id23
+	id22
+	id21
+	id20
+	id18
+	id17
+	id16
+	id15
+	id14
+	id13
+	id12
+	id11
+	id9
+	id7
+	id5
+	id3
+	id0
 )
 
 var _ proton.Marshaller = Marshaller{}
@@ -127,157 +76,277 @@ var _ proton.Marshaller = Marshaller{}
 // NewMarshaller creates marshaller.
 func NewMarshaller(capacity uint64) Marshaller {
 	return Marshaller{
-		massMsgMixedCustom:             mass.New[MsgMixedCustom](capacity),
-		massMsgSliceFloat64Custom:      mass.New[MsgSliceFloat64Custom](capacity),
-		massMsgSliceFloat32Custom:      mass.New[MsgSliceFloat32Custom](capacity),
-		massMsgSliceInt8Custom:         mass.New[MsgSliceInt8Custom](capacity),
-		massMsgSliceUint8Custom2:       mass.New[MsgSliceUint8Custom2](capacity),
-		massMsgSliceUint8Custom:        mass.New[MsgSliceUint8Custom](capacity),
-		massMsgArrayFloat64Custom:      mass.New[MsgArrayFloat64Custom](capacity),
-		massMsgArrayFloat32Custom:      mass.New[MsgArrayFloat32Custom](capacity),
-		massMsgArrayInt8Custom:         mass.New[MsgArrayInt8Custom](capacity),
-		massMsgArrayUint8Custom2:       mass.New[MsgArrayUint8Custom2](capacity),
-		massMsgArrayUint8Custom:        mass.New[MsgArrayUint8Custom](capacity),
-		massMsgMapCustom:               mass.New[MsgMapCustom](capacity),
-		massMsgSliceCustom:             mass.New[MsgSliceCustom](capacity),
-		massMsgArrayCustom:             mass.New[MsgArrayCustom](capacity),
-		massMsgStringCustom:            mass.New[MsgStringCustom](capacity),
-		massMsgFloat32Custom:           mass.New[MsgFloat32Custom](capacity),
-		massMsgFloat64Custom:           mass.New[MsgFloat64Custom](capacity),
-		massMsgBoolCustom:              mass.New[MsgBoolCustom](capacity),
-		massMsgInt8Custom:              mass.New[MsgInt8Custom](capacity),
-		massMsgInt16Custom:             mass.New[MsgInt16Custom](capacity),
-		massMsgInt32Custom:             mass.New[MsgInt32Custom](capacity),
-		massMsgInt64Custom:             mass.New[MsgInt64Custom](capacity),
-		massMsgUint8Custom:             mass.New[MsgUint8Custom](capacity),
-		massMsgUint16Custom:            mass.New[MsgUint16Custom](capacity),
-		massMsgUint32Custom:            mass.New[MsgUint32Custom](capacity),
-		massMsgUint64Custom:            mass.New[MsgUint64Custom](capacity),
-		massMsgMixed:                   mass.New[MsgMixed](capacity),
-		massMsgSliceFloat64:            mass.New[MsgSliceFloat64](capacity),
-		massMsgSliceFloat32:            mass.New[MsgSliceFloat32](capacity),
-		massMsgSliceInt8:               mass.New[MsgSliceInt8](capacity),
-		massMsgSliceUint8:              mass.New[MsgSliceUint8](capacity),
-		massMsgArrayFloat64:            mass.New[MsgArrayFloat64](capacity),
-		massMsgArrayFloat32:            mass.New[MsgArrayFloat32](capacity),
-		massMsgArrayInt8:               mass.New[MsgArrayInt8](capacity),
-		massMsgArrayUint8:              mass.New[MsgArrayUint8](capacity),
-		massMsgStructAnonymous:         mass.New[MsgStructAnonymous](capacity),
-		massMsgStruct:                  mass.New[MsgStruct](capacity),
-		massMsgMapString:               mass.New[MsgMapString](capacity),
-		massMsgMap:                     mass.New[MsgMap](capacity),
-		massMsgSlice:                   mass.New[MsgSlice](capacity),
-		massMsgArray:                   mass.New[MsgArray](capacity),
-		massMsgString:                  mass.New[MsgString](capacity),
-		massMsgFloat32:                 mass.New[MsgFloat32](capacity),
-		massMsgFloat64:                 mass.New[MsgFloat64](capacity),
-		massMsgBool10:                  mass.New[MsgBool10](capacity),
-		massMsgBool3:                   mass.New[MsgBool3](capacity),
-		massMsgInt8:                    mass.New[MsgInt8](capacity),
-		massMsgInt16:                   mass.New[MsgInt16](capacity),
-		massMsgInt32:                   mass.New[MsgInt32](capacity),
-		massMsgInt64:                   mass.New[MsgInt64](capacity),
-		massMsgUint8:                   mass.New[MsgUint8](capacity),
-		massMsgUint16:                  mass.New[MsgUint16](capacity),
-		massMsgUint32:                  mass.New[MsgUint32](capacity),
-		massMsgUint64:                  mass.New[MsgUint64](capacity),
-		massA3BABMapAInt16BCustomArray: mass.New[[3][]map[int16]custom.Array](capacity),
-		massMapAInt16BCustomArray:      mass.New[map[int16]custom.Array](capacity),
-		massCustomFloat64:              mass.New[custom.Float64](capacity),
-		massCustomFloat32:              mass.New[custom.Float32](capacity),
-		massCustomInt8:                 mass.New[custom.Int8](capacity),
-		massCustomUint8:                mass.New[custom.Uint8](capacity),
-		massCustomUint64:               mass.New[custom.Uint64](capacity),
-		massString:                     mass.New[string](capacity),
-		massA32BUint16:                 mass.New[[32]uint16](capacity),
-		massA3BABMapAInt16BA2BInt64:    mass.New[[3][]map[int16][2]int64](capacity),
-		massMapAInt16BA2BInt64:         mass.New[map[int16][2]int64](capacity),
-		massFloat64:                    mass.New[float64](capacity),
-		massFloat32:                    mass.New[float32](capacity),
-		massInt8:                       mass.New[int8](capacity),
-		massSpkgSubMsg:                 mass.New[spkg.SubMsg](capacity),
-		massSpkg1SubMsg:                mass.New[spkg1.SubMsg](capacity),
-		massBool:                       mass.New[bool](capacity),
+		mass0:  mass.New[MsgMixedCustom](capacity),
+		mass3:  mass.New[MsgSliceFloat64Custom](capacity),
+		mass5:  mass.New[MsgSliceFloat32Custom](capacity),
+		mass7:  mass.New[MsgSliceInt8Custom](capacity),
+		mass9:  mass.New[MsgSliceUint8Custom2](capacity),
+		mass11: mass.New[MsgSliceUint8Custom](capacity),
+		mass12: mass.New[MsgArrayFloat64Custom](capacity),
+		mass13: mass.New[MsgArrayFloat32Custom](capacity),
+		mass14: mass.New[MsgArrayInt8Custom](capacity),
+		mass15: mass.New[MsgArrayUint8Custom2](capacity),
+		mass16: mass.New[MsgArrayUint8Custom](capacity),
+		mass17: mass.New[MsgMapCustom](capacity),
+		mass18: mass.New[MsgSliceCustom](capacity),
+		mass20: mass.New[MsgArrayCustom](capacity),
+		mass21: mass.New[MsgStringCustom](capacity),
+		mass22: mass.New[MsgFloat32Custom](capacity),
+		mass23: mass.New[MsgFloat64Custom](capacity),
+		mass24: mass.New[MsgBoolCustom](capacity),
+		mass25: mass.New[MsgInt8Custom](capacity),
+		mass26: mass.New[MsgInt16Custom](capacity),
+		mass27: mass.New[MsgInt32Custom](capacity),
+		mass28: mass.New[MsgInt64Custom](capacity),
+		mass29: mass.New[MsgUint8Custom](capacity),
+		mass30: mass.New[MsgUint16Custom](capacity),
+		mass31: mass.New[MsgUint32Custom](capacity),
+		mass32: mass.New[MsgUint64Custom](capacity),
+		mass34: mass.New[MsgMixed](capacity),
+		mass39: mass.New[MsgSliceFloat64](capacity),
+		mass41: mass.New[MsgSliceFloat32](capacity),
+		mass43: mass.New[MsgSliceInt8](capacity),
+		mass45: mass.New[MsgSliceUint8](capacity),
+		mass46: mass.New[MsgArrayFloat64](capacity),
+		mass47: mass.New[MsgArrayFloat32](capacity),
+		mass48: mass.New[MsgArrayInt8](capacity),
+		mass49: mass.New[MsgArrayUint8](capacity),
+		mass52: mass.New[MsgStructAnonymous](capacity),
+		mass54: mass.New[MsgStruct](capacity),
+		mass55: mass.New[MsgMapString](capacity),
+		mass56: mass.New[MsgMap](capacity),
+		mass57: mass.New[MsgSlice](capacity),
+		mass59: mass.New[MsgArray](capacity),
+		mass60: mass.New[MsgString](capacity),
+		mass61: mass.New[MsgFloat32](capacity),
+		mass62: mass.New[MsgFloat64](capacity),
+		mass63: mass.New[MsgBool10](capacity),
+		mass64: mass.New[MsgBool3](capacity),
+		mass65: mass.New[MsgInt8](capacity),
+		mass66: mass.New[MsgInt16](capacity),
+		mass67: mass.New[MsgInt32](capacity),
+		mass68: mass.New[MsgInt64](capacity),
+		mass69: mass.New[MsgUint8](capacity),
+		mass70: mass.New[MsgUint16](capacity),
+		mass71: mass.New[MsgUint32](capacity),
+		mass72: mass.New[MsgUint64](capacity),
+		mass51: mass.New[pkg2.SubMsg](capacity),
+		mass2:  mass.New[[3][]map[int16]custom.Array](capacity),
+		mass1:  mass.New[map[int16]custom.Array](capacity),
+		mass4:  mass.New[custom.Float64](capacity),
+		mass6:  mass.New[custom.Float32](capacity),
+		mass8:  mass.New[custom.Int8](capacity),
+		mass10: mass.New[custom.Uint8](capacity),
+		mass19: mass.New[custom.Uint64](capacity),
+		mass35: mass.New[string](capacity),
+		mass36: mass.New[[32]uint16](capacity),
+		mass38: mass.New[[3][]map[int16][2]int64](capacity),
+		mass37: mass.New[map[int16][2]int64](capacity),
+		mass40: mass.New[float64](capacity),
+		mass42: mass.New[float32](capacity),
+		mass44: mass.New[int8](capacity),
+		mass33: mass.New[spkg.SubMsg](capacity),
+		mass53: mass.New[spkg6.SubMsg](capacity),
+		mass58: mass.New[bool](capacity),
 	}
 }
 
 // Marshaller marshals and unmarshals messages.
 type Marshaller struct {
-	massMsgMixedCustom             *mass.Mass[MsgMixedCustom]
-	massMsgSliceFloat64Custom      *mass.Mass[MsgSliceFloat64Custom]
-	massMsgSliceFloat32Custom      *mass.Mass[MsgSliceFloat32Custom]
-	massMsgSliceInt8Custom         *mass.Mass[MsgSliceInt8Custom]
-	massMsgSliceUint8Custom2       *mass.Mass[MsgSliceUint8Custom2]
-	massMsgSliceUint8Custom        *mass.Mass[MsgSliceUint8Custom]
-	massMsgArrayFloat64Custom      *mass.Mass[MsgArrayFloat64Custom]
-	massMsgArrayFloat32Custom      *mass.Mass[MsgArrayFloat32Custom]
-	massMsgArrayInt8Custom         *mass.Mass[MsgArrayInt8Custom]
-	massMsgArrayUint8Custom2       *mass.Mass[MsgArrayUint8Custom2]
-	massMsgArrayUint8Custom        *mass.Mass[MsgArrayUint8Custom]
-	massMsgMapCustom               *mass.Mass[MsgMapCustom]
-	massMsgSliceCustom             *mass.Mass[MsgSliceCustom]
-	massMsgArrayCustom             *mass.Mass[MsgArrayCustom]
-	massMsgStringCustom            *mass.Mass[MsgStringCustom]
-	massMsgFloat32Custom           *mass.Mass[MsgFloat32Custom]
-	massMsgFloat64Custom           *mass.Mass[MsgFloat64Custom]
-	massMsgBoolCustom              *mass.Mass[MsgBoolCustom]
-	massMsgInt8Custom              *mass.Mass[MsgInt8Custom]
-	massMsgInt16Custom             *mass.Mass[MsgInt16Custom]
-	massMsgInt32Custom             *mass.Mass[MsgInt32Custom]
-	massMsgInt64Custom             *mass.Mass[MsgInt64Custom]
-	massMsgUint8Custom             *mass.Mass[MsgUint8Custom]
-	massMsgUint16Custom            *mass.Mass[MsgUint16Custom]
-	massMsgUint32Custom            *mass.Mass[MsgUint32Custom]
-	massMsgUint64Custom            *mass.Mass[MsgUint64Custom]
-	massMsgMixed                   *mass.Mass[MsgMixed]
-	massMsgSliceFloat64            *mass.Mass[MsgSliceFloat64]
-	massMsgSliceFloat32            *mass.Mass[MsgSliceFloat32]
-	massMsgSliceInt8               *mass.Mass[MsgSliceInt8]
-	massMsgSliceUint8              *mass.Mass[MsgSliceUint8]
-	massMsgArrayFloat64            *mass.Mass[MsgArrayFloat64]
-	massMsgArrayFloat32            *mass.Mass[MsgArrayFloat32]
-	massMsgArrayInt8               *mass.Mass[MsgArrayInt8]
-	massMsgArrayUint8              *mass.Mass[MsgArrayUint8]
-	massMsgStructAnonymous         *mass.Mass[MsgStructAnonymous]
-	massMsgStruct                  *mass.Mass[MsgStruct]
-	massMsgMapString               *mass.Mass[MsgMapString]
-	massMsgMap                     *mass.Mass[MsgMap]
-	massMsgSlice                   *mass.Mass[MsgSlice]
-	massMsgArray                   *mass.Mass[MsgArray]
-	massMsgString                  *mass.Mass[MsgString]
-	massMsgFloat32                 *mass.Mass[MsgFloat32]
-	massMsgFloat64                 *mass.Mass[MsgFloat64]
-	massMsgBool10                  *mass.Mass[MsgBool10]
-	massMsgBool3                   *mass.Mass[MsgBool3]
-	massMsgInt8                    *mass.Mass[MsgInt8]
-	massMsgInt16                   *mass.Mass[MsgInt16]
-	massMsgInt32                   *mass.Mass[MsgInt32]
-	massMsgInt64                   *mass.Mass[MsgInt64]
-	massMsgUint8                   *mass.Mass[MsgUint8]
-	massMsgUint16                  *mass.Mass[MsgUint16]
-	massMsgUint32                  *mass.Mass[MsgUint32]
-	massMsgUint64                  *mass.Mass[MsgUint64]
-	massA3BABMapAInt16BCustomArray *mass.Mass[[3][]map[int16]custom.Array]
-	massMapAInt16BCustomArray      *mass.Mass[map[int16]custom.Array]
-	massCustomFloat64              *mass.Mass[custom.Float64]
-	massCustomFloat32              *mass.Mass[custom.Float32]
-	massCustomInt8                 *mass.Mass[custom.Int8]
-	massCustomUint8                *mass.Mass[custom.Uint8]
-	massCustomUint64               *mass.Mass[custom.Uint64]
-	massString                     *mass.Mass[string]
-	massA32BUint16                 *mass.Mass[[32]uint16]
-	massA3BABMapAInt16BA2BInt64    *mass.Mass[[3][]map[int16][2]int64]
-	massMapAInt16BA2BInt64         *mass.Mass[map[int16][2]int64]
-	massFloat64                    *mass.Mass[float64]
-	massFloat32                    *mass.Mass[float32]
-	massInt8                       *mass.Mass[int8]
-	massSpkgSubMsg                 *mass.Mass[spkg.SubMsg]
-	massSpkg1SubMsg                *mass.Mass[spkg1.SubMsg]
-	massBool                       *mass.Mass[bool]
+	mass0  *mass.Mass[MsgMixedCustom]
+	mass3  *mass.Mass[MsgSliceFloat64Custom]
+	mass5  *mass.Mass[MsgSliceFloat32Custom]
+	mass7  *mass.Mass[MsgSliceInt8Custom]
+	mass9  *mass.Mass[MsgSliceUint8Custom2]
+	mass11 *mass.Mass[MsgSliceUint8Custom]
+	mass12 *mass.Mass[MsgArrayFloat64Custom]
+	mass13 *mass.Mass[MsgArrayFloat32Custom]
+	mass14 *mass.Mass[MsgArrayInt8Custom]
+	mass15 *mass.Mass[MsgArrayUint8Custom2]
+	mass16 *mass.Mass[MsgArrayUint8Custom]
+	mass17 *mass.Mass[MsgMapCustom]
+	mass18 *mass.Mass[MsgSliceCustom]
+	mass20 *mass.Mass[MsgArrayCustom]
+	mass21 *mass.Mass[MsgStringCustom]
+	mass22 *mass.Mass[MsgFloat32Custom]
+	mass23 *mass.Mass[MsgFloat64Custom]
+	mass24 *mass.Mass[MsgBoolCustom]
+	mass25 *mass.Mass[MsgInt8Custom]
+	mass26 *mass.Mass[MsgInt16Custom]
+	mass27 *mass.Mass[MsgInt32Custom]
+	mass28 *mass.Mass[MsgInt64Custom]
+	mass29 *mass.Mass[MsgUint8Custom]
+	mass30 *mass.Mass[MsgUint16Custom]
+	mass31 *mass.Mass[MsgUint32Custom]
+	mass32 *mass.Mass[MsgUint64Custom]
+	mass34 *mass.Mass[MsgMixed]
+	mass39 *mass.Mass[MsgSliceFloat64]
+	mass41 *mass.Mass[MsgSliceFloat32]
+	mass43 *mass.Mass[MsgSliceInt8]
+	mass45 *mass.Mass[MsgSliceUint8]
+	mass46 *mass.Mass[MsgArrayFloat64]
+	mass47 *mass.Mass[MsgArrayFloat32]
+	mass48 *mass.Mass[MsgArrayInt8]
+	mass49 *mass.Mass[MsgArrayUint8]
+	mass52 *mass.Mass[MsgStructAnonymous]
+	mass54 *mass.Mass[MsgStruct]
+	mass55 *mass.Mass[MsgMapString]
+	mass56 *mass.Mass[MsgMap]
+	mass57 *mass.Mass[MsgSlice]
+	mass59 *mass.Mass[MsgArray]
+	mass60 *mass.Mass[MsgString]
+	mass61 *mass.Mass[MsgFloat32]
+	mass62 *mass.Mass[MsgFloat64]
+	mass63 *mass.Mass[MsgBool10]
+	mass64 *mass.Mass[MsgBool3]
+	mass65 *mass.Mass[MsgInt8]
+	mass66 *mass.Mass[MsgInt16]
+	mass67 *mass.Mass[MsgInt32]
+	mass68 *mass.Mass[MsgInt64]
+	mass69 *mass.Mass[MsgUint8]
+	mass70 *mass.Mass[MsgUint16]
+	mass71 *mass.Mass[MsgUint32]
+	mass72 *mass.Mass[MsgUint64]
+	mass51 *mass.Mass[pkg2.SubMsg]
+	mass2  *mass.Mass[[3][]map[int16]custom.Array]
+	mass1  *mass.Mass[map[int16]custom.Array]
+	mass4  *mass.Mass[custom.Float64]
+	mass6  *mass.Mass[custom.Float32]
+	mass8  *mass.Mass[custom.Int8]
+	mass10 *mass.Mass[custom.Uint8]
+	mass19 *mass.Mass[custom.Uint64]
+	mass35 *mass.Mass[string]
+	mass36 *mass.Mass[[32]uint16]
+	mass38 *mass.Mass[[3][]map[int16][2]int64]
+	mass37 *mass.Mass[map[int16][2]int64]
+	mass40 *mass.Mass[float64]
+	mass42 *mass.Mass[float32]
+	mass44 *mass.Mass[int8]
+	mass33 *mass.Mass[spkg.SubMsg]
+	mass53 *mass.Mass[spkg6.SubMsg]
+	mass58 *mass.Mass[bool]
+}
+
+// Size computes the size of marshalled message.
+func (m Marshaller) Size(msg any) (uint64, error) {
+	switch msg2 := msg.(type) {
+	case *MsgMixedCustom:
+		return size0(msg2), nil
+	case *MsgSliceFloat64Custom:
+		return size3(msg2), nil
+	case *MsgSliceFloat32Custom:
+		return size5(msg2), nil
+	case *MsgSliceInt8Custom:
+		return size7(msg2), nil
+	case *MsgSliceUint8Custom2:
+		return size9(msg2), nil
+	case *MsgSliceUint8Custom:
+		return size11(msg2), nil
+	case *MsgArrayFloat64Custom:
+		return size12(msg2), nil
+	case *MsgArrayFloat32Custom:
+		return size13(msg2), nil
+	case *MsgArrayInt8Custom:
+		return size14(msg2), nil
+	case *MsgArrayUint8Custom2:
+		return size15(msg2), nil
+	case *MsgArrayUint8Custom:
+		return size16(msg2), nil
+	case *MsgMapCustom:
+		return size17(msg2), nil
+	case *MsgSliceCustom:
+		return size18(msg2), nil
+	case *MsgArrayCustom:
+		return size20(msg2), nil
+	case *MsgStringCustom:
+		return size21(msg2), nil
+	case *MsgFloat32Custom:
+		return size22(msg2), nil
+	case *MsgFloat64Custom:
+		return size23(msg2), nil
+	case *MsgBoolCustom:
+		return size24(msg2), nil
+	case *MsgInt8Custom:
+		return size25(msg2), nil
+	case *MsgInt16Custom:
+		return size26(msg2), nil
+	case *MsgInt32Custom:
+		return size27(msg2), nil
+	case *MsgInt64Custom:
+		return size28(msg2), nil
+	case *MsgUint8Custom:
+		return size29(msg2), nil
+	case *MsgUint16Custom:
+		return size30(msg2), nil
+	case *MsgUint32Custom:
+		return size31(msg2), nil
+	case *MsgUint64Custom:
+		return size32(msg2), nil
+	case *MsgMixed:
+		return size34(msg2), nil
+	case *MsgSliceFloat64:
+		return size39(msg2), nil
+	case *MsgSliceFloat32:
+		return size41(msg2), nil
+	case *MsgSliceInt8:
+		return size43(msg2), nil
+	case *MsgSliceUint8:
+		return size45(msg2), nil
+	case *MsgArrayFloat64:
+		return size46(msg2), nil
+	case *MsgArrayFloat32:
+		return size47(msg2), nil
+	case *MsgArrayInt8:
+		return size48(msg2), nil
+	case *MsgArrayUint8:
+		return size49(msg2), nil
+	case *MsgStructAnonymous:
+		return size52(msg2), nil
+	case *MsgStruct:
+		return size54(msg2), nil
+	case *MsgMapString:
+		return size55(msg2), nil
+	case *MsgMap:
+		return size56(msg2), nil
+	case *MsgSlice:
+		return size57(msg2), nil
+	case *MsgArray:
+		return size59(msg2), nil
+	case *MsgString:
+		return size60(msg2), nil
+	case *MsgFloat32:
+		return size61(msg2), nil
+	case *MsgFloat64:
+		return size62(msg2), nil
+	case *MsgBool10:
+		return size63(msg2), nil
+	case *MsgBool3:
+		return size64(msg2), nil
+	case *MsgInt8:
+		return size65(msg2), nil
+	case *MsgInt16:
+		return size66(msg2), nil
+	case *MsgInt32:
+		return size67(msg2), nil
+	case *MsgInt64:
+		return size68(msg2), nil
+	case *MsgUint8:
+		return size69(msg2), nil
+	case *MsgUint16:
+		return size70(msg2), nil
+	case *MsgUint32:
+		return size71(msg2), nil
+	case *MsgUint64:
+		return size72(msg2), nil
+	case *pkg2.SubMsg:
+		return size51(msg2), nil
+	default:
+		return 0, errors.Errorf("unknown message type %T", msg)
+	}
 }
 
 // Marshal marshals message.
-func (m Marshaller) Marshal(msg proton.Marshallable, buf []byte) (retID, retSize uint64, retErr error) {
+func (m Marshaller) Marshal(msg any, buf []byte) (retID, retSize uint64, retErr error) {
 	defer func() {
 		if res := recover(); res != nil {
 			retErr = errors.Errorf("marshaling message failed: %s", res)
@@ -286,115 +355,117 @@ func (m Marshaller) Marshal(msg proton.Marshallable, buf []byte) (retID, retSize
 
 	switch msg2 := msg.(type) {
 	case *MsgMixedCustom:
-		return IDMsgMixedCustom, msg2.Marshal(buf), nil
+		return id0, marshal0(msg2, buf), nil
 	case *MsgSliceFloat64Custom:
-		return IDMsgSliceFloat64Custom, msg2.Marshal(buf), nil
+		return id3, marshal3(msg2, buf), nil
 	case *MsgSliceFloat32Custom:
-		return IDMsgSliceFloat32Custom, msg2.Marshal(buf), nil
+		return id5, marshal5(msg2, buf), nil
 	case *MsgSliceInt8Custom:
-		return IDMsgSliceInt8Custom, msg2.Marshal(buf), nil
+		return id7, marshal7(msg2, buf), nil
 	case *MsgSliceUint8Custom2:
-		return IDMsgSliceUint8Custom2, msg2.Marshal(buf), nil
+		return id9, marshal9(msg2, buf), nil
 	case *MsgSliceUint8Custom:
-		return IDMsgSliceUint8Custom, msg2.Marshal(buf), nil
+		return id11, marshal11(msg2, buf), nil
 	case *MsgArrayFloat64Custom:
-		return IDMsgArrayFloat64Custom, msg2.Marshal(buf), nil
+		return id12, marshal12(msg2, buf), nil
 	case *MsgArrayFloat32Custom:
-		return IDMsgArrayFloat32Custom, msg2.Marshal(buf), nil
+		return id13, marshal13(msg2, buf), nil
 	case *MsgArrayInt8Custom:
-		return IDMsgArrayInt8Custom, msg2.Marshal(buf), nil
+		return id14, marshal14(msg2, buf), nil
 	case *MsgArrayUint8Custom2:
-		return IDMsgArrayUint8Custom2, msg2.Marshal(buf), nil
+		return id15, marshal15(msg2, buf), nil
 	case *MsgArrayUint8Custom:
-		return IDMsgArrayUint8Custom, msg2.Marshal(buf), nil
+		return id16, marshal16(msg2, buf), nil
 	case *MsgMapCustom:
-		return IDMsgMapCustom, msg2.Marshal(buf), nil
+		return id17, marshal17(msg2, buf), nil
 	case *MsgSliceCustom:
-		return IDMsgSliceCustom, msg2.Marshal(buf), nil
+		return id18, marshal18(msg2, buf), nil
 	case *MsgArrayCustom:
-		return IDMsgArrayCustom, msg2.Marshal(buf), nil
+		return id20, marshal20(msg2, buf), nil
 	case *MsgStringCustom:
-		return IDMsgStringCustom, msg2.Marshal(buf), nil
+		return id21, marshal21(msg2, buf), nil
 	case *MsgFloat32Custom:
-		return IDMsgFloat32Custom, msg2.Marshal(buf), nil
+		return id22, marshal22(msg2, buf), nil
 	case *MsgFloat64Custom:
-		return IDMsgFloat64Custom, msg2.Marshal(buf), nil
+		return id23, marshal23(msg2, buf), nil
 	case *MsgBoolCustom:
-		return IDMsgBoolCustom, msg2.Marshal(buf), nil
+		return id24, marshal24(msg2, buf), nil
 	case *MsgInt8Custom:
-		return IDMsgInt8Custom, msg2.Marshal(buf), nil
+		return id25, marshal25(msg2, buf), nil
 	case *MsgInt16Custom:
-		return IDMsgInt16Custom, msg2.Marshal(buf), nil
+		return id26, marshal26(msg2, buf), nil
 	case *MsgInt32Custom:
-		return IDMsgInt32Custom, msg2.Marshal(buf), nil
+		return id27, marshal27(msg2, buf), nil
 	case *MsgInt64Custom:
-		return IDMsgInt64Custom, msg2.Marshal(buf), nil
+		return id28, marshal28(msg2, buf), nil
 	case *MsgUint8Custom:
-		return IDMsgUint8Custom, msg2.Marshal(buf), nil
+		return id29, marshal29(msg2, buf), nil
 	case *MsgUint16Custom:
-		return IDMsgUint16Custom, msg2.Marshal(buf), nil
+		return id30, marshal30(msg2, buf), nil
 	case *MsgUint32Custom:
-		return IDMsgUint32Custom, msg2.Marshal(buf), nil
+		return id31, marshal31(msg2, buf), nil
 	case *MsgUint64Custom:
-		return IDMsgUint64Custom, msg2.Marshal(buf), nil
+		return id32, marshal32(msg2, buf), nil
 	case *MsgMixed:
-		return IDMsgMixed, msg2.Marshal(buf), nil
+		return id34, marshal34(msg2, buf), nil
 	case *MsgSliceFloat64:
-		return IDMsgSliceFloat64, msg2.Marshal(buf), nil
+		return id39, marshal39(msg2, buf), nil
 	case *MsgSliceFloat32:
-		return IDMsgSliceFloat32, msg2.Marshal(buf), nil
+		return id41, marshal41(msg2, buf), nil
 	case *MsgSliceInt8:
-		return IDMsgSliceInt8, msg2.Marshal(buf), nil
+		return id43, marshal43(msg2, buf), nil
 	case *MsgSliceUint8:
-		return IDMsgSliceUint8, msg2.Marshal(buf), nil
+		return id45, marshal45(msg2, buf), nil
 	case *MsgArrayFloat64:
-		return IDMsgArrayFloat64, msg2.Marshal(buf), nil
+		return id46, marshal46(msg2, buf), nil
 	case *MsgArrayFloat32:
-		return IDMsgArrayFloat32, msg2.Marshal(buf), nil
+		return id47, marshal47(msg2, buf), nil
 	case *MsgArrayInt8:
-		return IDMsgArrayInt8, msg2.Marshal(buf), nil
+		return id48, marshal48(msg2, buf), nil
 	case *MsgArrayUint8:
-		return IDMsgArrayUint8, msg2.Marshal(buf), nil
+		return id49, marshal49(msg2, buf), nil
 	case *MsgStructAnonymous:
-		return IDMsgStructAnonymous, msg2.Marshal(buf), nil
+		return id52, marshal52(msg2, buf), nil
 	case *MsgStruct:
-		return IDMsgStruct, msg2.Marshal(buf), nil
+		return id54, marshal54(msg2, buf), nil
 	case *MsgMapString:
-		return IDMsgMapString, msg2.Marshal(buf), nil
+		return id55, marshal55(msg2, buf), nil
 	case *MsgMap:
-		return IDMsgMap, msg2.Marshal(buf), nil
+		return id56, marshal56(msg2, buf), nil
 	case *MsgSlice:
-		return IDMsgSlice, msg2.Marshal(buf), nil
+		return id57, marshal57(msg2, buf), nil
 	case *MsgArray:
-		return IDMsgArray, msg2.Marshal(buf), nil
+		return id59, marshal59(msg2, buf), nil
 	case *MsgString:
-		return IDMsgString, msg2.Marshal(buf), nil
+		return id60, marshal60(msg2, buf), nil
 	case *MsgFloat32:
-		return IDMsgFloat32, msg2.Marshal(buf), nil
+		return id61, marshal61(msg2, buf), nil
 	case *MsgFloat64:
-		return IDMsgFloat64, msg2.Marshal(buf), nil
+		return id62, marshal62(msg2, buf), nil
 	case *MsgBool10:
-		return IDMsgBool10, msg2.Marshal(buf), nil
+		return id63, marshal63(msg2, buf), nil
 	case *MsgBool3:
-		return IDMsgBool3, msg2.Marshal(buf), nil
+		return id64, marshal64(msg2, buf), nil
 	case *MsgInt8:
-		return IDMsgInt8, msg2.Marshal(buf), nil
+		return id65, marshal65(msg2, buf), nil
 	case *MsgInt16:
-		return IDMsgInt16, msg2.Marshal(buf), nil
+		return id66, marshal66(msg2, buf), nil
 	case *MsgInt32:
-		return IDMsgInt32, msg2.Marshal(buf), nil
+		return id67, marshal67(msg2, buf), nil
 	case *MsgInt64:
-		return IDMsgInt64, msg2.Marshal(buf), nil
+		return id68, marshal68(msg2, buf), nil
 	case *MsgUint8:
-		return IDMsgUint8, msg2.Marshal(buf), nil
+		return id69, marshal69(msg2, buf), nil
 	case *MsgUint16:
-		return IDMsgUint16, msg2.Marshal(buf), nil
+		return id70, marshal70(msg2, buf), nil
 	case *MsgUint32:
-		return IDMsgUint32, msg2.Marshal(buf), nil
+		return id71, marshal71(msg2, buf), nil
 	case *MsgUint64:
-		return IDMsgUint64, msg2.Marshal(buf), nil
+		return id72, marshal72(msg2, buf), nil
+	case *pkg2.SubMsg:
+		return id51, marshal51(msg2, buf), nil
 	default:
-		return 0, 0, errors.Errorf("unknown message type %T", m)
+		return 0, 0, errors.Errorf("unknown message type %T", msg)
 	}
 }
 
@@ -407,295 +478,355 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 	}()
 
 	switch id {
-	case IDMsgMixedCustom:
-		msg := m.massMsgMixedCustom.New()
-		return msg, msg.Unmarshal(
+	case id0:
+		msg := m.mass0.New()
+		return msg, unmarshal0(
+			msg,
 			buf,
-			m.massA3BABMapAInt16BCustomArray,
-			m.massMapAInt16BCustomArray,
+			m.mass2,
+			m.mass1,
 		), nil
-	case IDMsgSliceFloat64Custom:
-		msg := m.massMsgSliceFloat64Custom.New()
-		return msg, msg.Unmarshal(
+	case id3:
+		msg := m.mass3.New()
+		return msg, unmarshal3(
+			msg,
 			buf,
-			m.massCustomFloat64,
+			m.mass4,
 		), nil
-	case IDMsgSliceFloat32Custom:
-		msg := m.massMsgSliceFloat32Custom.New()
-		return msg, msg.Unmarshal(
+	case id5:
+		msg := m.mass5.New()
+		return msg, unmarshal5(
+			msg,
 			buf,
-			m.massCustomFloat32,
+			m.mass6,
 		), nil
-	case IDMsgSliceInt8Custom:
-		msg := m.massMsgSliceInt8Custom.New()
-		return msg, msg.Unmarshal(
+	case id7:
+		msg := m.mass7.New()
+		return msg, unmarshal7(
+			msg,
 			buf,
-			m.massCustomInt8,
+			m.mass8,
 		), nil
-	case IDMsgSliceUint8Custom2:
-		msg := m.massMsgSliceUint8Custom2.New()
-		return msg, msg.Unmarshal(
+	case id9:
+		msg := m.mass9.New()
+		return msg, unmarshal9(
+			msg,
 			buf,
-			m.massCustomUint8,
+			m.mass10,
 		), nil
-	case IDMsgSliceUint8Custom:
-		msg := m.massMsgSliceUint8Custom.New()
-		return msg, msg.Unmarshal(
-			buf,
-		), nil
-	case IDMsgArrayFloat64Custom:
-		msg := m.massMsgArrayFloat64Custom.New()
-		return msg, msg.Unmarshal(
-			buf,
-		), nil
-	case IDMsgArrayFloat32Custom:
-		msg := m.massMsgArrayFloat32Custom.New()
-		return msg, msg.Unmarshal(
+	case id11:
+		msg := m.mass11.New()
+		return msg, unmarshal11(
+			msg,
 			buf,
 		), nil
-	case IDMsgArrayInt8Custom:
-		msg := m.massMsgArrayInt8Custom.New()
-		return msg, msg.Unmarshal(
+	case id12:
+		msg := m.mass12.New()
+		return msg, unmarshal12(
+			msg,
 			buf,
 		), nil
-	case IDMsgArrayUint8Custom2:
-		msg := m.massMsgArrayUint8Custom2.New()
-		return msg, msg.Unmarshal(
+	case id13:
+		msg := m.mass13.New()
+		return msg, unmarshal13(
+			msg,
 			buf,
 		), nil
-	case IDMsgArrayUint8Custom:
-		msg := m.massMsgArrayUint8Custom.New()
-		return msg, msg.Unmarshal(
+	case id14:
+		msg := m.mass14.New()
+		return msg, unmarshal14(
+			msg,
 			buf,
 		), nil
-	case IDMsgMapCustom:
-		msg := m.massMsgMapCustom.New()
-		return msg, msg.Unmarshal(
+	case id15:
+		msg := m.mass15.New()
+		return msg, unmarshal15(
+			msg,
 			buf,
 		), nil
-	case IDMsgSliceCustom:
-		msg := m.massMsgSliceCustom.New()
-		return msg, msg.Unmarshal(
-			buf,
-			m.massCustomUint64,
-		), nil
-	case IDMsgArrayCustom:
-		msg := m.massMsgArrayCustom.New()
-		return msg, msg.Unmarshal(
+	case id16:
+		msg := m.mass16.New()
+		return msg, unmarshal16(
+			msg,
 			buf,
 		), nil
-	case IDMsgStringCustom:
-		msg := m.massMsgStringCustom.New()
-		return msg, msg.Unmarshal(
+	case id17:
+		msg := m.mass17.New()
+		return msg, unmarshal17(
+			msg,
 			buf,
 		), nil
-	case IDMsgFloat32Custom:
-		msg := m.massMsgFloat32Custom.New()
-		return msg, msg.Unmarshal(
+	case id18:
+		msg := m.mass18.New()
+		return msg, unmarshal18(
+			msg,
+			buf,
+			m.mass19,
+		), nil
+	case id20:
+		msg := m.mass20.New()
+		return msg, unmarshal20(
+			msg,
 			buf,
 		), nil
-	case IDMsgFloat64Custom:
-		msg := m.massMsgFloat64Custom.New()
-		return msg, msg.Unmarshal(
+	case id21:
+		msg := m.mass21.New()
+		return msg, unmarshal21(
+			msg,
 			buf,
 		), nil
-	case IDMsgBoolCustom:
-		msg := m.massMsgBoolCustom.New()
-		return msg, msg.Unmarshal(
+	case id22:
+		msg := m.mass22.New()
+		return msg, unmarshal22(
+			msg,
 			buf,
 		), nil
-	case IDMsgInt8Custom:
-		msg := m.massMsgInt8Custom.New()
-		return msg, msg.Unmarshal(
+	case id23:
+		msg := m.mass23.New()
+		return msg, unmarshal23(
+			msg,
 			buf,
 		), nil
-	case IDMsgInt16Custom:
-		msg := m.massMsgInt16Custom.New()
-		return msg, msg.Unmarshal(
+	case id24:
+		msg := m.mass24.New()
+		return msg, unmarshal24(
+			msg,
 			buf,
 		), nil
-	case IDMsgInt32Custom:
-		msg := m.massMsgInt32Custom.New()
-		return msg, msg.Unmarshal(
+	case id25:
+		msg := m.mass25.New()
+		return msg, unmarshal25(
+			msg,
 			buf,
 		), nil
-	case IDMsgInt64Custom:
-		msg := m.massMsgInt64Custom.New()
-		return msg, msg.Unmarshal(
+	case id26:
+		msg := m.mass26.New()
+		return msg, unmarshal26(
+			msg,
 			buf,
 		), nil
-	case IDMsgUint8Custom:
-		msg := m.massMsgUint8Custom.New()
-		return msg, msg.Unmarshal(
+	case id27:
+		msg := m.mass27.New()
+		return msg, unmarshal27(
+			msg,
 			buf,
 		), nil
-	case IDMsgUint16Custom:
-		msg := m.massMsgUint16Custom.New()
-		return msg, msg.Unmarshal(
+	case id28:
+		msg := m.mass28.New()
+		return msg, unmarshal28(
+			msg,
 			buf,
 		), nil
-	case IDMsgUint32Custom:
-		msg := m.massMsgUint32Custom.New()
-		return msg, msg.Unmarshal(
+	case id29:
+		msg := m.mass29.New()
+		return msg, unmarshal29(
+			msg,
 			buf,
 		), nil
-	case IDMsgUint64Custom:
-		msg := m.massMsgUint64Custom.New()
-		return msg, msg.Unmarshal(
+	case id30:
+		msg := m.mass30.New()
+		return msg, unmarshal30(
+			msg,
 			buf,
 		), nil
-	case IDMsgMixed:
-		msg := m.massMsgMixed.New()
-		return msg, msg.Unmarshal(
-			buf,
-			m.massString,
-			m.massA32BUint16,
-			m.massA3BABMapAInt16BA2BInt64,
-			m.massMapAInt16BA2BInt64,
-		), nil
-	case IDMsgSliceFloat64:
-		msg := m.massMsgSliceFloat64.New()
-		return msg, msg.Unmarshal(
-			buf,
-			m.massFloat64,
-		), nil
-	case IDMsgSliceFloat32:
-		msg := m.massMsgSliceFloat32.New()
-		return msg, msg.Unmarshal(
-			buf,
-			m.massFloat32,
-		), nil
-	case IDMsgSliceInt8:
-		msg := m.massMsgSliceInt8.New()
-		return msg, msg.Unmarshal(
-			buf,
-			m.massInt8,
-		), nil
-	case IDMsgSliceUint8:
-		msg := m.massMsgSliceUint8.New()
-		return msg, msg.Unmarshal(
+	case id31:
+		msg := m.mass31.New()
+		return msg, unmarshal31(
+			msg,
 			buf,
 		), nil
-	case IDMsgArrayFloat64:
-		msg := m.massMsgArrayFloat64.New()
-		return msg, msg.Unmarshal(
+	case id32:
+		msg := m.mass32.New()
+		return msg, unmarshal32(
+			msg,
 			buf,
 		), nil
-	case IDMsgArrayFloat32:
-		msg := m.massMsgArrayFloat32.New()
-		return msg, msg.Unmarshal(
+	case id34:
+		msg := m.mass34.New()
+		return msg, unmarshal34(
+			msg,
+			buf,
+			m.mass35,
+			m.mass36,
+			m.mass38,
+			m.mass37,
+		), nil
+	case id39:
+		msg := m.mass39.New()
+		return msg, unmarshal39(
+			msg,
+			buf,
+			m.mass40,
+		), nil
+	case id41:
+		msg := m.mass41.New()
+		return msg, unmarshal41(
+			msg,
+			buf,
+			m.mass42,
+		), nil
+	case id43:
+		msg := m.mass43.New()
+		return msg, unmarshal43(
+			msg,
+			buf,
+			m.mass44,
+		), nil
+	case id45:
+		msg := m.mass45.New()
+		return msg, unmarshal45(
+			msg,
 			buf,
 		), nil
-	case IDMsgArrayInt8:
-		msg := m.massMsgArrayInt8.New()
-		return msg, msg.Unmarshal(
+	case id46:
+		msg := m.mass46.New()
+		return msg, unmarshal46(
+			msg,
 			buf,
 		), nil
-	case IDMsgArrayUint8:
-		msg := m.massMsgArrayUint8.New()
-		return msg, msg.Unmarshal(
+	case id47:
+		msg := m.mass47.New()
+		return msg, unmarshal47(
+			msg,
 			buf,
 		), nil
-	case IDMsgStructAnonymous:
-		msg := m.massMsgStructAnonymous.New()
-		return msg, msg.Unmarshal(
-			buf,
-			m.massFloat32,
-			m.massSpkgSubMsg,
-			m.massSpkg1SubMsg,
-		), nil
-	case IDMsgStruct:
-		msg := m.massMsgStruct.New()
-		return msg, msg.Unmarshal(
-			buf,
-			m.massFloat32,
-			m.massSpkgSubMsg,
-			m.massSpkg1SubMsg,
-		), nil
-	case IDMsgMapString:
-		msg := m.massMsgMapString.New()
-		return msg, msg.Unmarshal(
+	case id48:
+		msg := m.mass48.New()
+		return msg, unmarshal48(
+			msg,
 			buf,
 		), nil
-	case IDMsgMap:
-		msg := m.massMsgMap.New()
-		return msg, msg.Unmarshal(
+	case id49:
+		msg := m.mass49.New()
+		return msg, unmarshal49(
+			msg,
 			buf,
 		), nil
-	case IDMsgSlice:
-		msg := m.massMsgSlice.New()
-		return msg, msg.Unmarshal(
+	case id52:
+		msg := m.mass52.New()
+		return msg, unmarshal52(
+			msg,
 			buf,
-			m.massBool,
+			m.mass42,
+			m.mass33,
+			m.mass53,
 		), nil
-	case IDMsgArray:
-		msg := m.massMsgArray.New()
-		return msg, msg.Unmarshal(
+	case id54:
+		msg := m.mass54.New()
+		return msg, unmarshal54(
+			msg,
 			buf,
+			m.mass42,
+			m.mass33,
+			m.mass53,
 		), nil
-	case IDMsgString:
-		msg := m.massMsgString.New()
-		return msg, msg.Unmarshal(
-			buf,
-		), nil
-	case IDMsgFloat32:
-		msg := m.massMsgFloat32.New()
-		return msg, msg.Unmarshal(
-			buf,
-		), nil
-	case IDMsgFloat64:
-		msg := m.massMsgFloat64.New()
-		return msg, msg.Unmarshal(
+	case id55:
+		msg := m.mass55.New()
+		return msg, unmarshal55(
+			msg,
 			buf,
 		), nil
-	case IDMsgBool10:
-		msg := m.massMsgBool10.New()
-		return msg, msg.Unmarshal(
+	case id56:
+		msg := m.mass56.New()
+		return msg, unmarshal56(
+			msg,
 			buf,
 		), nil
-	case IDMsgBool3:
-		msg := m.massMsgBool3.New()
-		return msg, msg.Unmarshal(
+	case id57:
+		msg := m.mass57.New()
+		return msg, unmarshal57(
+			msg,
+			buf,
+			m.mass58,
+		), nil
+	case id59:
+		msg := m.mass59.New()
+		return msg, unmarshal59(
+			msg,
 			buf,
 		), nil
-	case IDMsgInt8:
-		msg := m.massMsgInt8.New()
-		return msg, msg.Unmarshal(
+	case id60:
+		msg := m.mass60.New()
+		return msg, unmarshal60(
+			msg,
 			buf,
 		), nil
-	case IDMsgInt16:
-		msg := m.massMsgInt16.New()
-		return msg, msg.Unmarshal(
+	case id61:
+		msg := m.mass61.New()
+		return msg, unmarshal61(
+			msg,
 			buf,
 		), nil
-	case IDMsgInt32:
-		msg := m.massMsgInt32.New()
-		return msg, msg.Unmarshal(
+	case id62:
+		msg := m.mass62.New()
+		return msg, unmarshal62(
+			msg,
 			buf,
 		), nil
-	case IDMsgInt64:
-		msg := m.massMsgInt64.New()
-		return msg, msg.Unmarshal(
+	case id63:
+		msg := m.mass63.New()
+		return msg, unmarshal63(
+			msg,
 			buf,
 		), nil
-	case IDMsgUint8:
-		msg := m.massMsgUint8.New()
-		return msg, msg.Unmarshal(
+	case id64:
+		msg := m.mass64.New()
+		return msg, unmarshal64(
+			msg,
 			buf,
 		), nil
-	case IDMsgUint16:
-		msg := m.massMsgUint16.New()
-		return msg, msg.Unmarshal(
+	case id65:
+		msg := m.mass65.New()
+		return msg, unmarshal65(
+			msg,
 			buf,
 		), nil
-	case IDMsgUint32:
-		msg := m.massMsgUint32.New()
-		return msg, msg.Unmarshal(
+	case id66:
+		msg := m.mass66.New()
+		return msg, unmarshal66(
+			msg,
 			buf,
 		), nil
-	case IDMsgUint64:
-		msg := m.massMsgUint64.New()
-		return msg, msg.Unmarshal(
+	case id67:
+		msg := m.mass67.New()
+		return msg, unmarshal67(
+			msg,
+			buf,
+		), nil
+	case id68:
+		msg := m.mass68.New()
+		return msg, unmarshal68(
+			msg,
+			buf,
+		), nil
+	case id69:
+		msg := m.mass69.New()
+		return msg, unmarshal69(
+			msg,
+			buf,
+		), nil
+	case id70:
+		msg := m.mass70.New()
+		return msg, unmarshal70(
+			msg,
+			buf,
+		), nil
+	case id71:
+		msg := m.mass71.New()
+		return msg, unmarshal71(
+			msg,
+			buf,
+		), nil
+	case id72:
+		msg := m.mass72.New()
+		return msg, unmarshal72(
+			msg,
+			buf,
+		), nil
+	case id51:
+		msg := m.mass51.New()
+		return msg, unmarshal51(
+			msg,
 			buf,
 		), nil
 	default:
@@ -703,10 +834,7 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 	}
 }
 
-var _ proton.Message = &MsgMixedCustom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgMixedCustom) Size() uint64 {
+func size0(m *MsgMixedCustom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -832,8 +960,7 @@ func (m *MsgMixedCustom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgMixedCustom) Marshal(b []byte) uint64 {
+func marshal0(m *MsgMixedCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1439,11 +1566,11 @@ func (m *MsgMixedCustom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgMixedCustom) Unmarshal(
+func unmarshal0(
+	m *MsgMixedCustom,
 	b []byte,
-	massA3BABMapAInt16BCustomArray *mass.Mass[[3][]map[int16]custom.Array],
-	massMapAInt16BCustomArray *mass.Mass[map[int16]custom.Array],
+	mass2 *mass.Mass[[3][]map[int16]custom.Array],
+	mass1 *mass.Mass[map[int16]custom.Array],
 ) uint64 {
 	var o uint64
 	{
@@ -1496,7 +1623,7 @@ func (m *MsgMixedCustom) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = massA3BABMapAInt16BCustomArray.NewSlice(l)
+			m.Value = mass2.NewSlice(l)
 			for i6 := range l {
 				for i5 := range 3 {
 					var l uint64
@@ -1546,7 +1673,7 @@ func (m *MsgMixedCustom) Unmarshal(
 						l = vi
 					}
 					if l > 0 {
-						m.Value[i6][i5] = massMapAInt16BCustomArray.NewSlice(l)
+						m.Value[i6][i5] = mass1.NewSlice(l)
 						for i4 := range l {
 							var l uint64
 							{
@@ -1596,10 +1723,10 @@ func (m *MsgMixedCustom) Unmarshal(
 							}
 							if l > 0 {
 								m.Value[i6][i5][i4] = make(map[int16]custom.Array, l)
-							
+
 								var mk2 int16
 								var mv3 custom.Array
-							
+
 								for range l {
 									{
 										vi := uint16(b[o] & 0x7F)
@@ -1688,10 +1815,7 @@ func (m *MsgMixedCustom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgSliceFloat64Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgSliceFloat64Custom) Size() uint64 {
+func size3(m *MsgSliceFloat64Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -1724,8 +1848,7 @@ func (m *MsgSliceFloat64Custom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgSliceFloat64Custom) Marshal(b []byte) uint64 {
+func marshal3(m *MsgSliceFloat64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1880,10 +2003,10 @@ func (m *MsgSliceFloat64Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgSliceFloat64Custom) Unmarshal(
+func unmarshal3(
+	m *MsgSliceFloat64Custom,
 	b []byte,
-	massCustomFloat64 *mass.Mass[custom.Float64],
+	mass4 *mass.Mass[custom.Float64],
 ) uint64 {
 	var o uint64
 	{
@@ -1936,7 +2059,7 @@ func (m *MsgSliceFloat64Custom) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = massCustomFloat64.NewSlice(l)
+			m.Value = mass4.NewSlice(l)
 			copy(unsafe.Slice((*byte)(unsafe.Pointer(&m.Value[0])), l*8), b[o:o+l*8])
 			o += l * 8
 		} else {
@@ -1947,10 +2070,7 @@ func (m *MsgSliceFloat64Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgSliceFloat32Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgSliceFloat32Custom) Size() uint64 {
+func size5(m *MsgSliceFloat32Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -1983,8 +2103,7 @@ func (m *MsgSliceFloat32Custom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgSliceFloat32Custom) Marshal(b []byte) uint64 {
+func marshal5(m *MsgSliceFloat32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2139,10 +2258,10 @@ func (m *MsgSliceFloat32Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgSliceFloat32Custom) Unmarshal(
+func unmarshal5(
+	m *MsgSliceFloat32Custom,
 	b []byte,
-	massCustomFloat32 *mass.Mass[custom.Float32],
+	mass6 *mass.Mass[custom.Float32],
 ) uint64 {
 	var o uint64
 	{
@@ -2195,7 +2314,7 @@ func (m *MsgSliceFloat32Custom) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = massCustomFloat32.NewSlice(l)
+			m.Value = mass6.NewSlice(l)
 			copy(unsafe.Slice((*byte)(unsafe.Pointer(&m.Value[0])), l*4), b[o:o+l*4])
 			o += l * 4
 		} else {
@@ -2206,10 +2325,7 @@ func (m *MsgSliceFloat32Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgSliceInt8Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgSliceInt8Custom) Size() uint64 {
+func size7(m *MsgSliceInt8Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2242,8 +2358,7 @@ func (m *MsgSliceInt8Custom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgSliceInt8Custom) Marshal(b []byte) uint64 {
+func marshal7(m *MsgSliceInt8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2398,10 +2513,10 @@ func (m *MsgSliceInt8Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgSliceInt8Custom) Unmarshal(
+func unmarshal7(
+	m *MsgSliceInt8Custom,
 	b []byte,
-	massCustomInt8 *mass.Mass[custom.Int8],
+	mass8 *mass.Mass[custom.Int8],
 ) uint64 {
 	var o uint64
 	{
@@ -2454,7 +2569,7 @@ func (m *MsgSliceInt8Custom) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = massCustomInt8.NewSlice(l)
+			m.Value = mass8.NewSlice(l)
 			copy(unsafe.Slice((*byte)(unsafe.Pointer(&m.Value[0])), l), b[o:o+l])
 			o += l
 		} else {
@@ -2465,10 +2580,7 @@ func (m *MsgSliceInt8Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgSliceUint8Custom2{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgSliceUint8Custom2) Size() uint64 {
+func size9(m *MsgSliceUint8Custom2) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2501,8 +2613,7 @@ func (m *MsgSliceUint8Custom2) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgSliceUint8Custom2) Marshal(b []byte) uint64 {
+func marshal9(m *MsgSliceUint8Custom2, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2657,10 +2768,10 @@ func (m *MsgSliceUint8Custom2) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgSliceUint8Custom2) Unmarshal(
+func unmarshal9(
+	m *MsgSliceUint8Custom2,
 	b []byte,
-	massCustomUint8 *mass.Mass[custom.Uint8],
+	mass10 *mass.Mass[custom.Uint8],
 ) uint64 {
 	var o uint64
 	{
@@ -2713,7 +2824,7 @@ func (m *MsgSliceUint8Custom2) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = massCustomUint8.NewSlice(l)
+			m.Value = mass10.NewSlice(l)
 			copy(unsafe.Slice((*byte)(&m.Value[0]), l), b[o:o+l])
 			o += l
 		} else {
@@ -2724,10 +2835,7 @@ func (m *MsgSliceUint8Custom2) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgSliceUint8Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgSliceUint8Custom) Size() uint64 {
+func size11(m *MsgSliceUint8Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2760,8 +2868,7 @@ func (m *MsgSliceUint8Custom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgSliceUint8Custom) Marshal(b []byte) uint64 {
+func marshal11(m *MsgSliceUint8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2916,8 +3023,8 @@ func (m *MsgSliceUint8Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgSliceUint8Custom) Unmarshal(
+func unmarshal11(
+	m *MsgSliceUint8Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -2971,7 +3078,7 @@ func (m *MsgSliceUint8Custom) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = b[o:o+l]
+			m.Value = b[o : o+l]
 			o += l
 		} else {
 			m.Value = nil
@@ -2981,16 +3088,12 @@ func (m *MsgSliceUint8Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgArrayFloat64Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgArrayFloat64Custom) Size() uint64 {
+func size12(m *MsgArrayFloat64Custom) uint64 {
 	var n uint64 = 40
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgArrayFloat64Custom) Marshal(b []byte) uint64 {
+func marshal12(m *MsgArrayFloat64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3002,8 +3105,8 @@ func (m *MsgArrayFloat64Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgArrayFloat64Custom) Unmarshal(
+func unmarshal12(
+	m *MsgArrayFloat64Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -3017,16 +3120,12 @@ func (m *MsgArrayFloat64Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgArrayFloat32Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgArrayFloat32Custom) Size() uint64 {
+func size13(m *MsgArrayFloat32Custom) uint64 {
 	var n uint64 = 20
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgArrayFloat32Custom) Marshal(b []byte) uint64 {
+func marshal13(m *MsgArrayFloat32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3038,8 +3137,8 @@ func (m *MsgArrayFloat32Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgArrayFloat32Custom) Unmarshal(
+func unmarshal13(
+	m *MsgArrayFloat32Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -3053,16 +3152,12 @@ func (m *MsgArrayFloat32Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgArrayInt8Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgArrayInt8Custom) Size() uint64 {
+func size14(m *MsgArrayInt8Custom) uint64 {
 	var n uint64 = 5
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgArrayInt8Custom) Marshal(b []byte) uint64 {
+func marshal14(m *MsgArrayInt8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3074,8 +3169,8 @@ func (m *MsgArrayInt8Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgArrayInt8Custom) Unmarshal(
+func unmarshal14(
+	m *MsgArrayInt8Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -3089,16 +3184,12 @@ func (m *MsgArrayInt8Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgArrayUint8Custom2{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgArrayUint8Custom2) Size() uint64 {
+func size15(m *MsgArrayUint8Custom2) uint64 {
 	var n uint64 = 5
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgArrayUint8Custom2) Marshal(b []byte) uint64 {
+func marshal15(m *MsgArrayUint8Custom2, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3110,8 +3201,8 @@ func (m *MsgArrayUint8Custom2) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgArrayUint8Custom2) Unmarshal(
+func unmarshal15(
+	m *MsgArrayUint8Custom2,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -3125,16 +3216,12 @@ func (m *MsgArrayUint8Custom2) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgArrayUint8Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgArrayUint8Custom) Size() uint64 {
+func size16(m *MsgArrayUint8Custom) uint64 {
 	var n uint64 = 5
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgArrayUint8Custom) Marshal(b []byte) uint64 {
+func marshal16(m *MsgArrayUint8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3146,8 +3233,8 @@ func (m *MsgArrayUint8Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgArrayUint8Custom) Unmarshal(
+func unmarshal16(
+	m *MsgArrayUint8Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -3161,10 +3248,7 @@ func (m *MsgArrayUint8Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgMapCustom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgMapCustom) Size() uint64 {
+func size17(m *MsgMapCustom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -3242,8 +3326,7 @@ func (m *MsgMapCustom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgMapCustom) Marshal(b []byte) uint64 {
+func marshal17(m *MsgMapCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3593,8 +3676,8 @@ func (m *MsgMapCustom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgMapCustom) Unmarshal(
+func unmarshal17(
+	m *MsgMapCustom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -3649,10 +3732,10 @@ func (m *MsgMapCustom) Unmarshal(
 		}
 		if l > 0 {
 			m.Value = make(custom.Map, l)
-		
+
 			var mk1 custom.String
 			var mv2 custom.Int32
-		
+
 			for range l {
 				{
 					var l uint64
@@ -3705,7 +3788,7 @@ func (m *MsgMapCustom) Unmarshal(
 						mk1 = custom.String(unsafe.String((*byte)(unsafe.Pointer(&b[o])), l))
 						o += l
 					} else {
-						mk1 = "" 
+						mk1 = ""
 					}
 				}
 				{
@@ -3749,10 +3832,7 @@ func (m *MsgMapCustom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgSliceCustom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgSliceCustom) Size() uint64 {
+func size18(m *MsgSliceCustom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -3809,8 +3889,7 @@ func (m *MsgSliceCustom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgSliceCustom) Marshal(b []byte) uint64 {
+func marshal18(m *MsgSliceCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -4102,10 +4181,10 @@ func (m *MsgSliceCustom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgSliceCustom) Unmarshal(
+func unmarshal18(
+	m *MsgSliceCustom,
 	b []byte,
-	massCustomUint64 *mass.Mass[custom.Uint64],
+	mass19 *mass.Mass[custom.Uint64],
 ) uint64 {
 	var o uint64
 	{
@@ -4158,7 +4237,7 @@ func (m *MsgSliceCustom) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = massCustomUint64.NewSlice(l)
+			m.Value = mass19.NewSlice(l)
 			for i1 := range l {
 				{
 					vi := custom.Uint64(b[o] & 0x7F)
@@ -4214,10 +4293,7 @@ func (m *MsgSliceCustom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgArrayCustom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgArrayCustom) Size() uint64 {
+func size20(m *MsgArrayCustom) uint64 {
 	var n uint64 = 2
 	{
 		// Value
@@ -4250,8 +4326,7 @@ func (m *MsgArrayCustom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgArrayCustom) Marshal(b []byte) uint64 {
+func marshal20(m *MsgArrayCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -4403,8 +4478,8 @@ func (m *MsgArrayCustom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgArrayCustom) Unmarshal(
+func unmarshal20(
+	m *MsgArrayCustom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -4463,10 +4538,7 @@ func (m *MsgArrayCustom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgStringCustom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgStringCustom) Size() uint64 {
+func size21(m *MsgStringCustom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -4501,8 +4573,7 @@ func (m *MsgStringCustom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgStringCustom) Marshal(b []byte) uint64 {
+func marshal21(m *MsgStringCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -4657,8 +4728,8 @@ func (m *MsgStringCustom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgStringCustom) Unmarshal(
+func unmarshal21(
+	m *MsgStringCustom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -4716,7 +4787,7 @@ func (m *MsgStringCustom) Unmarshal(
 				m.Value = custom.String(unsafe.String((*byte)(unsafe.Pointer(&b[o])), l))
 				o += l
 			} else {
-				m.Value = "" 
+				m.Value = ""
 			}
 		}
 	}
@@ -4724,16 +4795,12 @@ func (m *MsgStringCustom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgFloat32Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgFloat32Custom) Size() uint64 {
+func size22(m *MsgFloat32Custom) uint64 {
 	var n uint64 = 4
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgFloat32Custom) Marshal(b []byte) uint64 {
+func marshal22(m *MsgFloat32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -4745,8 +4812,8 @@ func (m *MsgFloat32Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgFloat32Custom) Unmarshal(
+func unmarshal22(
+	m *MsgFloat32Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -4760,16 +4827,12 @@ func (m *MsgFloat32Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgFloat64Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgFloat64Custom) Size() uint64 {
+func size23(m *MsgFloat64Custom) uint64 {
 	var n uint64 = 8
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgFloat64Custom) Marshal(b []byte) uint64 {
+func marshal23(m *MsgFloat64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -4781,8 +4844,8 @@ func (m *MsgFloat64Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgFloat64Custom) Unmarshal(
+func unmarshal23(
+	m *MsgFloat64Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -4796,16 +4859,12 @@ func (m *MsgFloat64Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgBoolCustom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgBoolCustom) Size() uint64 {
+func size24(m *MsgBoolCustom) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgBoolCustom) Marshal(b []byte) uint64 {
+func marshal24(m *MsgBoolCustom, b []byte) uint64 {
 	var o uint64 = 1
 	{
 		// Value
@@ -4820,8 +4879,8 @@ func (m *MsgBoolCustom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgBoolCustom) Unmarshal(
+func unmarshal24(
+	m *MsgBoolCustom,
 	b []byte,
 ) uint64 {
 	var o uint64 = 1
@@ -4834,16 +4893,12 @@ func (m *MsgBoolCustom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgInt8Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgInt8Custom) Size() uint64 {
+func size25(m *MsgInt8Custom) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgInt8Custom) Marshal(b []byte) uint64 {
+func marshal25(m *MsgInt8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -4855,8 +4910,8 @@ func (m *MsgInt8Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgInt8Custom) Unmarshal(
+func unmarshal25(
+	m *MsgInt8Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -4870,10 +4925,7 @@ func (m *MsgInt8Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgInt16Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgInt16Custom) Size() uint64 {
+func size26(m *MsgInt16Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -4895,8 +4947,7 @@ func (m *MsgInt16Custom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgInt16Custom) Marshal(b []byte) uint64 {
+func marshal26(m *MsgInt16Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -4932,8 +4983,8 @@ func (m *MsgInt16Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgInt16Custom) Unmarshal(
+func unmarshal26(
+	m *MsgInt16Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -4966,10 +5017,7 @@ func (m *MsgInt16Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgInt32Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgInt32Custom) Size() uint64 {
+func size27(m *MsgInt32Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -4995,8 +5043,7 @@ func (m *MsgInt32Custom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgInt32Custom) Marshal(b []byte) uint64 {
+func marshal27(m *MsgInt32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -5059,8 +5106,8 @@ func (m *MsgInt32Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgInt32Custom) Unmarshal(
+func unmarshal27(
+	m *MsgInt32Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -5103,10 +5150,7 @@ func (m *MsgInt32Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgInt64Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgInt64Custom) Size() uint64 {
+func size28(m *MsgInt64Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -5142,8 +5186,7 @@ func (m *MsgInt64Custom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgInt64Custom) Marshal(b []byte) uint64 {
+func marshal28(m *MsgInt64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -5326,8 +5369,8 @@ func (m *MsgInt64Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgInt64Custom) Unmarshal(
+func unmarshal28(
+	m *MsgInt64Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -5395,16 +5438,12 @@ func (m *MsgInt64Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgUint8Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgUint8Custom) Size() uint64 {
+func size29(m *MsgUint8Custom) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgUint8Custom) Marshal(b []byte) uint64 {
+func marshal29(m *MsgUint8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -5416,8 +5455,8 @@ func (m *MsgUint8Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgUint8Custom) Unmarshal(
+func unmarshal29(
+	m *MsgUint8Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -5431,10 +5470,7 @@ func (m *MsgUint8Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgUint16Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgUint16Custom) Size() uint64 {
+func size30(m *MsgUint16Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -5453,8 +5489,7 @@ func (m *MsgUint16Custom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgUint16Custom) Marshal(b []byte) uint64 {
+func marshal30(m *MsgUint16Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -5487,8 +5522,8 @@ func (m *MsgUint16Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgUint16Custom) Unmarshal(
+func unmarshal30(
+	m *MsgUint16Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -5515,10 +5550,7 @@ func (m *MsgUint16Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgUint32Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgUint32Custom) Size() uint64 {
+func size31(m *MsgUint32Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -5541,8 +5573,7 @@ func (m *MsgUint32Custom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgUint32Custom) Marshal(b []byte) uint64 {
+func marshal31(m *MsgUint32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -5602,8 +5633,8 @@ func (m *MsgUint32Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgUint32Custom) Unmarshal(
+func unmarshal31(
+	m *MsgUint32Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -5640,10 +5671,7 @@ func (m *MsgUint32Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgUint64Custom{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgUint64Custom) Size() uint64 {
+func size32(m *MsgUint64Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -5674,8 +5702,7 @@ func (m *MsgUint64Custom) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgUint64Custom) Marshal(b []byte) uint64 {
+func marshal32(m *MsgUint64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -5825,8 +5852,8 @@ func (m *MsgUint64Custom) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgUint64Custom) Unmarshal(
+func unmarshal32(
+	m *MsgUint64Custom,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -5883,10 +5910,7 @@ func (m *MsgUint64Custom) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgMixed{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgMixed) Size() uint64 {
+func size34(m *MsgMixed) uint64 {
 	var n uint64 = 18
 	{
 		// Value1
@@ -5942,7 +5966,7 @@ func (m *MsgMixed) Size() uint64 {
 					}
 				}
 			}
-			n += mv2.Size()
+			n += size33(&mv2)
 		}
 	}
 	{
@@ -6258,8 +6282,7 @@ func (m *MsgMixed) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgMixed) Marshal(b []byte) uint64 {
+func marshal34(m *MsgMixed, b []byte) uint64 {
 	var o uint64 = 1
 	{
 		// Value1
@@ -6550,7 +6573,7 @@ func (m *MsgMixed) Marshal(b []byte) uint64 {
 				copy(b[o:o+l], mk1)
 				o += l
 			}
-			o += mv2.Marshal(b[o:])
+			o += marshal33(&mv2, b[o:])
 		}
 	}
 	{
@@ -8115,13 +8138,13 @@ func (m *MsgMixed) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgMixed) Unmarshal(
+func unmarshal34(
+	m *MsgMixed,
 	b []byte,
-	massString *mass.Mass[string],
-	massA32BUint16 *mass.Mass[[32]uint16],
-	massA3BABMapAInt16BA2BInt64 *mass.Mass[[3][]map[int16][2]int64],
-	massMapAInt16BA2BInt64 *mass.Mass[map[int16][2]int64],
+	mass35 *mass.Mass[string],
+	mass36 *mass.Mass[[32]uint16],
+	mass38 *mass.Mass[[3][]map[int16][2]int64],
+	mass37 *mass.Mass[map[int16][2]int64],
 ) uint64 {
 	var o uint64 = 1
 	{
@@ -8175,10 +8198,10 @@ func (m *MsgMixed) Unmarshal(
 		}
 		if l > 0 {
 			m.Value1 = make(map[string]spkg.SubMsg, l)
-		
+
 			var mk1 string
 			var mv2 spkg.SubMsg
-		
+
 			for range l {
 				{
 					var l uint64
@@ -8231,10 +8254,11 @@ func (m *MsgMixed) Unmarshal(
 						mk1 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 						o += l
 					} else {
-						mk1 = "" 
+						mk1 = ""
 					}
 				}
-				o += mv2.Unmarshal(
+				o += unmarshal33(
+					&mv2,
 					b[o:],
 				)
 				m.Value1[mk1] = mv2
@@ -8294,10 +8318,10 @@ func (m *MsgMixed) Unmarshal(
 		}
 		if l > 0 {
 			m.Value2 = make(map[uint8][]string, l)
-		
+
 			var mk2 uint8
 			var mv3 []string
-		
+
 			for range l {
 				mk2 = b[o]
 				o++
@@ -8348,7 +8372,7 @@ func (m *MsgMixed) Unmarshal(
 					l = vi
 				}
 				if l > 0 {
-					mv3 = massString.NewSlice(l)
+					mv3 = mass35.NewSlice(l)
 					for i1 := range l {
 						{
 							var l uint64
@@ -8401,7 +8425,7 @@ func (m *MsgMixed) Unmarshal(
 								mv3[i1] = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 								o += l
 							} else {
-								mv3[i1] = "" 
+								mv3[i1] = ""
 							}
 						}
 					}
@@ -8464,7 +8488,7 @@ func (m *MsgMixed) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value3 = massA32BUint16.NewSlice(l)
+			m.Value3 = mass36.NewSlice(l)
 			for i2 := range l {
 				for i1 := range 32 {
 					{
@@ -8540,10 +8564,10 @@ func (m *MsgMixed) Unmarshal(
 			}
 			if l > 0 {
 				m.Value4[i3] = make(map[int8]float32, l)
-			
+
 				var mk1 int8
 				var mv2 float32
-			
+
 				for range l {
 					mk1 = int8(b[o])
 					o++
@@ -8606,7 +8630,7 @@ func (m *MsgMixed) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value5 = massA3BABMapAInt16BA2BInt64.NewSlice(l)
+			m.Value5 = mass38.NewSlice(l)
 			for i6 := range l {
 				for i5 := range 3 {
 					var l uint64
@@ -8656,7 +8680,7 @@ func (m *MsgMixed) Unmarshal(
 						l = vi
 					}
 					if l > 0 {
-						m.Value5[i6][i5] = massMapAInt16BA2BInt64.NewSlice(l)
+						m.Value5[i6][i5] = mass37.NewSlice(l)
 						for i4 := range l {
 							var l uint64
 							{
@@ -8706,10 +8730,10 @@ func (m *MsgMixed) Unmarshal(
 							}
 							if l > 0 {
 								m.Value5[i6][i5][i4] = make(map[int16][2]int64, l)
-							
+
 								var mk2 int16
 								var mv3 [2]int64
-							
+
 								for range l {
 									{
 										vi := uint16(b[o] & 0x7F)
@@ -8869,7 +8893,7 @@ func (m *MsgMixed) Unmarshal(
 				m.Value8 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 				o += l
 			} else {
-				m.Value8 = "" 
+				m.Value8 = ""
 			}
 		}
 	}
@@ -8877,10 +8901,140 @@ func (m *MsgMixed) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgSliceFloat64{}
+func size33(m *spkg.SubMsg) uint64 {
+	var n uint64 = 1
+	{
+		// Value
 
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgSliceFloat64) Size() uint64 {
+		{
+			vi := uint32(m.Value) << 1
+			if m.Value < 0 {
+				vi ^= 0xFFFFFFFF
+			}
+			switch {
+			case vi <= 0x7F:
+			case vi <= 0x3FFF:
+				n++
+			case vi <= 0x1FFFFF:
+				n += 2
+			case vi <= 0xFFFFFFF:
+				n += 3
+			default:
+				n += 4
+			}
+		}
+	}
+	return n
+}
+
+func marshal33(m *spkg.SubMsg, b []byte) uint64 {
+	var o uint64
+	{
+		// Value
+
+		{
+			vi := uint32(m.Value) << 1
+			if m.Value < 0 {
+				vi ^= 0xFFFFFFFF
+			}
+			switch {
+			case vi <= 0x7F:
+				b[o] = byte(vi)
+				o++
+			case vi <= 0x3FFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			case vi <= 0x1FFFFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			case vi <= 0xFFFFFFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			default:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			}
+		}
+	}
+
+	return o
+}
+
+func unmarshal33(
+	m *spkg.SubMsg,
+	b []byte,
+) uint64 {
+	var o uint64
+	{
+		// Value
+
+		{
+			vi := uint32(b[o] & 0x7F)
+			if b[o]&0x80 == 0 {
+				o++
+			} else {
+				vi |= uint32(b[o+1]&0x7F) << 7
+				if b[o+1]&0x80 == 0 {
+					o += 2
+				} else {
+					vi |= uint32(b[o+2]&0x7F) << 14
+					if b[o+2]&0x80 == 0 {
+						o += 3
+					} else {
+						vi |= uint32(b[o+3]&0x7F) << 21
+						if b[o+3]&0x80 == 0 {
+							o += 4
+						} else {
+							vi |= uint32(b[o+4]) << 28
+							o += 5
+						}
+					}
+				}
+			}
+			if vi&0x01 == 0 {
+				vi >>= 1
+			} else {
+				vi >>= 1
+				vi ^= 0xFFFFFFFF
+			}
+			m.Value = int32(vi)
+		}
+	}
+
+	return o
+}
+
+func size39(m *MsgSliceFloat64) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -8913,8 +9067,7 @@ func (m *MsgSliceFloat64) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgSliceFloat64) Marshal(b []byte) uint64 {
+func marshal39(m *MsgSliceFloat64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -9069,10 +9222,10 @@ func (m *MsgSliceFloat64) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgSliceFloat64) Unmarshal(
+func unmarshal39(
+	m *MsgSliceFloat64,
 	b []byte,
-	massFloat64 *mass.Mass[float64],
+	mass40 *mass.Mass[float64],
 ) uint64 {
 	var o uint64
 	{
@@ -9125,7 +9278,7 @@ func (m *MsgSliceFloat64) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = massFloat64.NewSlice(l)
+			m.Value = mass40.NewSlice(l)
 			copy(unsafe.Slice((*byte)(unsafe.Pointer(&m.Value[0])), l*8), b[o:o+l*8])
 			o += l * 8
 		} else {
@@ -9136,10 +9289,7 @@ func (m *MsgSliceFloat64) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgSliceFloat32{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgSliceFloat32) Size() uint64 {
+func size41(m *MsgSliceFloat32) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -9172,8 +9322,7 @@ func (m *MsgSliceFloat32) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgSliceFloat32) Marshal(b []byte) uint64 {
+func marshal41(m *MsgSliceFloat32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -9328,10 +9477,10 @@ func (m *MsgSliceFloat32) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgSliceFloat32) Unmarshal(
+func unmarshal41(
+	m *MsgSliceFloat32,
 	b []byte,
-	massFloat32 *mass.Mass[float32],
+	mass42 *mass.Mass[float32],
 ) uint64 {
 	var o uint64
 	{
@@ -9384,7 +9533,7 @@ func (m *MsgSliceFloat32) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = massFloat32.NewSlice(l)
+			m.Value = mass42.NewSlice(l)
 			copy(unsafe.Slice((*byte)(unsafe.Pointer(&m.Value[0])), l*4), b[o:o+l*4])
 			o += l * 4
 		} else {
@@ -9395,10 +9544,7 @@ func (m *MsgSliceFloat32) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgSliceInt8{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgSliceInt8) Size() uint64 {
+func size43(m *MsgSliceInt8) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -9431,8 +9577,7 @@ func (m *MsgSliceInt8) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgSliceInt8) Marshal(b []byte) uint64 {
+func marshal43(m *MsgSliceInt8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -9587,10 +9732,10 @@ func (m *MsgSliceInt8) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgSliceInt8) Unmarshal(
+func unmarshal43(
+	m *MsgSliceInt8,
 	b []byte,
-	massInt8 *mass.Mass[int8],
+	mass44 *mass.Mass[int8],
 ) uint64 {
 	var o uint64
 	{
@@ -9643,7 +9788,7 @@ func (m *MsgSliceInt8) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = massInt8.NewSlice(l)
+			m.Value = mass44.NewSlice(l)
 			copy(unsafe.Slice((*byte)(unsafe.Pointer(&m.Value[0])), l), b[o:o+l])
 			o += l
 		} else {
@@ -9654,10 +9799,7 @@ func (m *MsgSliceInt8) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgSliceUint8{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgSliceUint8) Size() uint64 {
+func size45(m *MsgSliceUint8) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -9690,8 +9832,7 @@ func (m *MsgSliceUint8) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgSliceUint8) Marshal(b []byte) uint64 {
+func marshal45(m *MsgSliceUint8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -9846,8 +9987,8 @@ func (m *MsgSliceUint8) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgSliceUint8) Unmarshal(
+func unmarshal45(
+	m *MsgSliceUint8,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -9901,7 +10042,7 @@ func (m *MsgSliceUint8) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = b[o:o+l]
+			m.Value = b[o : o+l]
 			o += l
 		} else {
 			m.Value = nil
@@ -9911,16 +10052,12 @@ func (m *MsgSliceUint8) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgArrayFloat64{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgArrayFloat64) Size() uint64 {
+func size46(m *MsgArrayFloat64) uint64 {
 	var n uint64 = 40
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgArrayFloat64) Marshal(b []byte) uint64 {
+func marshal46(m *MsgArrayFloat64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -9932,8 +10069,8 @@ func (m *MsgArrayFloat64) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgArrayFloat64) Unmarshal(
+func unmarshal46(
+	m *MsgArrayFloat64,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -9947,16 +10084,12 @@ func (m *MsgArrayFloat64) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgArrayFloat32{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgArrayFloat32) Size() uint64 {
+func size47(m *MsgArrayFloat32) uint64 {
 	var n uint64 = 20
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgArrayFloat32) Marshal(b []byte) uint64 {
+func marshal47(m *MsgArrayFloat32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -9968,8 +10101,8 @@ func (m *MsgArrayFloat32) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgArrayFloat32) Unmarshal(
+func unmarshal47(
+	m *MsgArrayFloat32,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -9983,16 +10116,12 @@ func (m *MsgArrayFloat32) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgArrayInt8{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgArrayInt8) Size() uint64 {
+func size48(m *MsgArrayInt8) uint64 {
 	var n uint64 = 5
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgArrayInt8) Marshal(b []byte) uint64 {
+func marshal48(m *MsgArrayInt8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -10004,8 +10133,8 @@ func (m *MsgArrayInt8) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgArrayInt8) Unmarshal(
+func unmarshal48(
+	m *MsgArrayInt8,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -10019,16 +10148,12 @@ func (m *MsgArrayInt8) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgArrayUint8{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgArrayUint8) Size() uint64 {
+func size49(m *MsgArrayUint8) uint64 {
 	var n uint64 = 5
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgArrayUint8) Marshal(b []byte) uint64 {
+func marshal49(m *MsgArrayUint8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -10040,8 +10165,8 @@ func (m *MsgArrayUint8) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgArrayUint8) Unmarshal(
+func unmarshal49(
+	m *MsgArrayUint8,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -10055,63 +10180,61 @@ func (m *MsgArrayUint8) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgStructAnonymous{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgStructAnonymous) Size() uint64 {
+func size52(m *MsgStructAnonymous) uint64 {
 	var n uint64
 	{
 		// SubMsg
 
-		n += m.SubMsg.Size()
+		n += size50(&m.SubMsg)
 	}
 	{
 		// Value2
 
-		n += m.Value2.Size()
+		n += size51(&m.Value2)
 	}
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgStructAnonymous) Marshal(b []byte) uint64 {
+func marshal52(m *MsgStructAnonymous, b []byte) uint64 {
 	var o uint64
 	{
 		// SubMsg
 
-		o += m.SubMsg.Marshal(b[o:])
+		o += marshal50(&m.SubMsg, b[o:])
 	}
 	{
 		// Value2
 
-		o += m.Value2.Marshal(b[o:])
+		o += marshal51(&m.Value2, b[o:])
 	}
 
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgStructAnonymous) Unmarshal(
+func unmarshal52(
+	m *MsgStructAnonymous,
 	b []byte,
-	massFloat32 *mass.Mass[float32],
-	massSpkgSubMsg *mass.Mass[spkg.SubMsg],
-	massSpkg1SubMsg *mass.Mass[spkg1.SubMsg],
+	mass42 *mass.Mass[float32],
+	mass33 *mass.Mass[spkg.SubMsg],
+	mass53 *mass.Mass[spkg6.SubMsg],
 ) uint64 {
 	var o uint64
 	{
 		// SubMsg
 
-		o += m.SubMsg.Unmarshal(
+		o += unmarshal50(
+			&m.SubMsg,
 			b[o:],
-			massFloat32,
-			massSpkgSubMsg,
-			massSpkg1SubMsg,
+			mass42,
+			mass33,
+			mass53,
 		)
 	}
 	{
 		// Value2
 
-		o += m.Value2.Unmarshal(
+		o += unmarshal51(
+			&m.Value2,
 			b[o:],
 		)
 	}
@@ -10119,10 +10242,7 @@ func (m *MsgStructAnonymous) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &SubMsg{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *SubMsg) Size() uint64 {
+func size50(m *SubMsg) uint64 {
 	var n uint64 = 3
 	{
 		// Value1
@@ -10179,7 +10299,7 @@ func (m *SubMsg) Size() uint64 {
 			}
 		}
 		for _, sv1 := range m.Value2 {
-			n += sv1.Size()
+			n += size33(&sv1)
 		}
 	}
 	{
@@ -10209,14 +10329,13 @@ func (m *SubMsg) Size() uint64 {
 			}
 		}
 		for _, sv1 := range m.Value3 {
-			n += sv1.Size()
+			n += size53(&sv1)
 		}
 	}
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *SubMsg) Marshal(b []byte) uint64 {
+func marshal50(m *SubMsg, b []byte) uint64 {
 	var o uint64
 	{
 		// Value1
@@ -10511,7 +10630,7 @@ func (m *SubMsg) Marshal(b []byte) uint64 {
 			}
 		}
 		for _, sv1 := range m.Value2 {
-			o += sv1.Marshal(b[o:])
+			o += marshal33(&sv1, b[o:])
 		}
 	}
 	{
@@ -10658,19 +10777,19 @@ func (m *SubMsg) Marshal(b []byte) uint64 {
 			}
 		}
 		for _, sv1 := range m.Value3 {
-			o += sv1.Marshal(b[o:])
+			o += marshal53(&sv1, b[o:])
 		}
 	}
 
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *SubMsg) Unmarshal(
+func unmarshal50(
+	m *SubMsg,
 	b []byte,
-	massFloat32 *mass.Mass[float32],
-	massSpkgSubMsg *mass.Mass[spkg.SubMsg],
-	massSpkg1SubMsg *mass.Mass[spkg1.SubMsg],
+	mass42 *mass.Mass[float32],
+	mass33 *mass.Mass[spkg.SubMsg],
+	mass53 *mass.Mass[spkg6.SubMsg],
 ) uint64 {
 	var o uint64
 	{
@@ -10723,7 +10842,7 @@ func (m *SubMsg) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value1 = massFloat32.NewSlice(l)
+			m.Value1 = mass42.NewSlice(l)
 			copy(unsafe.Slice((*byte)(unsafe.Pointer(&m.Value1[0])), l*4), b[o:o+l*4])
 			o += l * 4
 		} else {
@@ -10780,9 +10899,10 @@ func (m *SubMsg) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value2 = massSpkgSubMsg.NewSlice(l)
+			m.Value2 = mass33.NewSlice(l)
 			for i1 := range l {
-				o += m.Value2[i1].Unmarshal(
+				o += unmarshal33(
+					&m.Value2[i1],
 					b[o:],
 				)
 			}
@@ -10840,9 +10960,10 @@ func (m *SubMsg) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value3 = massSpkg1SubMsg.NewSlice(l)
+			m.Value3 = mass53.NewSlice(l)
 			for i1 := range l {
-				o += m.Value3[i1].Unmarshal(
+				o += unmarshal53(
+					&m.Value3[i1],
 					b[o:],
 				)
 			}
@@ -10854,63 +10975,153 @@ func (m *SubMsg) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgStruct{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgStruct) Size() uint64 {
-	var n uint64
+func size53(m *spkg6.SubMsg) uint64 {
+	var n uint64 = 1
 	{
-		// Value1
+		// Value
 
-		n += m.Value1.Size()
-	}
-	{
-		// Value2
-
-		n += m.Value2.Size()
+		{
+			vi := uint16(m.Value) << 1
+			if m.Value < 0 {
+				vi ^= 0xFFFF
+			}
+			switch {
+			case vi <= 0x7F:
+			case vi <= 0x3FFF:
+				n++
+			default:
+				n += 2
+			}
+		}
 	}
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgStruct) Marshal(b []byte) uint64 {
+func marshal53(m *spkg6.SubMsg, b []byte) uint64 {
 	var o uint64
 	{
-		// Value1
+		// Value
 
-		o += m.Value1.Marshal(b[o:])
-	}
-	{
-		// Value2
-
-		o += m.Value2.Marshal(b[o:])
+		{
+			vi := uint16(m.Value) << 1
+			if m.Value < 0 {
+				vi ^= 0xFFFF
+			}
+			switch {
+			case vi <= 0x7F:
+				b[o] = byte(vi)
+				o++
+			case vi <= 0x3FFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			default:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			}
+		}
 	}
 
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgStruct) Unmarshal(
+func unmarshal53(
+	m *spkg6.SubMsg,
 	b []byte,
-	massFloat32 *mass.Mass[float32],
-	massSpkgSubMsg *mass.Mass[spkg.SubMsg],
-	massSpkg1SubMsg *mass.Mass[spkg1.SubMsg],
+) uint64 {
+	var o uint64
+	{
+		// Value
+
+		{
+			vi := uint16(b[o] & 0x7F)
+			if b[o]&0x80 == 0 {
+				o++
+			} else {
+				vi |= uint16(b[o+1]&0x7F) << 7
+				if b[o+1]&0x80 == 0 {
+					o += 2
+				} else {
+					vi |= uint16(b[o+2]) << 14
+					o += 3
+				}
+			}
+			if vi&0x01 == 0 {
+				vi >>= 1
+			} else {
+				vi >>= 1
+				vi ^= 0xFFFF
+			}
+			m.Value = int16(vi)
+		}
+	}
+
+	return o
+}
+
+func size54(m *MsgStruct) uint64 {
+	var n uint64
+	{
+		// Value1
+
+		n += size50(&m.Value1)
+	}
+	{
+		// Value2
+
+		n += size51(&m.Value2)
+	}
+	return n
+}
+
+func marshal54(m *MsgStruct, b []byte) uint64 {
+	var o uint64
+	{
+		// Value1
+
+		o += marshal50(&m.Value1, b[o:])
+	}
+	{
+		// Value2
+
+		o += marshal51(&m.Value2, b[o:])
+	}
+
+	return o
+}
+
+func unmarshal54(
+	m *MsgStruct,
+	b []byte,
+	mass42 *mass.Mass[float32],
+	mass33 *mass.Mass[spkg.SubMsg],
+	mass53 *mass.Mass[spkg6.SubMsg],
 ) uint64 {
 	var o uint64
 	{
 		// Value1
 
-		o += m.Value1.Unmarshal(
+		o += unmarshal50(
+			&m.Value1,
 			b[o:],
-			massFloat32,
-			massSpkgSubMsg,
-			massSpkg1SubMsg,
+			mass42,
+			mass33,
+			mass53,
 		)
 	}
 	{
 		// Value2
 
-		o += m.Value2.Unmarshal(
+		o += unmarshal51(
+			&m.Value2,
 			b[o:],
 		)
 	}
@@ -10918,10 +11129,7 @@ func (m *MsgStruct) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgMapString{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgMapString) Size() uint64 {
+func size55(m *MsgMapString) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -11008,8 +11216,7 @@ func (m *MsgMapString) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgMapString) Marshal(b []byte) uint64 {
+func marshal55(m *MsgMapString, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -11451,8 +11658,8 @@ func (m *MsgMapString) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgMapString) Unmarshal(
+func unmarshal55(
+	m *MsgMapString,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -11507,10 +11714,10 @@ func (m *MsgMapString) Unmarshal(
 		}
 		if l > 0 {
 			m.Value = make(map[string]string, l)
-		
+
 			var mk1 string
 			var mv2 string
-		
+
 			for range l {
 				{
 					var l uint64
@@ -11563,7 +11770,7 @@ func (m *MsgMapString) Unmarshal(
 						mk1 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 						o += l
 					} else {
-						mk1 = "" 
+						mk1 = ""
 					}
 				}
 				{
@@ -11617,7 +11824,7 @@ func (m *MsgMapString) Unmarshal(
 						mv2 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 						o += l
 					} else {
-						mv2 = "" 
+						mv2 = ""
 					}
 				}
 				m.Value[mk1] = mv2
@@ -11630,10 +11837,7 @@ func (m *MsgMapString) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgMap{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgMap) Size() uint64 {
+func size56(m *MsgMap) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -11712,8 +11916,7 @@ func (m *MsgMap) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgMap) Marshal(b []byte) uint64 {
+func marshal56(m *MsgMap, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -12145,8 +12348,8 @@ func (m *MsgMap) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgMap) Unmarshal(
+func unmarshal56(
+	m *MsgMap,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -12201,10 +12404,10 @@ func (m *MsgMap) Unmarshal(
 		}
 		if l > 0 {
 			m.Value = make(map[uint64]uint64, l)
-		
+
 			var mk1 uint64
 			var mv2 uint64
-		
+
 			for range l {
 				{
 					vi := uint64(b[o] & 0x7F)
@@ -12306,10 +12509,7 @@ func (m *MsgMap) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgSlice{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgSlice) Size() uint64 {
+func size57(m *MsgSlice) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -12342,8 +12542,7 @@ func (m *MsgSlice) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgSlice) Marshal(b []byte) uint64 {
+func marshal57(m *MsgSlice, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -12501,10 +12700,10 @@ func (m *MsgSlice) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgSlice) Unmarshal(
+func unmarshal57(
+	m *MsgSlice,
 	b []byte,
-	massBool *mass.Mass[bool],
+	mass58 *mass.Mass[bool],
 ) uint64 {
 	var o uint64
 	{
@@ -12557,7 +12756,7 @@ func (m *MsgSlice) Unmarshal(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = massBool.NewSlice(l)
+			m.Value = mass58.NewSlice(l)
 			for i1 := range l {
 				m.Value[i1] = b[o] != 0x00
 				o++
@@ -12570,16 +12769,12 @@ func (m *MsgSlice) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgArray{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgArray) Size() uint64 {
+func size59(m *MsgArray) uint64 {
 	var n uint64 = 3
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgArray) Marshal(b []byte) uint64 {
+func marshal59(m *MsgArray, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -12597,8 +12792,8 @@ func (m *MsgArray) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgArray) Unmarshal(
+func unmarshal59(
+	m *MsgArray,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -12614,10 +12809,7 @@ func (m *MsgArray) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgString{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgString) Size() uint64 {
+func size60(m *MsgString) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -12652,8 +12844,7 @@ func (m *MsgString) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgString) Marshal(b []byte) uint64 {
+func marshal60(m *MsgString, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -12808,8 +12999,8 @@ func (m *MsgString) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgString) Unmarshal(
+func unmarshal60(
+	m *MsgString,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -12867,7 +13058,7 @@ func (m *MsgString) Unmarshal(
 				m.Value = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 				o += l
 			} else {
-				m.Value = "" 
+				m.Value = ""
 			}
 		}
 	}
@@ -12875,16 +13066,12 @@ func (m *MsgString) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgFloat32{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgFloat32) Size() uint64 {
+func size61(m *MsgFloat32) uint64 {
 	var n uint64 = 4
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgFloat32) Marshal(b []byte) uint64 {
+func marshal61(m *MsgFloat32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -12896,8 +13083,8 @@ func (m *MsgFloat32) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgFloat32) Unmarshal(
+func unmarshal61(
+	m *MsgFloat32,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -12911,16 +13098,12 @@ func (m *MsgFloat32) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgFloat64{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgFloat64) Size() uint64 {
+func size62(m *MsgFloat64) uint64 {
 	var n uint64 = 8
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgFloat64) Marshal(b []byte) uint64 {
+func marshal62(m *MsgFloat64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -12932,8 +13115,8 @@ func (m *MsgFloat64) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgFloat64) Unmarshal(
+func unmarshal62(
+	m *MsgFloat64,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -12947,16 +13130,12 @@ func (m *MsgFloat64) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgBool10{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgBool10) Size() uint64 {
+func size63(m *MsgBool10) uint64 {
 	var n uint64 = 2
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgBool10) Marshal(b []byte) uint64 {
+func marshal63(m *MsgBool10, b []byte) uint64 {
 	var o uint64 = 2
 	{
 		// Value1
@@ -13052,8 +13231,8 @@ func (m *MsgBool10) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgBool10) Unmarshal(
+func unmarshal63(
+	m *MsgBool10,
 	b []byte,
 ) uint64 {
 	var o uint64 = 2
@@ -13111,16 +13290,12 @@ func (m *MsgBool10) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgBool3{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgBool3) Size() uint64 {
+func size64(m *MsgBool3) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgBool3) Marshal(b []byte) uint64 {
+func marshal64(m *MsgBool3, b []byte) uint64 {
 	var o uint64 = 1
 	{
 		// Value1
@@ -13153,8 +13328,8 @@ func (m *MsgBool3) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgBool3) Unmarshal(
+func unmarshal64(
+	m *MsgBool3,
 	b []byte,
 ) uint64 {
 	var o uint64 = 1
@@ -13177,16 +13352,12 @@ func (m *MsgBool3) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgInt8{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgInt8) Size() uint64 {
+func size65(m *MsgInt8) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgInt8) Marshal(b []byte) uint64 {
+func marshal65(m *MsgInt8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -13198,8 +13369,8 @@ func (m *MsgInt8) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgInt8) Unmarshal(
+func unmarshal65(
+	m *MsgInt8,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -13213,10 +13384,7 @@ func (m *MsgInt8) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgInt16{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgInt16) Size() uint64 {
+func size66(m *MsgInt16) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -13238,8 +13406,7 @@ func (m *MsgInt16) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgInt16) Marshal(b []byte) uint64 {
+func marshal66(m *MsgInt16, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -13275,8 +13442,8 @@ func (m *MsgInt16) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgInt16) Unmarshal(
+func unmarshal66(
+	m *MsgInt16,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -13309,10 +13476,7 @@ func (m *MsgInt16) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgInt32{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgInt32) Size() uint64 {
+func size67(m *MsgInt32) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -13338,8 +13502,7 @@ func (m *MsgInt32) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgInt32) Marshal(b []byte) uint64 {
+func marshal67(m *MsgInt32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -13402,8 +13565,8 @@ func (m *MsgInt32) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgInt32) Unmarshal(
+func unmarshal67(
+	m *MsgInt32,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -13446,10 +13609,7 @@ func (m *MsgInt32) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgInt64{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgInt64) Size() uint64 {
+func size68(m *MsgInt64) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -13485,8 +13645,7 @@ func (m *MsgInt64) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgInt64) Marshal(b []byte) uint64 {
+func marshal68(m *MsgInt64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -13669,8 +13828,8 @@ func (m *MsgInt64) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgInt64) Unmarshal(
+func unmarshal68(
+	m *MsgInt64,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -13738,16 +13897,12 @@ func (m *MsgInt64) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgUint8{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgUint8) Size() uint64 {
+func size69(m *MsgUint8) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgUint8) Marshal(b []byte) uint64 {
+func marshal69(m *MsgUint8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -13759,8 +13914,8 @@ func (m *MsgUint8) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgUint8) Unmarshal(
+func unmarshal69(
+	m *MsgUint8,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -13774,10 +13929,7 @@ func (m *MsgUint8) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgUint16{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgUint16) Size() uint64 {
+func size70(m *MsgUint16) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -13796,8 +13948,7 @@ func (m *MsgUint16) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgUint16) Marshal(b []byte) uint64 {
+func marshal70(m *MsgUint16, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -13830,8 +13981,8 @@ func (m *MsgUint16) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgUint16) Unmarshal(
+func unmarshal70(
+	m *MsgUint16,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -13858,10 +14009,7 @@ func (m *MsgUint16) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgUint32{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgUint32) Size() uint64 {
+func size71(m *MsgUint32) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -13884,8 +14032,7 @@ func (m *MsgUint32) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgUint32) Marshal(b []byte) uint64 {
+func marshal71(m *MsgUint32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -13945,8 +14092,8 @@ func (m *MsgUint32) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgUint32) Unmarshal(
+func unmarshal71(
+	m *MsgUint32,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -13983,10 +14130,7 @@ func (m *MsgUint32) Unmarshal(
 	return o
 }
 
-var _ proton.Message = &MsgUint64{}
-
-// Size computes the required size of the buffer for marshaling the structure.
-func (m *MsgUint64) Size() uint64 {
+func size72(m *MsgUint64) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -14017,8 +14161,7 @@ func (m *MsgUint64) Size() uint64 {
 	return n
 }
 
-// Marshal marshals the structure.
-func (m *MsgUint64) Marshal(b []byte) uint64 {
+func marshal72(m *MsgUint64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -14168,8 +14311,8 @@ func (m *MsgUint64) Marshal(b []byte) uint64 {
 	return o
 }
 
-// Unmarshal unmarshals the structure.
-func (m *MsgUint64) Unmarshal(
+func unmarshal72(
+	m *MsgUint64,
 	b []byte,
 ) uint64 {
 	var o uint64
@@ -14220,6 +14363,794 @@ func (m *MsgUint64) Unmarshal(
 				}
 			}
 			m.Value = vi
+		}
+	}
+
+	return o
+}
+
+func size51(m *pkg2.SubMsg) uint64 {
+	var n uint64 = 3
+	{
+		// Value1
+
+		l := uint64(len(m.Value1))
+		{
+			vi := l
+			switch {
+			case vi <= 0x7F:
+			case vi <= 0x3FFF:
+				n++
+			case vi <= 0x1FFFFF:
+				n += 2
+			case vi <= 0xFFFFFFF:
+				n += 3
+			case vi <= 0x7FFFFFFFF:
+				n += 4
+			case vi <= 0x3FFFFFFFFFF:
+				n += 5
+			case vi <= 0x1FFFFFFFFFFFF:
+				n += 6
+			case vi <= 0xFFFFFFFFFFFFFF:
+				n += 7
+			default:
+				n += 8
+			}
+		}
+		n += l * 2
+		for _, mv2 := range m.Value1 {
+			{
+				l := uint64(len(mv2))
+				n += l
+				{
+					vi := l
+					switch {
+					case vi <= 0x7F:
+					case vi <= 0x3FFF:
+						n++
+					case vi <= 0x1FFFFF:
+						n += 2
+					case vi <= 0xFFFFFFF:
+						n += 3
+					case vi <= 0x7FFFFFFFF:
+						n += 4
+					case vi <= 0x3FFFFFFFFFF:
+						n += 5
+					case vi <= 0x1FFFFFFFFFFFF:
+						n += 6
+					case vi <= 0xFFFFFFFFFFFFFF:
+						n += 7
+					default:
+						n += 8
+					}
+				}
+			}
+		}
+	}
+	{
+		// Value2
+
+		{
+			l := uint64(len(m.Value2))
+			n += l
+			{
+				vi := l
+				switch {
+				case vi <= 0x7F:
+				case vi <= 0x3FFF:
+					n++
+				case vi <= 0x1FFFFF:
+					n += 2
+				case vi <= 0xFFFFFFF:
+					n += 3
+				case vi <= 0x7FFFFFFFF:
+					n += 4
+				case vi <= 0x3FFFFFFFFFF:
+					n += 5
+				case vi <= 0x1FFFFFFFFFFFF:
+					n += 6
+				case vi <= 0xFFFFFFFFFFFFFF:
+					n += 7
+				default:
+					n += 8
+				}
+			}
+		}
+	}
+	{
+		// Value3
+
+		{
+			vi := m.Value3
+			switch {
+			case vi <= 0x7F:
+			case vi <= 0x3FFF:
+				n++
+			default:
+				n += 2
+			}
+		}
+	}
+	return n
+}
+
+func marshal51(m *pkg2.SubMsg, b []byte) uint64 {
+	var o uint64
+	{
+		// Value1
+
+		{
+			vi := uint64(len(m.Value1))
+			switch {
+			case vi <= 0x7F:
+				b[o] = byte(vi)
+				o++
+			case vi <= 0x3FFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			case vi <= 0x1FFFFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			case vi <= 0xFFFFFFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			case vi <= 0x7FFFFFFFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			case vi <= 0x3FFFFFFFFFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			case vi <= 0x1FFFFFFFFFFFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			case vi <= 0xFFFFFFFFFFFFFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			default:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			}
+		}
+		for mk1, mv2 := range m.Value1 {
+			if mk1 {
+				b[o] = 0x01
+			} else {
+				b[o] = 0x00
+			}
+			o++
+			{
+				l := uint64(len(mv2))
+				{
+					vi := l
+					switch {
+					case vi <= 0x7F:
+						b[o] = byte(vi)
+						o++
+					case vi <= 0x3FFF:
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi)
+						o++
+					case vi <= 0x1FFFFF:
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi)
+						o++
+					case vi <= 0xFFFFFFF:
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi)
+						o++
+					case vi <= 0x7FFFFFFFF:
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi)
+						o++
+					case vi <= 0x3FFFFFFFFFF:
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi)
+						o++
+					case vi <= 0x1FFFFFFFFFFFF:
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi)
+						o++
+					case vi <= 0xFFFFFFFFFFFFFF:
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi)
+						o++
+					default:
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi) | 0x80
+						o++
+						vi >>= 7
+						b[o] = byte(vi)
+						o++
+					}
+				}
+				copy(b[o:o+l], mv2)
+				o += l
+			}
+		}
+	}
+	{
+		// Value2
+
+		{
+			l := uint64(len(m.Value2))
+			{
+				vi := l
+				switch {
+				case vi <= 0x7F:
+					b[o] = byte(vi)
+					o++
+				case vi <= 0x3FFF:
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi)
+					o++
+				case vi <= 0x1FFFFF:
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi)
+					o++
+				case vi <= 0xFFFFFFF:
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi)
+					o++
+				case vi <= 0x7FFFFFFFF:
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi)
+					o++
+				case vi <= 0x3FFFFFFFFFF:
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi)
+					o++
+				case vi <= 0x1FFFFFFFFFFFF:
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi)
+					o++
+				case vi <= 0xFFFFFFFFFFFFFF:
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi)
+					o++
+				default:
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi) | 0x80
+					o++
+					vi >>= 7
+					b[o] = byte(vi)
+					o++
+				}
+			}
+			copy(b[o:o+l], m.Value2)
+			o += l
+		}
+	}
+	{
+		// Value3
+
+		{
+			vi := m.Value3
+			switch {
+			case vi <= 0x7F:
+				b[o] = byte(vi)
+				o++
+			case vi <= 0x3FFF:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			default:
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi) | 0x80
+				o++
+				vi >>= 7
+				b[o] = byte(vi)
+				o++
+			}
+		}
+	}
+
+	return o
+}
+
+func unmarshal51(
+	m *pkg2.SubMsg,
+	b []byte,
+) uint64 {
+	var o uint64
+	{
+		// Value1
+
+		var l uint64
+		{
+			vi := uint64(b[o] & 0x7F)
+			if b[o]&0x80 == 0 {
+				o++
+			} else {
+				vi |= uint64(b[o+1]&0x7F) << 7
+				if b[o+1]&0x80 == 0 {
+					o += 2
+				} else {
+					vi |= uint64(b[o+2]&0x7F) << 14
+					if b[o+2]&0x80 == 0 {
+						o += 3
+					} else {
+						vi |= uint64(b[o+3]&0x7F) << 21
+						if b[o+3]&0x80 == 0 {
+							o += 4
+						} else {
+							vi |= uint64(b[o+4]&0x7F) << 28
+							if b[o+4]&0x80 == 0 {
+								o += 5
+							} else {
+								vi |= uint64(b[o+5]&0x7F) << 35
+								if b[o+5]&0x80 == 0 {
+									o += 6
+								} else {
+									vi |= uint64(b[o+6]&0x7F) << 42
+									if b[o+6]&0x80 == 0 {
+										o += 7
+									} else {
+										vi |= uint64(b[o+7]&0x7F) << 49
+										if b[o+7]&0x80 == 0 {
+											o += 8
+										} else {
+											vi |= uint64(b[o+8]) << 56
+											o += 9
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			l = vi
+		}
+		if l > 0 {
+			m.Value1 = make(map[bool]string, l)
+
+			var mk1 bool
+			var mv2 string
+
+			for range l {
+				mk1 = b[o] != 0x00
+				o++
+				{
+					var l uint64
+					{
+						vi := uint64(b[o] & 0x7F)
+						if b[o]&0x80 == 0 {
+							o++
+						} else {
+							vi |= uint64(b[o+1]&0x7F) << 7
+							if b[o+1]&0x80 == 0 {
+								o += 2
+							} else {
+								vi |= uint64(b[o+2]&0x7F) << 14
+								if b[o+2]&0x80 == 0 {
+									o += 3
+								} else {
+									vi |= uint64(b[o+3]&0x7F) << 21
+									if b[o+3]&0x80 == 0 {
+										o += 4
+									} else {
+										vi |= uint64(b[o+4]&0x7F) << 28
+										if b[o+4]&0x80 == 0 {
+											o += 5
+										} else {
+											vi |= uint64(b[o+5]&0x7F) << 35
+											if b[o+5]&0x80 == 0 {
+												o += 6
+											} else {
+												vi |= uint64(b[o+6]&0x7F) << 42
+												if b[o+6]&0x80 == 0 {
+													o += 7
+												} else {
+													vi |= uint64(b[o+7]&0x7F) << 49
+													if b[o+7]&0x80 == 0 {
+														o += 8
+													} else {
+														vi |= uint64(b[o+8]) << 56
+														o += 9
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						l = vi
+					}
+					if l > 0 {
+						mv2 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
+						o += l
+					} else {
+						mv2 = ""
+					}
+				}
+				m.Value1[mk1] = mv2
+			}
+		} else {
+			m.Value1 = nil
+		}
+	}
+	{
+		// Value2
+
+		{
+			var l uint64
+			{
+				vi := uint64(b[o] & 0x7F)
+				if b[o]&0x80 == 0 {
+					o++
+				} else {
+					vi |= uint64(b[o+1]&0x7F) << 7
+					if b[o+1]&0x80 == 0 {
+						o += 2
+					} else {
+						vi |= uint64(b[o+2]&0x7F) << 14
+						if b[o+2]&0x80 == 0 {
+							o += 3
+						} else {
+							vi |= uint64(b[o+3]&0x7F) << 21
+							if b[o+3]&0x80 == 0 {
+								o += 4
+							} else {
+								vi |= uint64(b[o+4]&0x7F) << 28
+								if b[o+4]&0x80 == 0 {
+									o += 5
+								} else {
+									vi |= uint64(b[o+5]&0x7F) << 35
+									if b[o+5]&0x80 == 0 {
+										o += 6
+									} else {
+										vi |= uint64(b[o+6]&0x7F) << 42
+										if b[o+6]&0x80 == 0 {
+											o += 7
+										} else {
+											vi |= uint64(b[o+7]&0x7F) << 49
+											if b[o+7]&0x80 == 0 {
+												o += 8
+											} else {
+												vi |= uint64(b[o+8]) << 56
+												o += 9
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				l = vi
+			}
+			if l > 0 {
+				m.Value2 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
+				o += l
+			} else {
+				m.Value2 = ""
+			}
+		}
+	}
+	{
+		// Value3
+
+		{
+			vi := uint16(b[o] & 0x7F)
+			if b[o]&0x80 == 0 {
+				o++
+			} else {
+				vi |= uint16(b[o+1]&0x7F) << 7
+				if b[o+1]&0x80 == 0 {
+					o += 2
+				} else {
+					vi |= uint16(b[o+2]) << 14
+					o += 3
+				}
+			}
+			m.Value3 = vi
 		}
 	}
 

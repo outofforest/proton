@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/outofforest/proton/test/pkg1"
-	"github.com/outofforest/proton/test/pkg2"
+	"github.com/outofforest/proton/test/pkg1/spkg"
 )
 
 func TestMarshaller(t *testing.T) {
@@ -23,15 +23,16 @@ func TestMarshaller(t *testing.T) {
 		msg1.Value[fmt.Sprintf("key-%d", i)] = fmt.Sprintf("value-%d", i)
 	}
 
-	b := make([]byte, msg1.Size())
+	size, err := m.Size(msg1)
+	requireT.NoError(err)
+	b := make([]byte, size)
 	msgID, msgSize, err := m.Marshal(msg1, b)
 	requireT.NoError(err)
-	requireT.Equal(msg1.Size(), msgSize)
-	requireT.Equal(pkg1.IDMsgMapString, msgID)
+	requireT.Equal(size, msgSize)
 
-	msg2, msgSize2, err := m.Unmarshal(pkg1.IDMsgMapString, b)
+	msg2, msgSize2, err := m.Unmarshal(msgID, b)
 	requireT.NoError(err)
-	requireT.Equal(msg1.Size(), msgSize2)
+	requireT.Equal(size, msgSize2)
 	requireT.Equal(msg1, msg2.(*pkg1.MsgMapString))
 }
 
@@ -41,7 +42,7 @@ func TestMarshallerUnknownType(t *testing.T) {
 	m := pkg1.NewMarshaller(100)
 
 	b := make([]byte, 100)
-	msgID, msgSize, err := m.Marshal(&pkg2.SubMsg{}, b)
+	msgID, msgSize, err := m.Marshal(&spkg.SubMsg{}, b)
 	requireT.Error(err)
 	requireT.Equal(uint64(0), msgSize)
 	requireT.Equal(uint64(0), msgID)

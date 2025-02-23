@@ -5,7 +5,6 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/outofforest/mass"
 	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
@@ -14,57 +13,25 @@ import (
 func TestDefault(t *testing.T) {
 	requireT := require.New(t)
 
-	msg1 := pkg1.MsgMixed{}
+	m := pkg1.NewMarshaller(100)
+	msg1 := &pkg1.MsgMixed{}
 
-	requireT.EqualValues(18, msg1.Size())
+	size, err := m.Size(msg1)
+	requireT.NoError(err)
+	requireT.EqualValues(18, size)
 
-	b := make([]byte, msg1.Size())
-	l := msg1.Marshal(b)
-	requireT.Equal(msg1.Size(), l)
+	b := make([]byte, size)
+	id, l, err := m.Marshal(msg1, b)
+	requireT.NoError(err)
+	requireT.Equal(size, l)
 	requireT.Equal([]byte{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00}, b)
 
-	msg2 := pkg1.MsgMixed{
-		Value1: map[string]spkg1.SubMsg{
-			"aa": {
-				Value: 1,
-			},
-		},
-		Value2: map[uint8][]string{
-			4: {"aa", "bb"},
-		},
-		Value3: [][32]uint16{
-			{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
-				29, 30, 31},
-		},
-		Value4: [12]map[int8]float32{
-			{0: 1.}, {0: 1.}, {0: 1.}, {0: 1.}, {0: 1.}, {0: 1.}, {0: 1.}, {0: 1.}, {0: 1.}, {0: 1.}, {0: 1.}, {0: 1.},
-		},
-		Value5: [][3][]map[int16][2]int64{
-			{
-				{
-					{2: {1, 2}},
-					{2: {1, 2}},
-				},
-				{
-					{2: {1, 2}},
-					{2: {1, 2}},
-				},
-				{
-					{2: {1, 2}},
-					{2: {1, 2}},
-				},
-			},
-		},
-		Value6: true,
-		Value7: true,
-		Value8: "fdfsd",
-	}
-	l = msg2.Unmarshal(b, mass.New[string](10), mass.New[[32]uint16](10),
-		mass.New[[3][]map[int16][2]int64](10), mass.New[map[int16][2]int64](10))
-	requireT.Equal(msg1.Size(), l)
+	msg2, l, err := m.Unmarshal(id, b)
+	requireT.NoError(err)
+	requireT.Equal(size, l)
 
-	requireT.Equal(pkg1.MsgMixed{
+	requireT.Equal(&pkg1.MsgMixed{
 		Value1: nil,
 		Value2: nil,
 		Value3: nil,
@@ -75,8 +42,9 @@ func TestDefault(t *testing.T) {
 
 func Test1(t *testing.T) {
 	requireT := require.New(t)
+	m := pkg1.NewMarshaller(100)
 
-	msg1 := pkg1.MsgMixed{
+	msg1 := &pkg1.MsgMixed{
 		Value1: map[string]spkg1.SubMsg{
 			"aa": {
 				Value: 1,
@@ -134,22 +102,25 @@ func Test1(t *testing.T) {
 		Value8: "fdfsfdsfkds;fdsfd;skfl;sdkd",
 	}
 
-	b := make([]byte, msg1.Size())
-	l := msg1.Marshal(b)
-	requireT.Equal(msg1.Size(), l)
+	size, err := m.Size(msg1)
+	requireT.NoError(err)
+	b := make([]byte, size)
+	id, l, err := m.Marshal(msg1, b)
+	requireT.NoError(err)
+	requireT.Equal(size, l)
 
-	var msg2 pkg1.MsgMixed
-	l = msg2.Unmarshal(b, mass.New[string](10), mass.New[[32]uint16](10),
-		mass.New[[3][]map[int16][2]int64](10), mass.New[map[int16][2]int64](10))
-	requireT.Equal(msg1.Size(), l)
+	msg2, l, err := m.Unmarshal(id, b)
+	requireT.NoError(err)
+	requireT.Equal(size, l)
 
 	requireT.Equal(msg1, msg2)
 }
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
+	m := pkg1.NewMarshaller(100)
 
-	msg1 := pkg1.MsgMixedCustom{
+	msg1 := &pkg1.MsgMixedCustom{
 		Value: custom.Mixed{
 			{
 				{
@@ -182,14 +153,16 @@ func TestCustom(t *testing.T) {
 		},
 	}
 
-	b := make([]byte, msg1.Size())
-	l := msg1.Marshal(b)
-	requireT.Equal(msg1.Size(), l)
+	size, err := m.Size(msg1)
+	requireT.NoError(err)
+	b := make([]byte, size)
+	id, l, err := m.Marshal(msg1, b)
+	requireT.NoError(err)
+	requireT.Equal(size, l)
 
-	var msg2 pkg1.MsgMixedCustom
-	l = msg2.Unmarshal(b, mass.New[[3][]map[int16]custom.Array](10),
-		mass.New[map[int16]custom.Array](10))
-	requireT.Equal(msg1.Size(), l)
+	msg2, l, err := m.Unmarshal(id, b)
+	requireT.NoError(err)
+	requireT.Equal(size, l)
 
 	requireT.Equal(msg1, msg2)
 }

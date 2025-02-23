@@ -1,9 +1,10 @@
 package test
 
 import (
+	"fmt"
+	"io"
 	"testing"
 
-	"github.com/outofforest/mass"
 	"github.com/outofforest/proton/test/pkg1"
 	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
 )
@@ -201,103 +202,129 @@ func BenchmarkMarshalingMixed(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	var msg2 pkg1.MsgMixed
-	buf := make([]byte, msgMixed.Size())
+	m := pkg1.NewMarshaller(100)
 
-	mass1 := mass.New[string](100)
-	mass2 := mass.New[[32]uint16](100)
-	mass3 := mass.New[[3][]map[int16][2]int64](100)
-	mass4 := mass.New[map[int16][2]int64](100)
+	var msg2 any
+
+	size, _ := m.Size(msgMixed)
+	buf := make([]byte, size)
 
 	b.StartTimer()
 	for range b.N {
-		msgMixed.Marshal(buf)
-		msg2.Unmarshal(buf, mass1, mass2, mass3, mass4)
+		id, _, _ := m.Marshal(msgMixed, buf)
+		msg2, _, _ = m.Unmarshal(id, buf)
 	}
 	b.StopTimer()
+
+	_, _ = fmt.Fprint(io.Discard, msg2)
 }
 
 func BenchmarkMarshalingSlices(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	var msg2 pkg1.MsgSlice
-	buf := make([]byte, msgSlice.Size())
+	m := pkg1.NewMarshaller(100)
 
-	mass := mass.New[bool](1000)
+	var msg2 any
+	size, _ := m.Size(msgSlice)
+	buf := make([]byte, size)
 
 	b.StartTimer()
 	for range b.N {
-		msgSlice.Marshal(buf)
-		msg2.Unmarshal(buf, mass)
+		id, _, _ := m.Marshal(msgSlice, buf)
+		msg2, _, _ = m.Unmarshal(id, buf)
 	}
 	b.StopTimer()
+
+	_, _ = fmt.Fprint(io.Discard, msg2)
 }
 
 func BenchmarkMarshalingByteSlices(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	var msg2 pkg1.MsgSliceUint8
-	buf := make([]byte, msgBytes.Size())
+	m := pkg1.NewMarshaller(100)
+
+	var msg2 any
+	size, _ := m.Size(msgBytes)
+	buf := make([]byte, size)
 
 	b.StartTimer()
 	for range b.N {
-		msgBytes.Marshal(buf)
-		msg2.Unmarshal(buf)
+		id, _, _ := m.Marshal(msgBytes, buf)
+		msg2, _, _ = m.Unmarshal(id, buf)
 	}
 	b.StopTimer()
+
+	_, _ = fmt.Fprint(io.Discard, msg2)
 }
 
 func BenchmarkMarshalingStrings(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	var msg2 pkg1.MsgString
-	buf := make([]byte, msgStrings.Size())
+	m := pkg1.NewMarshaller(100)
+
+	var msg2 any
+	size, _ := m.Size(msgStrings)
+	buf := make([]byte, size)
 
 	b.StartTimer()
 	for range b.N {
-		msgStrings.Marshal(buf)
-		msg2.Unmarshal(buf)
+		id, _, _ := m.Marshal(msgStrings, buf)
+		msg2, _, _ = m.Unmarshal(id, buf)
 	}
 	b.StopTimer()
+
+	_, _ = fmt.Fprint(io.Discard, msg2)
 }
 
 func BenchmarkMarshalingEmptySlices(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	var msg pkg1.MsgSlice
-	buf := make([]byte, msg.Size())
+	m := pkg1.NewMarshaller(100)
 
-	mass := mass.New[bool](100)
+	var msg2 any
+
+	msg := &pkg1.MsgSlice{}
+	size, _ := m.Size(msg)
+	buf := make([]byte, size)
 
 	b.StartTimer()
 	for range b.N {
-		msg.Marshal(buf)
-		msg.Unmarshal(buf, mass)
+		id, _, _ := m.Marshal(msg, buf)
+		msg2, _, _ = m.Unmarshal(id, buf)
 	}
 	b.StopTimer()
+
+	_, _ = fmt.Fprint(io.Discard, msg2)
 }
 
 func BenchmarkMarshalingEmptyMaps(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	var msg pkg1.MsgMap
-	buf := make([]byte, msg.Size())
+	m := pkg1.NewMarshaller(100)
+
+	var msg2 any
+
+	msg := &pkg1.MsgMap{}
+	size, _ := m.Size(msg)
+	buf := make([]byte, size)
 
 	b.StartTimer()
 	for range b.N {
-		msg.Marshal(buf)
-		msg.Unmarshal(buf)
+		id, _, _ := m.Marshal(msg, buf)
+		msg2, _, _ = m.Unmarshal(id, buf)
 	}
 	b.StopTimer()
+
+	_, _ = fmt.Fprint(io.Discard, msg2)
 }
 
 var (
-	msgMixed = pkg1.MsgMixed{
+	msgMixed = &pkg1.MsgMixed{
 		Value1: map[string]spkg1.SubMsg{
 			"aa": {
 				Value: 143443,
@@ -402,7 +429,7 @@ var (
 		Value7: true,
 		Value8: "fdfsd",
 	}
-	msgBytes = pkg1.MsgSliceUint8{
+	msgBytes = &pkg1.MsgSliceUint8{
 		Value: []uint8{
 			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
 			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
@@ -415,11 +442,11 @@ var (
 			0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
 		},
 	}
-	msgStrings = pkg1.MsgString{
+	msgStrings = &pkg1.MsgString{
 		//nolint:lll
 		Value: "fdfsdfdsgfdlghfdkghkdfhkdfhkjghdfkhgkjdfhgkjdfhkjdgfhkjhdfkjhgkjdfhkjdfhkjdfhkjhfdkjhkjdfhkjdfhkjfdghkjhfdkjhgkjdfhkjdfhkjghfdkjhgdfkjhkjfdhkjfhkjghdfkjhdfkhgkjsfysdfydgdfkghdfkjghkfd",
 	}
-	msgSlice = pkg1.MsgSlice{
+	msgSlice = &pkg1.MsgSlice{
 		Value: make([]bool, 10),
 	}
 )

@@ -14,13 +14,12 @@ import (
 )
 
 const (
-	header = `// Marshal marshals the structure.
-func (m *{{ .TypeName }}) Marshal(b []byte) uint64 {
+	header = `func {{ .FuncName}}(m *{{ .TypeName }}, b []byte) uint64 {
 `
 )
 
 // Build generates code of Marshal method.
-func Build(cfg methods.Config, tm types.TypeMap) []byte {
+func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 	code := &bytes.Buffer{}
 
 	offset := methods.BitMapLength(cfg.NumOfBooleanFields)
@@ -49,7 +48,7 @@ func Build(cfg methods.Config, tm types.TypeMap) []byte {
 			return nil
 		}
 
-		builder, err := factory.Get(cfg.Type, field.Type, tm)
+		builder, err := factory.Get(field.Type, tm)
 		if err != nil {
 			return err
 		}
@@ -66,9 +65,11 @@ func Build(cfg methods.Config, tm types.TypeMap) []byte {
 
 	b := &bytes.Buffer{}
 	helpers.Execute(b, header, struct {
+		FuncName string
 		TypeName string
 	}{
-		TypeName: cfg.Type.Name(),
+		FuncName: tm.VarName(cfg.Type, "marshal"),
+		TypeName: tm.TypeName(cfg.Type),
 	})
 
 	if code.Len() > 0 {

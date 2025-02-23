@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"path"
 	"reflect"
-	"strings"
+	"strconv"
 
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -41,94 +41,88 @@ type BuilderFactoryNonConstant interface {
 }
 
 // NewTypeMap creates new type map.
-func NewTypeMap() TypeMap {
-	return TypeMap{
+func NewTypeMap(pkg string) *TypeMap {
+	return &TypeMap{
+		pkg:          pkg,
 		imports:      map[string]string{},
-		aliases:      map[string]bool{},
-		importIndex:  new(uint64),
+		aliases:      map[string]struct{}{},
+		varIndexes:   map[reflect.Type]uint64{},
 		varNameCaser: cases.Title(language.English, cases.NoLower),
 	}
 }
 
 // TypeMap implements type mapping required by go code.
 type TypeMap struct {
+	pkg          string
 	imports      map[string]string
-	aliases      map[string]bool
-	importIndex  *uint64
+	aliases      map[string]struct{}
+	varIndexes   map[reflect.Type]uint64
 	varNameCaser cases.Caser
 }
 
 // TypeName generates a type name for type.
-func (tm TypeMap) TypeName(parentType, childType reflect.Type) string {
-	switch childType.Kind() {
+func (tm *TypeMap) TypeName(t reflect.Type) string {
+	switch t.Kind() {
 	case reflect.Array:
 		switch {
-		case childType.PkgPath() == parentType.PkgPath():
-			return childType.Name()
-		case childType.PkgPath() != "":
-			return tm.Import(childType.PkgPath()) + "." + childType.Name()
+		case t.PkgPath() == tm.pkg:
+			return t.Name()
+		case t.PkgPath() != "":
+			return tm.Import(t.PkgPath()) + "." + t.Name()
 		default:
-			return fmt.Sprintf("[%d]%s", childType.Len(), tm.TypeName(parentType, childType.Elem()))
+			return fmt.Sprintf("[%d]%s", t.Len(), tm.TypeName(t.Elem()))
 		}
 	case reflect.Slice:
 		switch {
-		case childType.PkgPath() == parentType.PkgPath():
-			return childType.Name()
-		case childType.PkgPath() != "":
-			return tm.Import(childType.PkgPath()) + "." + childType.Name()
+		case t.PkgPath() == tm.pkg:
+			return t.Name()
+		case t.PkgPath() != "":
+			return tm.Import(t.PkgPath()) + "." + t.Name()
 		default:
-			return "[]" + tm.TypeName(parentType, childType.Elem())
+			return "[]" + tm.TypeName(t.Elem())
 		}
 	case reflect.Map:
 		switch {
-		case childType.PkgPath() == parentType.PkgPath():
-			return childType.Name()
-		case childType.PkgPath() != "":
-			return tm.Import(childType.PkgPath()) + "." + childType.Name()
+		case t.PkgPath() == tm.pkg:
+			return t.Name()
+		case t.PkgPath() != "":
+			return tm.Import(t.PkgPath()) + "." + t.Name()
 		default:
-			return fmt.Sprintf("map[%s]%s", tm.TypeName(parentType, childType.Key()), tm.TypeName(parentType, childType.Elem()))
+			return fmt.Sprintf("map[%s]%s", tm.TypeName(t.Key()), tm.TypeName(t.Elem()))
 		}
 	default:
-		if childType.PkgPath() == "" || childType.PkgPath() == parentType.PkgPath() {
-			return childType.Name()
+		if t.PkgPath() == "" || t.PkgPath() == tm.pkg {
+			return t.Name()
 		}
-		return tm.Import(childType.PkgPath()) + "." + childType.Name()
+		return tm.Import(t.PkgPath()) + "." + t.Name()
 	}
 }
 
 // VarName generates deterministic variable name based on its type.
-func (tm TypeMap) VarName(parentType, childType reflect.Type, prefix string) string {
-	typeName := tm.TypeName(parentType, childType)
-	parts := strings.Split(typeName, ".")
-	for i, part := range parts {
-		parts[i] = tm.varNameCaser.String(part)
+func (tm *TypeMap) VarName(t reflect.Type, prefix string) string {
+	if _, exists := tm.varIndexes[t]; !exists {
+		tm.varIndexes[t] = uint64(len(tm.varIndexes))
 	}
-
-	varName := strings.Join(parts, "")
-	varName = strings.ReplaceAll(varName, "[", "A")
-	varName = strings.ReplaceAll(varName, "]", "B")
-
-	return prefix + varName
+	return prefix + strconv.FormatUint(tm.varIndexes[t], 10)
 }
 
 // Import adds package to the list of imports.
-func (tm TypeMap) Import(pkg string) string {
+func (tm *TypeMap) Import(pkg string) string {
 	if alias := tm.imports[pkg]; alias != "" {
 		return alias
 	}
 
 	base := path.Base(pkg)
 	pkgBase := base
-	if tm.aliases[pkgBase] {
-		*tm.importIndex++
-		pkgBase = fmt.Sprintf("%s%d", base, *tm.importIndex)
+	if _, exists := tm.aliases[pkgBase]; exists {
+		pkgBase = fmt.Sprintf("%s%d", base, len(tm.aliases))
 	}
-	tm.aliases[pkgBase] = true
+	tm.aliases[pkgBase] = struct{}{}
 	tm.imports[pkg] = pkgBase
 	return pkgBase
 }
 
 // Imports returns the list of collected imports.
-func (tm TypeMap) Imports() map[string]string {
+func (tm *TypeMap) Imports() map[string]string {
 	return tm.imports
 }
