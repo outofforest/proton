@@ -3,14 +3,13 @@ package pkg1
 import (
 	"unsafe"
 
-	"github.com/pkg/errors"
-
 	"github.com/outofforest/mass"
 	"github.com/outofforest/proton"
 	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1/spkg"
 	"github.com/outofforest/proton/test/pkg2"
 	spkg6 "github.com/outofforest/proton/test/pkg2/spkg"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -1723,10 +1722,10 @@ func unmarshal0(
 							}
 							if l > 0 {
 								m.Value[i6][i5][i4] = make(map[int16]custom.Array, l)
-
+							
 								var mk2 int16
 								var mv3 custom.Array
-
+							
 								for range l {
 									{
 										vi := uint16(b[o] & 0x7F)
@@ -3078,7 +3077,7 @@ func unmarshal11(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = b[o : o+l]
+			m.Value = b[o:o+l]
 			o += l
 		} else {
 			m.Value = nil
@@ -3732,10 +3731,10 @@ func unmarshal17(
 		}
 		if l > 0 {
 			m.Value = make(custom.Map, l)
-
+		
 			var mk1 custom.String
 			var mv2 custom.Int32
-
+		
 			for range l {
 				{
 					var l uint64
@@ -3788,7 +3787,7 @@ func unmarshal17(
 						mk1 = custom.String(unsafe.String((*byte)(unsafe.Pointer(&b[o])), l))
 						o += l
 					} else {
-						mk1 = ""
+						mk1 = "" 
 					}
 				}
 				{
@@ -4787,7 +4786,7 @@ func unmarshal21(
 				m.Value = custom.String(unsafe.String((*byte)(unsafe.Pointer(&b[o])), l))
 				o += l
 			} else {
-				m.Value = ""
+				m.Value = "" 
 			}
 		}
 	}
@@ -8198,10 +8197,10 @@ func unmarshal34(
 		}
 		if l > 0 {
 			m.Value1 = make(map[string]spkg.SubMsg, l)
-
+		
 			var mk1 string
 			var mv2 spkg.SubMsg
-
+		
 			for range l {
 				{
 					var l uint64
@@ -8254,7 +8253,7 @@ func unmarshal34(
 						mk1 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 						o += l
 					} else {
-						mk1 = ""
+						mk1 = "" 
 					}
 				}
 				o += unmarshal33(
@@ -8318,10 +8317,10 @@ func unmarshal34(
 		}
 		if l > 0 {
 			m.Value2 = make(map[uint8][]string, l)
-
+		
 			var mk2 uint8
 			var mv3 []string
-
+		
 			for range l {
 				mk2 = b[o]
 				o++
@@ -8425,7 +8424,7 @@ func unmarshal34(
 								mv3[i1] = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 								o += l
 							} else {
-								mv3[i1] = ""
+								mv3[i1] = "" 
 							}
 						}
 					}
@@ -8564,10 +8563,10 @@ func unmarshal34(
 			}
 			if l > 0 {
 				m.Value4[i3] = make(map[int8]float32, l)
-
+			
 				var mk1 int8
 				var mv2 float32
-
+			
 				for range l {
 					mk1 = int8(b[o])
 					o++
@@ -8730,10 +8729,10 @@ func unmarshal34(
 							}
 							if l > 0 {
 								m.Value5[i6][i5][i4] = make(map[int16][2]int64, l)
-
+							
 								var mk2 int16
 								var mv3 [2]int64
-
+							
 								for range l {
 									{
 										vi := uint16(b[o] & 0x7F)
@@ -8893,7 +8892,7 @@ func unmarshal34(
 				m.Value8 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 				o += l
 			} else {
-				m.Value8 = ""
+				m.Value8 = "" 
 			}
 		}
 	}
@@ -10042,7 +10041,7 @@ func unmarshal45(
 			l = vi
 		}
 		if l > 0 {
-			m.Value = b[o : o+l]
+			m.Value = b[o:o+l]
 			o += l
 		} else {
 			m.Value = nil
@@ -11714,10 +11713,10 @@ func unmarshal55(
 		}
 		if l > 0 {
 			m.Value = make(map[string]string, l)
-
+		
 			var mk1 string
 			var mv2 string
-
+		
 			for range l {
 				{
 					var l uint64
@@ -11770,7 +11769,7 @@ func unmarshal55(
 						mk1 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 						o += l
 					} else {
-						mk1 = ""
+						mk1 = "" 
 					}
 				}
 				{
@@ -11824,7 +11823,7 @@ func unmarshal55(
 						mv2 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 						o += l
 					} else {
-						mv2 = ""
+						mv2 = "" 
 					}
 				}
 				m.Value[mk1] = mv2
@@ -12404,10 +12403,10 @@ func unmarshal56(
 		}
 		if l > 0 {
 			m.Value = make(map[uint64]uint64, l)
-
+		
 			var mk1 uint64
 			var mv2 uint64
-
+		
 			for range l {
 				{
 					vi := uint64(b[o] & 0x7F)
@@ -13058,7 +13057,7 @@ func unmarshal60(
 				m.Value = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 				o += l
 			} else {
-				m.Value = ""
+				m.Value = "" 
 			}
 		}
 	}
@@ -15009,10 +15008,10 @@ func unmarshal51(
 		}
 		if l > 0 {
 			m.Value1 = make(map[bool]string, l)
-
+		
 			var mk1 bool
 			var mv2 string
-
+		
 			for range l {
 				mk1 = b[o] != 0x00
 				o++
@@ -15067,7 +15066,7 @@ func unmarshal51(
 						mv2 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 						o += l
 					} else {
-						mv2 = ""
+						mv2 = "" 
 					}
 				}
 				m.Value1[mk1] = mv2
@@ -15130,7 +15129,7 @@ func unmarshal51(
 				m.Value2 = unsafe.String((*byte)(unsafe.Pointer(&b[o])), l)
 				o += l
 			} else {
-				m.Value2 = ""
+				m.Value2 = "" 
 			}
 		}
 	}
