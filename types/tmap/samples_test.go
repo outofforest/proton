@@ -12,7 +12,7 @@ import (
 
 func TestDefault(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgMap{}
 
@@ -34,7 +34,7 @@ func TestDefault(t *testing.T) {
 
 func TestEmpty(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgMap{
 		Value: map[uint64]uint64{},
@@ -58,7 +58,7 @@ func TestEmpty(t *testing.T) {
 
 func Test1(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgMap{
 		Value: map[uint64]uint64{1: 2},
@@ -82,7 +82,7 @@ func Test1(t *testing.T) {
 
 func Test2(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgMap{
 		Value: map[uint64]uint64{1: 2, 3: 4, 5: 6},
@@ -106,7 +106,7 @@ func Test2(t *testing.T) {
 
 func Test127(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgMap{
 		Value: map[uint64]uint64{},
@@ -134,7 +134,7 @@ func Test127(t *testing.T) {
 
 func Test128(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgMap{
 		Value: map[uint64]uint64{},
@@ -162,7 +162,7 @@ func Test128(t *testing.T) {
 
 func TestString(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgMapString{
 		Value: map[string]string{},
@@ -190,7 +190,7 @@ func TestString(t *testing.T) {
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgMapCustom{
 		Value: custom.Map{},

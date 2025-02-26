@@ -13,7 +13,7 @@ import (
 func TestMarshaller(t *testing.T) {
 	requireT := require.New(t)
 
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgMapString{
 		Value: map[string]string{},
@@ -39,7 +39,7 @@ func TestMarshaller(t *testing.T) {
 func TestMarshallerUnknownType(t *testing.T) {
 	requireT := require.New(t)
 
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	b := make([]byte, 100)
 	msgID, msgSize, err := m.Marshal(&spkg.SubMsg{}, b)

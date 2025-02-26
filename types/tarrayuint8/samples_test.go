@@ -11,7 +11,7 @@ import (
 
 func TestDefault(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgArrayUint8{}
 
@@ -33,7 +33,7 @@ func TestDefault(t *testing.T) {
 
 func Test1(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgArrayUint8{
 		Value: [5]uint8{255, 254, 253, 0, 1},
@@ -57,7 +57,7 @@ func Test1(t *testing.T) {
 
 func TestCustom1(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgArrayUint8Custom{
 		Value: custom.ArrayUint8{255, 254, 253, 0, 1},
@@ -81,7 +81,7 @@ func TestCustom1(t *testing.T) {
 
 func TestCustom2(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgArrayUint8Custom2{
 		Value: custom.ArrayCustomUint8{255, 254, 253, 0, 1},

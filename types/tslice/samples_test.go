@@ -11,7 +11,7 @@ import (
 
 func TestDefault(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgSlice{}
 
@@ -33,7 +33,7 @@ func TestDefault(t *testing.T) {
 
 func TestEmpty(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgSlice{
 		Value: []bool{},
@@ -57,7 +57,7 @@ func TestEmpty(t *testing.T) {
 
 func Test1(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgSlice{
 		Value: []bool{true},
@@ -81,7 +81,7 @@ func Test1(t *testing.T) {
 
 func Test2(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgSlice{
 		Value: []bool{false},
@@ -105,7 +105,7 @@ func Test2(t *testing.T) {
 
 func Test3(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgSlice{
 		Value: []bool{true, false},
@@ -129,7 +129,7 @@ func Test3(t *testing.T) {
 
 func Test127Items(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgSlice{
 		Value: []bool{true, false, true, false, true, false, true, false, true, false, true, false, true, false, true,
@@ -168,7 +168,7 @@ func Test127Items(t *testing.T) {
 
 func Test128Items(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgSlice{
 		Value: []bool{true, false, true, false, true, false, true, false, true, false, true, false, true, false, true,
@@ -208,7 +208,7 @@ func Test128Items(t *testing.T) {
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgSliceCustom{
 		Value: custom.Slice{1, 10, 30, 100, 5000, 45543, 4323432432, 32849023843243, 432748732984732},

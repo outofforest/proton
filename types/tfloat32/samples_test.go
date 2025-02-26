@@ -11,7 +11,7 @@ import (
 
 func TestZero(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgFloat32{
 		Value: 0x00,
@@ -35,7 +35,7 @@ func TestZero(t *testing.T) {
 
 func TestMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgFloat32{
 		Value: -math.MaxFloat32,
@@ -59,7 +59,7 @@ func TestMin(t *testing.T) {
 
 func TestMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgFloat32{
 		Value: math.MaxFloat32,
@@ -83,7 +83,7 @@ func TestMax(t *testing.T) {
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgFloat32Custom{
 		Value: math.MaxFloat32,

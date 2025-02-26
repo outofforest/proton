@@ -10,7 +10,7 @@ import (
 
 func TestZero(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x00,
@@ -34,7 +34,7 @@ func TestZero(t *testing.T) {
 
 func TestByte1PositiveMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x01,
@@ -58,7 +58,7 @@ func TestByte1PositiveMin(t *testing.T) {
 
 func TestByte1PositiveMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x3F,
@@ -82,7 +82,7 @@ func TestByte1PositiveMax(t *testing.T) {
 
 func TestByte2PositiveMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x40,
@@ -106,7 +106,7 @@ func TestByte2PositiveMin(t *testing.T) {
 
 func TestByte2PositiveMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x1FFF,
@@ -130,7 +130,7 @@ func TestByte2PositiveMax(t *testing.T) {
 
 func TestByte3PositiveMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x2000,
@@ -154,7 +154,7 @@ func TestByte3PositiveMin(t *testing.T) {
 
 func TestByte3PositiveMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0xFFFFF,
@@ -178,7 +178,7 @@ func TestByte3PositiveMax(t *testing.T) {
 
 func TestByte4PositiveMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x100000,
@@ -202,7 +202,7 @@ func TestByte4PositiveMin(t *testing.T) {
 
 func TestByte4PositiveMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x7FFFFFF,
@@ -226,7 +226,7 @@ func TestByte4PositiveMax(t *testing.T) {
 
 func TestByte5PositiveMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x8000000,
@@ -250,7 +250,7 @@ func TestByte5PositiveMin(t *testing.T) {
 
 func TestByte5PositiveMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x3FFFFFFFF,
@@ -274,7 +274,7 @@ func TestByte5PositiveMax(t *testing.T) {
 
 func TestByte6PositiveMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x400000000,
@@ -298,7 +298,7 @@ func TestByte6PositiveMin(t *testing.T) {
 
 func TestByte6PositiveMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x1FFFFFFFFFF,
@@ -322,7 +322,7 @@ func TestByte6PositiveMax(t *testing.T) {
 
 func TestByte7PositiveMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x20000000000,
@@ -346,7 +346,7 @@ func TestByte7PositiveMin(t *testing.T) {
 
 func TestByte7PositiveMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0xFFFFFFFFFFFF,
@@ -370,7 +370,7 @@ func TestByte7PositiveMax(t *testing.T) {
 
 func TestByte8PositiveMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x1000000000000,
@@ -394,7 +394,7 @@ func TestByte8PositiveMin(t *testing.T) {
 
 func TestByte8PositiveMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x7FFFFFFFFFFFFF,
@@ -418,7 +418,7 @@ func TestByte8PositiveMax(t *testing.T) {
 
 func TestByte9PositiveMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x80000000000000,
@@ -442,7 +442,7 @@ func TestByte9PositiveMin(t *testing.T) {
 
 func TestByte9PositiveMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x3FFFFFFFFFFFFFFF,
@@ -466,7 +466,7 @@ func TestByte9PositiveMax(t *testing.T) {
 
 func TestByte10PositiveMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x4000000000000000,
@@ -490,7 +490,7 @@ func TestByte10PositiveMin(t *testing.T) {
 
 func TestByte10PositiveMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: 0x7FFFFFFFFFFFFFFF,
@@ -514,7 +514,7 @@ func TestByte10PositiveMax(t *testing.T) {
 
 func TestByte1NegativeMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x01,
@@ -538,7 +538,7 @@ func TestByte1NegativeMin(t *testing.T) {
 
 func TestByte1NegativeMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x40,
@@ -562,7 +562,7 @@ func TestByte1NegativeMax(t *testing.T) {
 
 func TestByte2NegativeMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x41,
@@ -586,7 +586,7 @@ func TestByte2NegativeMin(t *testing.T) {
 
 func TestByte2NegativeMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x2000,
@@ -610,7 +610,7 @@ func TestByte2NegativeMax(t *testing.T) {
 
 func TestByte3NegativeMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x2001,
@@ -634,7 +634,7 @@ func TestByte3NegativeMin(t *testing.T) {
 
 func TestByte3NegativeMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x100000,
@@ -658,7 +658,7 @@ func TestByte3NegativeMax(t *testing.T) {
 
 func TestByte4NegativeMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x100001,
@@ -682,7 +682,7 @@ func TestByte4NegativeMin(t *testing.T) {
 
 func TestByte4NegativeMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x8000000,
@@ -706,7 +706,7 @@ func TestByte4NegativeMax(t *testing.T) {
 
 func TestByte5NegativeMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x8000001,
@@ -730,7 +730,7 @@ func TestByte5NegativeMin(t *testing.T) {
 
 func TestByte5NegativeMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x400000000,
@@ -754,7 +754,7 @@ func TestByte5NegativeMax(t *testing.T) {
 
 func TestByte6NegativeMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x400000001,
@@ -778,7 +778,7 @@ func TestByte6NegativeMin(t *testing.T) {
 
 func TestByte6NegativeMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x20000000000,
@@ -802,7 +802,7 @@ func TestByte6NegativeMax(t *testing.T) {
 
 func TestByte7NegativeMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x20000000001,
@@ -826,7 +826,7 @@ func TestByte7NegativeMin(t *testing.T) {
 
 func TestByte7NegativeMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x1000000000000,
@@ -850,7 +850,7 @@ func TestByte7NegativeMax(t *testing.T) {
 
 func TestByte8NegativeMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x1000000000001,
@@ -874,7 +874,7 @@ func TestByte8NegativeMin(t *testing.T) {
 
 func TestByte8NegativeMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x80000000000000,
@@ -898,7 +898,7 @@ func TestByte8NegativeMax(t *testing.T) {
 
 func TestByte9NegativeMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x80000000000001,
@@ -922,7 +922,7 @@ func TestByte9NegativeMin(t *testing.T) {
 
 func TestByte9NegativeMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x4000000000000000,
@@ -946,7 +946,7 @@ func TestByte9NegativeMax(t *testing.T) {
 
 func TestByte10NegativeMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x4000000000000001,
@@ -970,7 +970,7 @@ func TestByte10NegativeMin(t *testing.T) {
 
 func TestByte10NegativeMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64{
 		Value: -0x8000000000000000,
@@ -994,7 +994,7 @@ func TestByte10NegativeMax(t *testing.T) {
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt64Custom{
 		Value: -0x8000000000000000,

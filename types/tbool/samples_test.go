@@ -10,7 +10,7 @@ import (
 
 func Test3Bools1(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgBool3{
 		Value1: false,
@@ -36,7 +36,7 @@ func Test3Bools1(t *testing.T) {
 
 func Test3Bools2(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgBool3{
 		Value1: false,
@@ -62,7 +62,7 @@ func Test3Bools2(t *testing.T) {
 
 func Test3Bools3(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgBool3{
 		Value1: true,
@@ -88,7 +88,7 @@ func Test3Bools3(t *testing.T) {
 
 func Test10Bools1(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgBool10{
 		Value1:  false,
@@ -121,7 +121,7 @@ func Test10Bools1(t *testing.T) {
 
 func Test10Bools2(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgBool10{
 		Value1:  true,
@@ -154,7 +154,7 @@ func Test10Bools2(t *testing.T) {
 
 func Test10Bools3(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgBool10{
 		Value1:  true,
@@ -187,7 +187,7 @@ func Test10Bools3(t *testing.T) {
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgBoolCustom{
 		Value: true,

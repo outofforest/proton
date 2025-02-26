@@ -10,7 +10,7 @@ import (
 
 func TestZero(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt8{
 		Value: 0x00,
@@ -34,7 +34,7 @@ func TestZero(t *testing.T) {
 
 func TestByte1PositiveMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt8{
 		Value: 0x01,
@@ -58,7 +58,7 @@ func TestByte1PositiveMin(t *testing.T) {
 
 func TestByte1PositiveMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt8{
 		Value: 0x7F,
@@ -82,7 +82,7 @@ func TestByte1PositiveMax(t *testing.T) {
 
 func TestByte1NegativeMin(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt8{
 		Value: -0x01,
@@ -106,7 +106,7 @@ func TestByte1NegativeMin(t *testing.T) {
 
 func TestByte1NegativeMax(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt8{
 		Value: -0x80,
@@ -130,7 +130,7 @@ func TestByte1NegativeMax(t *testing.T) {
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgInt8Custom{
 		Value: -0x80,
