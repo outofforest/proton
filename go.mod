@@ -3,7 +3,6 @@ module github.com/outofforest/proton
 go 1.23
 
 require (
-	github.com/outofforest/mass v0.2.1
 	github.com/outofforest/run v0.8.0
 	github.com/pkg/errors v0.9.1
 	github.com/samber/lo v1.49.1

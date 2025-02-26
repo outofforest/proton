@@ -28,15 +28,6 @@ func (b Builder) Dependencies() []reflect.Type {
 	return []reflect.Type{b.fieldType}
 }
 
-// Allocators returns the list of types for which massive allocators are needed.
-func (b Builder) Allocators() []reflect.Type {
-	requiredAllocators := []reflect.Type{}
-	for _, fieldBuilder := range b.fieldBuilders {
-		requiredAllocators = types.MergeTypes(requiredAllocators, fieldBuilder.Allocators())
-	}
-	return requiredAllocators
-}
-
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCodeTemplate(_ *uint64) string {
@@ -50,15 +41,6 @@ func (b Builder) MarshalCodeTemplate(_ *uint64) string {
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
-	code := fmt.Sprintf(`o += %[1]s(
-	&{{ . }},
-	b[o:],
+	return fmt.Sprintf(`o += %[1]s(&{{ . }}, b[o:])
 `, b.tm.VarName(b.fieldType, "unmarshal"))
-	for _, allocator := range b.Allocators() {
-		code += fmt.Sprintf("	%[1]s,\n", b.tm.VarName(allocator, "mass"))
-	}
-
-	code += `)`
-
-	return code
 }

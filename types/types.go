@@ -13,7 +13,6 @@ import (
 // BuilderFactory is the interface every type builder must implement.
 type BuilderFactory interface {
 	Dependencies() []reflect.Type
-	Allocators() []reflect.Type
 	ConstantSize() uint64
 	SizeCodeTemplate(varIndex *uint64) (string, bool)
 	MarshalCodeTemplate(varIndex *uint64) string
@@ -24,7 +23,6 @@ type BuilderFactory interface {
 // constant size of buffer.
 type BuilderFactoryConstant interface {
 	Dependencies() []reflect.Type
-	Allocators() []reflect.Type
 	ConstantSize() uint64
 	MarshalCodeTemplate(varIndex *uint64) string
 	UnmarshalCodeTemplate(varIndex *uint64) string
@@ -34,7 +32,6 @@ type BuilderFactoryConstant interface {
 // non-constant size of buffer.
 type BuilderFactoryNonConstant interface {
 	Dependencies() []reflect.Type
-	Allocators() []reflect.Type
 	SizeCodeTemplate(varIndex *uint64) string
 	MarshalCodeTemplate(varIndex *uint64) string
 	UnmarshalCodeTemplate(varIndex *uint64) string

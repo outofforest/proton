@@ -11,7 +11,7 @@ import (
 
 func TestDefault(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgArray{}
 
@@ -33,7 +33,7 @@ func TestDefault(t *testing.T) {
 
 func Test1(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgArray{
 		Value: [3]bool{true, true, true},
@@ -57,7 +57,7 @@ func Test1(t *testing.T) {
 
 func Test2(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgArray{
 		Value: [3]bool{false, true, false},
@@ -81,7 +81,7 @@ func Test2(t *testing.T) {
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgArrayCustom{
 		Value: custom.Array{53454, 89898},

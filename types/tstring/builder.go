@@ -28,11 +28,6 @@ func (b Builder) Dependencies() []reflect.Type {
 	return nil
 }
 
-// Allocators returns the list of types for which massive allocators are needed.
-func (b Builder) Allocators() []reflect.Type {
-	return nil
-}
-
 // ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content.
 func (b Builder) ConstantSize() uint64 {
 	return 1 // size always takes at least one byte
@@ -74,7 +69,6 @@ func (b Builder) MarshalCodeTemplate(_ *uint64) string {
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
-	unsafe := b.tm.Import("unsafe")
 	code := `{
 	var l uint64
 `
@@ -83,19 +77,11 @@ func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
 	helpers.Execute(buf, types.UInt64Unmarshal("uint64"), "l")
 	code += types.AddIndent(buf.String(), 1) + "\n"
 
-	code += `	if l > 0 {
-`
-	if b.fieldType.Name() == "string" {
-		code += fmt.Sprintf("		{{ . }} = %[1]s.String((*byte)(%[1]s.Pointer(&b[o])), l)\n", unsafe)
-	} else {
-		code += fmt.Sprintf("		{{ . }} = %[2]s(%[1]s.String((*byte)(%[1]s.Pointer(&b[o])), l))\n", unsafe,
-			b.tm.TypeName(b.fieldType))
+	code += fmt.Sprintf(`	if l > 0 {
+		{{ . }} = %[1]s(b[o:o+l])
+		o += l
 	}
-	code += `		o += l
-	} else {
-		{{ . }} = "" 
-	}
-}`
+}`, b.tm.TypeName(b.fieldType))
 
 	return code
 }

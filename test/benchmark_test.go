@@ -202,7 +202,7 @@ func BenchmarkMarshalingMixed(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	var msg2 any
 
@@ -223,7 +223,7 @@ func BenchmarkMarshalingSlices(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	var msg2 any
 	size, _ := m.Size(msgSlice)
@@ -243,7 +243,7 @@ func BenchmarkMarshalingByteSlices(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	var msg2 any
 	size, _ := m.Size(msgBytes)
@@ -263,7 +263,7 @@ func BenchmarkMarshalingStrings(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	var msg2 any
 	size, _ := m.Size(msgStrings)
@@ -283,7 +283,7 @@ func BenchmarkMarshalingEmptySlices(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	var msg2 any
 
@@ -305,7 +305,7 @@ func BenchmarkMarshalingEmptyMaps(b *testing.B) {
 	b.StopTimer()
 	b.ResetTimer()
 
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	var msg2 any
 

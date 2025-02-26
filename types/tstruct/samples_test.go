@@ -13,7 +13,7 @@ import (
 
 func TestDefault(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgStruct{}
 
@@ -35,7 +35,7 @@ func TestDefault(t *testing.T) {
 
 func TestEmpty(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgStruct{
 		Value1: pkg1.SubMsg{
@@ -66,7 +66,7 @@ func TestEmpty(t *testing.T) {
 
 func Test1(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgStruct{
 		Value1: pkg1.SubMsg{
@@ -118,7 +118,7 @@ func Test1(t *testing.T) {
 
 func TestAnonymousDefault(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgStructAnonymous{}
 
@@ -140,7 +140,7 @@ func TestAnonymousDefault(t *testing.T) {
 
 func TestAnonymousEmpty(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgStructAnonymous{
 		SubMsg: pkg1.SubMsg{
@@ -171,7 +171,7 @@ func TestAnonymousEmpty(t *testing.T) {
 
 func TestAnonymous1(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgStructAnonymous{
 		SubMsg: pkg1.SubMsg{

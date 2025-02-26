@@ -10,7 +10,7 @@ import (
 
 func TestEmpty(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgString{
 		Value: "",
@@ -34,7 +34,7 @@ func TestEmpty(t *testing.T) {
 
 func Test1Char(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgString{
 		Value: "a",
@@ -58,7 +58,7 @@ func Test1Char(t *testing.T) {
 
 func Test127Chars(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgString{
 		//nolint:lll
@@ -90,7 +90,7 @@ func Test127Chars(t *testing.T) {
 
 func Test128Chars(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgString{
 		//nolint:lll
@@ -122,7 +122,7 @@ func Test128Chars(t *testing.T) {
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgStringCustom{
 		//nolint:lll

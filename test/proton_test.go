@@ -13,7 +13,7 @@ import (
 func TestDefault(t *testing.T) {
 	requireT := require.New(t)
 
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 	msg1 := &pkg1.MsgMixed{}
 
 	size, err := m.Size(msg1)
@@ -42,7 +42,7 @@ func TestDefault(t *testing.T) {
 
 func Test1(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgMixed{
 		Value1: map[string]spkg1.SubMsg{
@@ -118,7 +118,7 @@ func Test1(t *testing.T) {
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgMixedCustom{
 		Value: custom.Mixed{

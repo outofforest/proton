@@ -10,7 +10,7 @@ import (
 
 func TestZero(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32{
 		Value: 0x00,
@@ -34,7 +34,7 @@ func TestZero(t *testing.T) {
 
 func TestByte1Min(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32{
 		Value: 0x01,
@@ -58,7 +58,7 @@ func TestByte1Min(t *testing.T) {
 
 func TestByte1Max(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32{
 		Value: 0x7F,
@@ -82,7 +82,7 @@ func TestByte1Max(t *testing.T) {
 
 func TestByte2Min(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32{
 		Value: 0x80,
@@ -106,7 +106,7 @@ func TestByte2Min(t *testing.T) {
 
 func TestByte2Max(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32{
 		Value: 0x3FFF,
@@ -130,7 +130,7 @@ func TestByte2Max(t *testing.T) {
 
 func TestByte3Min(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32{
 		Value: 0x4000,
@@ -154,7 +154,7 @@ func TestByte3Min(t *testing.T) {
 
 func TestByte3Max(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32{
 		Value: 0x1FFFFF,
@@ -178,7 +178,7 @@ func TestByte3Max(t *testing.T) {
 
 func TestByte4Min(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32{
 		Value: 0x200000,
@@ -202,7 +202,7 @@ func TestByte4Min(t *testing.T) {
 
 func TestByte4Max(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32{
 		Value: 0xFFFFFFF,
@@ -226,7 +226,7 @@ func TestByte4Max(t *testing.T) {
 
 func TestByte5Min(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32{
 		Value: 0x10000000,
@@ -250,7 +250,7 @@ func TestByte5Min(t *testing.T) {
 
 func TestByte5Max(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32{
 		Value: 0xFFFFFFFF,
@@ -274,7 +274,7 @@ func TestByte5Max(t *testing.T) {
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgUint32Custom{
 		Value: 0xFFFFFFFF,

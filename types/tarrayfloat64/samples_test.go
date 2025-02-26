@@ -11,7 +11,7 @@ import (
 
 func TestDefault(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgArrayFloat64{}
 
@@ -36,7 +36,7 @@ func TestDefault(t *testing.T) {
 
 func Test1(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgArrayFloat64{
 		Value: [5]float64{-128.23, 127.78, -1.2, 0., 1.1},
@@ -62,7 +62,7 @@ func Test1(t *testing.T) {
 
 func TestCustom(t *testing.T) {
 	requireT := require.New(t)
-	m := pkg1.NewMarshaller(100)
+	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgArrayFloat64Custom{
 		Value: custom.ArrayFloat64{-128.23, 127.78, -1.2, 0., 1.1},

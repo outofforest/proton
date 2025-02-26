@@ -14,7 +14,7 @@ import (
 )
 
 // Build generates code of Unmarshal method.
-func Build(cfg methods.Config, tm *types.TypeMap) ([]byte, []reflect.Type) {
+func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 	code := &bytes.Buffer{}
 
 	offset := methods.BitMapLength(cfg.NumOfBooleanFields)
@@ -25,7 +25,6 @@ func Build(cfg methods.Config, tm *types.TypeMap) ([]byte, []reflect.Type) {
 	}
 
 	var boolIndex uint64
-	allocators := []reflect.Type{}
 	lo.Must0(helpers.ForEachField(cfg.Type, func(field reflect.StructField) error {
 		if field.Type.Kind() == reflect.Bool {
 			byteIndex, bitIndex := methods.BitMapPosition(boolIndex)
@@ -45,8 +44,6 @@ func Build(cfg methods.Config, tm *types.TypeMap) ([]byte, []reflect.Type) {
 			return err
 		}
 
-		allocators = types.MergeTypes(allocators, builder.Allocators())
-
 		marshalCode := builder.UnmarshalCodeTemplate(new(uint64))
 
 		code.WriteString("	{\n		// " + field.Name + "\n\n")
@@ -59,25 +56,13 @@ func Build(cfg methods.Config, tm *types.TypeMap) ([]byte, []reflect.Type) {
 
 	b := &bytes.Buffer{}
 
-	b.WriteString(fmt.Sprintf(`func %[1]s(
-	m *%[2]s,
-	b []byte,
+	b.WriteString(fmt.Sprintf(`func %[1]s(m *%[2]s, b []byte) uint64 {
 `, tm.VarName(cfg.Type, "unmarshal"), tm.TypeName(cfg.Type)))
-
-	for _, allocator := range allocators {
-		b.WriteString(fmt.Sprintf("	%[1]s *mass.Mass[%[2]s],\n",
-			tm.VarName(allocator, "mass"),
-			tm.TypeName(allocator),
-		))
-	}
-
-	b.WriteString(`) uint64 {
-`)
 
 	if code.Len() > 0 {
 		lo.Must(code.WriteTo(b))
 	}
 
 	b.WriteString("\n	return o\n}")
-	return b.Bytes(), allocators
+	return b.Bytes()
 }

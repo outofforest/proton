@@ -141,10 +141,6 @@ func (b constantAdapter) Dependencies() []reflect.Type {
 	return b.builder.Dependencies()
 }
 
-func (b constantAdapter) Allocators() []reflect.Type {
-	return b.builder.Allocators()
-}
-
 func (b constantAdapter) ConstantSize() uint64 {
 	return b.builder.ConstantSize()
 }
@@ -173,10 +169,6 @@ type nonConstantAdapter struct {
 
 func (b nonConstantAdapter) Dependencies() []reflect.Type {
 	return b.builder.Dependencies()
-}
-
-func (b nonConstantAdapter) Allocators() []reflect.Type {
-	return b.builder.Allocators()
 }
 
 func (b nonConstantAdapter) ConstantSize() uint64 {

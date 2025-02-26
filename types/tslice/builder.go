@@ -30,11 +30,6 @@ func (b Builder) Dependencies() []reflect.Type {
 	return b.elementBuilder.Dependencies()
 }
 
-// Allocators returns the list of types for which massive allocators are needed.
-func (b Builder) Allocators() []reflect.Type {
-	return types.MergeTypes([]reflect.Type{b.fieldType.Elem()}, b.elementBuilder.Allocators())
-}
-
 // ConstantSize returns the amount of bytes data will always need to be marshaled, independent of actual content.
 func (b Builder) ConstantSize() uint64 {
 	return 1 // covers the first byte of length
@@ -110,8 +105,8 @@ func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
 
 	code += `if l > 0 {
 `
-	code += fmt.Sprintf(`	{{ . }} = %[1]s.NewSlice(l)
-`, b.tm.VarName(b.fieldType.Elem(), "mass"))
+	code += fmt.Sprintf(`	{{ . }} = make([]%[1]s, l)
+`, b.tm.TypeName(b.fieldType.Elem()))
 
 	i := types.Var("i", varIndex)
 	code += fmt.Sprintf("	for %[1]s := range l {\n", i)
@@ -121,8 +116,6 @@ func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
 	code += types.AddIndent(buf.String(), 2) + "\n"
 
 	code += `	}
-} else {
-	{{ . }} = nil
 }`
 
 	return code
