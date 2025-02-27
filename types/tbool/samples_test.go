@@ -32,6 +32,10 @@ func Test3Bools1(t *testing.T) {
 	requireT.NoError(err)
 	requireT.Equal(size, l)
 	requireT.Equal(msg1, msg2)
+
+	id2, err := m.ID(msg2)
+	requireT.NoError(err)
+	requireT.Equal(id, id2)
 }
 
 func Test3Bools2(t *testing.T) {

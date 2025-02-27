@@ -264,6 +264,21 @@ func NewMarshaller() Marshaller {
 type Marshaller struct {
 `
 
+	const idHeader = `
+// ID returns ID of message type.
+func (m Marshaller) ID(msg any) (uint64, error) {
+	switch msg.(type) {
+`
+	const idFooter = `	default:
+		return 0, errors.Errorf("unknown message type %T", msg)
+	}
+}
+`
+
+	const idTemplate = `	case *%[1]s:
+		return %[2]s, nil
+`
+
 	const sizeHeader = `
 // Size computes the size of marshalled message.
 func (m Marshaller) Size(msg any) (uint64, error) {
@@ -330,6 +345,21 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 	}
 
 	if _, err := out.WriteString("}\n"); err != nil {
+		return errors.WithStack(err)
+	}
+
+	if _, err := out.WriteString(idHeader); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, msgType := range msgTypes {
+		if _, err := out.WriteString(fmt.Sprintf(idTemplate, tm.TypeName(msgType),
+			tm.VarName(msgType, "id"))); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if _, err := out.WriteString(idFooter); err != nil {
 		return errors.WithStack(err)
 	}
 
