@@ -30,6 +30,10 @@ func TestDefault(t *testing.T) {
 	requireT.NoError(err)
 	requireT.Equal(size, l)
 	requireT.Equal(msg1, msg2)
+
+	id2, err := m.ID(msg2)
+	requireT.NoError(err)
+	requireT.Equal(id, id2)
 }
 
 func TestEmpty(t *testing.T) {

@@ -81,6 +81,124 @@ func NewMarshaller() Marshaller {
 type Marshaller struct {
 }
 
+// ID returns ID of message type.
+func (m Marshaller) ID(msg any) (uint64, error) {
+	switch msg.(type) {
+	case *pkg2.SubMsg:
+		return id37, nil
+	case *MsgUint64:
+		return id57, nil
+	case *MsgUint32:
+		return id56, nil
+	case *MsgUint16:
+		return id55, nil
+	case *MsgUint8:
+		return id54, nil
+	case *MsgInt64:
+		return id53, nil
+	case *MsgInt32:
+		return id52, nil
+	case *MsgInt16:
+		return id51, nil
+	case *MsgInt8:
+		return id50, nil
+	case *MsgBool3:
+		return id49, nil
+	case *MsgBool10:
+		return id48, nil
+	case *MsgFloat64:
+		return id47, nil
+	case *MsgFloat32:
+		return id46, nil
+	case *MsgString:
+		return id45, nil
+	case *MsgArray:
+		return id44, nil
+	case *MsgSlice:
+		return id43, nil
+	case *MsgMap:
+		return id42, nil
+	case *MsgMapString:
+		return id41, nil
+	case *MsgStruct:
+		return id40, nil
+	case *MsgStructAnonymous:
+		return id38, nil
+	case *MsgArrayUint8:
+		return id35, nil
+	case *MsgArrayInt8:
+		return id34, nil
+	case *MsgArrayFloat32:
+		return id33, nil
+	case *MsgArrayFloat64:
+		return id32, nil
+	case *MsgSliceUint8:
+		return id31, nil
+	case *MsgSliceInt8:
+		return id30, nil
+	case *MsgSliceFloat32:
+		return id29, nil
+	case *MsgSliceFloat64:
+		return id28, nil
+	case *MsgMixed:
+		return id27, nil
+	case *MsgUint64Custom:
+		return id25, nil
+	case *MsgUint32Custom:
+		return id24, nil
+	case *MsgUint16Custom:
+		return id23, nil
+	case *MsgUint8Custom:
+		return id22, nil
+	case *MsgInt64Custom:
+		return id21, nil
+	case *MsgInt32Custom:
+		return id20, nil
+	case *MsgInt16Custom:
+		return id19, nil
+	case *MsgInt8Custom:
+		return id18, nil
+	case *MsgBoolCustom:
+		return id17, nil
+	case *MsgFloat64Custom:
+		return id16, nil
+	case *MsgFloat32Custom:
+		return id15, nil
+	case *MsgStringCustom:
+		return id14, nil
+	case *MsgArrayCustom:
+		return id13, nil
+	case *MsgSliceCustom:
+		return id12, nil
+	case *MsgMapCustom:
+		return id11, nil
+	case *MsgArrayUint8Custom:
+		return id10, nil
+	case *MsgArrayUint8Custom2:
+		return id9, nil
+	case *MsgArrayInt8Custom:
+		return id8, nil
+	case *MsgArrayFloat32Custom:
+		return id7, nil
+	case *MsgArrayFloat64Custom:
+		return id6, nil
+	case *MsgSliceUint8Custom:
+		return id5, nil
+	case *MsgSliceUint8Custom2:
+		return id4, nil
+	case *MsgSliceInt8Custom:
+		return id3, nil
+	case *MsgSliceFloat32Custom:
+		return id2, nil
+	case *MsgSliceFloat64Custom:
+		return id1, nil
+	case *MsgMixedCustom:
+		return id0, nil
+	default:
+		return 0, errors.Errorf("unknown message type %T", msg)
+	}
+}
+
 // Size computes the size of marshalled message.
 func (m Marshaller) Size(msg any) (uint64, error) {
 	switch msg2 := msg.(type) {
