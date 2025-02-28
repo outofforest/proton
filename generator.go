@@ -252,12 +252,14 @@ const (
 }
 
 func writeMarshaller(out io.StringWriter, msgTypes []reflect.Type, tm *types.TypeMap) error {
-	const constructorHeader = `
+	const constructor = `
 var _ proton.Marshaller = Marshaller{}
 
 // NewMarshaller creates marshaller.
 func NewMarshaller() Marshaller {
-	return Marshaller{
+	return Marshaller{}
+}
+
 `
 	const typeHeader = `
 // Marshaller marshals and unmarshals messages.
@@ -326,17 +328,19 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 
 	switch id {
 `
+
+	const unmarshalTemplate = `	case %[2]s:
+		msg := &%[3]s{}
+		return msg, %[1]s(msg, buf), nil
+`
+
 	const unmarshalFooter = `	default:
 		return nil, 0, errors.Errorf("unknown ID %d", id)
 	}
 }
 `
 
-	if _, err := out.WriteString(constructorHeader); err != nil {
-		return errors.WithStack(err)
-	}
-
-	if _, err := out.WriteString("	}\n}\n"); err != nil {
+	if _, err := out.WriteString(constructor); err != nil {
 		return errors.WithStack(err)
 	}
 
@@ -398,11 +402,8 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 	}
 
 	for _, msgType := range msgTypes {
-		if _, err := out.WriteString(fmt.Sprintf(`	case %[2]s:
-		msg := &%[3]s{}
-		return msg, %[1]s(msg, buf), nil
-`, tm.VarName(msgType, "unmarshal"), tm.VarName(msgType, "id"),
-			tm.TypeName(msgType))); err != nil {
+		if _, err := out.WriteString(fmt.Sprintf(unmarshalTemplate, tm.VarName(msgType, "unmarshal"),
+			tm.VarName(msgType, "id"), tm.TypeName(msgType))); err != nil {
 			return errors.WithStack(err)
 		}
 	}
