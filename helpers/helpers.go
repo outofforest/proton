@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"text/template"
 
+	"github.com/pkg/errors"
 	"github.com/samber/lo"
 )
 
@@ -28,4 +29,18 @@ func ForEachField(msgType reflect.Type, fn func(field reflect.StructField) error
 // Execute executes a template using provided data.
 func Execute(b io.Writer, code string, data any) {
 	lo.Must0(template.Must(template.New("").Parse(code)).Execute(b, data))
+}
+
+// RecoverMarshal recovers from panic inside marshaller.
+func RecoverMarshal(err *error) {
+	if res := recover(); res != nil {
+		*err = errors.Errorf("marshaling message failed: %s", res)
+	}
+}
+
+// RecoverUnmarshal recovers from panic inside unmarshaller.
+func RecoverUnmarshal(err *error) {
+	if res := recover(); res != nil {
+		*err = errors.Errorf("unmarshaling message failed: %s", res)
+	}
 }

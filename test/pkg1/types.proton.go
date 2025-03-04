@@ -4,10 +4,11 @@ import (
 	"unsafe"
 
 	"github.com/outofforest/proton"
+	"github.com/outofforest/proton/helpers"
 	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1/spkg"
 	"github.com/outofforest/proton/test/pkg2"
-	spkg5 "github.com/outofforest/proton/test/pkg2/spkg"
+	spkg6 "github.com/outofforest/proton/test/pkg2/spkg"
 	"github.com/pkg/errors"
 )
 
@@ -319,11 +320,7 @@ func (m Marshaller) Size(msg any) (uint64, error) {
 
 // Marshal marshals message.
 func (m Marshaller) Marshal(msg any, buf []byte) (retID, retSize uint64, retErr error) {
-	defer func() {
-		if res := recover(); res != nil {
-			retErr = errors.Errorf("marshaling message failed: %s", res)
-		}
-	}()
+	defer helpers.RecoverMarshal(&retErr)
 
 	switch msg2 := msg.(type) {
 	case *pkg2.SubMsg:
@@ -443,11 +440,7 @@ func (m Marshaller) Marshal(msg any, buf []byte) (retID, retSize uint64, retErr 
 
 // Unmarshal unmarshals message.
 func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64, retErr error) {
-	defer func() {
-		if res := recover(); res != nil {
-			retErr = errors.Errorf("unmarshaling message failed: %s", res)
-		}
-	}()
+	defer helpers.RecoverUnmarshal(&retErr)
 
 	switch id {
 	case id37:
@@ -10545,7 +10538,7 @@ func unmarshal36(m *SubMsg, b []byte) uint64 {
 			l = vi
 		}
 		if l > 0 {
-			m.Value3 = make([]spkg5.SubMsg, l)
+			m.Value3 = make([]spkg6.SubMsg, l)
 			for i1 := range l {
 				o += unmarshal39(&m.Value3[i1], b[o:])
 				
@@ -10556,7 +10549,7 @@ func unmarshal36(m *SubMsg, b []byte) uint64 {
 	return o
 }
 
-func size39(m *spkg5.SubMsg) uint64 {
+func size39(m *spkg6.SubMsg) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -10578,7 +10571,7 @@ func size39(m *spkg5.SubMsg) uint64 {
 	return n
 }
 
-func marshal39(m *spkg5.SubMsg, b []byte) uint64 {
+func marshal39(m *spkg6.SubMsg, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -10614,7 +10607,7 @@ func marshal39(m *spkg5.SubMsg, b []byte) uint64 {
 	return o
 }
 
-func unmarshal39(m *spkg5.SubMsg, b []byte) uint64 {
+func unmarshal39(m *spkg6.SubMsg, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
