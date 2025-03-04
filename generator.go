@@ -60,6 +60,7 @@ func generate(filePath string, msgs ...any) error {
 	tm := types.NewTypeMap(pkg)
 	tm.Import("github.com/pkg/errors")
 	tm.Import("github.com/outofforest/proton")
+	tm.Import("github.com/outofforest/proton/helpers")
 
 	for len(stack) > 0 {
 		msgType := stack[len(stack)-1]
@@ -299,11 +300,7 @@ func (m Marshaller) Size(msg any) (uint64, error) {
 	const marshalHeader = `
 // Marshal marshals message.
 func (m Marshaller) Marshal(msg any, buf []byte) (retID, retSize uint64, retErr error) {
-	defer func() {
-		if res := recover(); res != nil {
-			retErr = errors.Errorf("marshaling message failed: %s", res)
-		}
-	}()
+	defer helpers.RecoverMarshal(&retErr)
 
 	switch msg2 := msg.(type) {
 `
@@ -320,11 +317,7 @@ func (m Marshaller) Marshal(msg any, buf []byte) (retID, retSize uint64, retErr 
 	const unmarshalHeader = `
 // Unmarshal unmarshals message.
 func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64, retErr error) {
-	defer func() {
-		if res := recover(); res != nil {
-			retErr = errors.Errorf("unmarshaling message failed: %s", res)
-		}
-	}()
+	defer helpers.RecoverUnmarshal(&retErr)
 
 	switch id {
 `
