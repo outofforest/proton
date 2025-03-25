@@ -1,7 +1,6 @@
 module github.com/outofforest/proton
 
-go 1.23
-toolchain go1.24.1
+go 1.23.0
 
 require (
 	github.com/outofforest/run v0.8.0
