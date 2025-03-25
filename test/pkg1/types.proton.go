@@ -77,7 +77,6 @@ func NewMarshaller() Marshaller {
 	return Marshaller{}
 }
 
-
 // Marshaller marshals and unmarshals messages.
 type Marshaller struct {
 }
