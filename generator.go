@@ -260,7 +260,6 @@ var _ proton.Marshaller = Marshaller{}
 func NewMarshaller() Marshaller {
 	return Marshaller{}
 }
-
 `
 	const typeHeader = `
 // Marshaller marshals and unmarshals messages.

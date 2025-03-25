@@ -1,6 +1,7 @@
 package test
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -310,4 +311,15 @@ func TestUnmarshalBufferTooSmall(t *testing.T) {
 
 	_, _, err = m.Unmarshal(id, b2)
 	requireT.Error(err)
+}
+
+func TestIDsAreGeneratedInSequence(t *testing.T) {
+	requireT := require.New(t)
+	m := pkg1.NewMarshaller()
+
+	for i, v := range pkg1.List {
+		id, err := m.ID(reflect.New(reflect.TypeOf(v)).Elem().Addr().Interface())
+		requireT.NoError(err)
+		requireT.EqualValues(i+1, id)
+	}
 }
