@@ -2,6 +2,7 @@ package pkg1
 
 import "github.com/outofforest/proton/test/pkg2"
 
+// List is a list of types to generate code for.
 var List = []any{
 	pkg2.SubMsg{},
 	MsgUint64{},
