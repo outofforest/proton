@@ -20,7 +20,7 @@ func BenchmarkValue(b *testing.B) {
 
 	r := str
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		b.StartTimer()
 		for range 100000 {
 			r = s.Method(r)
@@ -37,7 +37,7 @@ func BenchmarkPointer(b *testing.B) {
 
 	r := str
 
-	for bi := 0; bi < b.N; bi++ {
+	for range b.N {
 		b.StartTimer()
 		for range 100000 {
 			r = s.Method(r)

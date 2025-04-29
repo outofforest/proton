@@ -41,10 +41,10 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 
 		sizeCode, ok := builder.SizeCodeTemplate(new(uint64))
 		if ok {
-			code.WriteString("	{\n		// " + field.Name + "\n\n")
+			_, _ = fmt.Fprint(code, "	{\n		// "+field.Name+"\n\n")
 			helpers.Execute(code, types.AddIndent(sizeCode, 2), "m."+field.Name)
-			code.WriteString("\n	}")
-			code.WriteString("\n")
+			_, _ = fmt.Fprint(code, "\n	}")
+			_, _ = fmt.Fprint(code, "\n")
 		}
 		return nil
 	}))
@@ -59,15 +59,15 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 	})
 
 	if n > 0 {
-		b.WriteString(fmt.Sprintf("	var n uint64 = %d\n", n))
+		_, _ = fmt.Fprintf(b, "	var n uint64 = %d\n", n)
 	} else {
-		b.WriteString("	var n uint64\n")
+		_, _ = fmt.Fprint(b, "	var n uint64\n")
 	}
 
 	if code.Len() > 0 {
 		lo.Must(code.WriteTo(b))
 	}
 
-	b.WriteString("	return n\n}")
+	_, _ = fmt.Fprint(b, "	return n\n}")
 	return b.Bytes()
 }

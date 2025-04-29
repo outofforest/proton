@@ -19,9 +19,9 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 
 	offset := methods.BitMapLength(cfg.NumOfBooleanFields)
 	if offset == 0 {
-		code.WriteString("	var o uint64\n")
+		_, _ = fmt.Fprint(code, "	var o uint64\n")
 	} else {
-		code.WriteString(fmt.Sprintf("	var o uint64 = %d\n", offset))
+		_, _ = fmt.Fprintf(code, "	var o uint64 = %d\n", offset)
 	}
 
 	var boolIndex uint64
@@ -30,12 +30,12 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 			byteIndex, bitIndex := methods.BitMapPosition(boolIndex)
 			boolIndex++
 
-			code.WriteString(fmt.Sprintf(`	{
+			_, _ = fmt.Fprintf(code, `	{
 		// %[1]s
 
 		m.%[1]s = b[%[2]d]&0x%02[3]X != 0
 	}
-`, field.Name, byteIndex, 0x01<<bitIndex))
+`, field.Name, byteIndex, 0x01<<bitIndex)
 			return nil
 		}
 
@@ -46,23 +46,23 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 
 		marshalCode := builder.UnmarshalCodeTemplate(new(uint64))
 
-		code.WriteString("	{\n		// " + field.Name + "\n\n")
+		_, _ = fmt.Fprint(code, "	{\n		// "+field.Name+"\n\n")
 		helpers.Execute(code, types.AddIndent(marshalCode, 2), "m."+field.Name)
-		code.WriteString("\n	}")
-		code.WriteString("\n")
+		_, _ = fmt.Fprint(code, "\n	}")
+		_, _ = fmt.Fprint(code, "\n")
 
 		return nil
 	}))
 
 	b := &bytes.Buffer{}
 
-	b.WriteString(fmt.Sprintf(`func %[1]s(m *%[2]s, b []byte) uint64 {
-`, tm.VarName(cfg.Type, "unmarshal"), tm.TypeName(cfg.Type)))
+	_, _ = fmt.Fprintf(b, `func %[1]s(m *%[2]s, b []byte) uint64 {
+`, tm.VarName(cfg.Type, "unmarshal"), tm.TypeName(cfg.Type))
 
 	if code.Len() > 0 {
 		lo.Must(code.WriteTo(b))
 	}
 
-	b.WriteString("\n	return o\n}")
+	_, _ = fmt.Fprint(b, "\n	return o\n}")
 	return b.Bytes()
 }

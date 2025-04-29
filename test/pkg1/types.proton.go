@@ -81,6 +81,67 @@ func NewMarshaller() Marshaller {
 type Marshaller struct {
 }
 
+// Messages returns list of the message types supported by marshaller.
+func (m Marshaller) Messages() []any {
+	return []any {
+		pkg2.SubMsg{},
+		MsgUint64{},
+		MsgUint32{},
+		MsgUint16{},
+		MsgUint8{},
+		MsgInt64{},
+		MsgInt32{},
+		MsgInt16{},
+		MsgInt8{},
+		MsgBool3{},
+		MsgBool10{},
+		MsgFloat64{},
+		MsgFloat32{},
+		MsgString{},
+		MsgArray{},
+		MsgSlice{},
+		MsgMap{},
+		MsgMapString{},
+		MsgStruct{},
+		MsgStructAnonymous{},
+		MsgArrayUint8{},
+		MsgArrayInt8{},
+		MsgArrayFloat32{},
+		MsgArrayFloat64{},
+		MsgSliceUint8{},
+		MsgSliceInt8{},
+		MsgSliceFloat32{},
+		MsgSliceFloat64{},
+		MsgMixed{},
+		MsgUint64Custom{},
+		MsgUint32Custom{},
+		MsgUint16Custom{},
+		MsgUint8Custom{},
+		MsgInt64Custom{},
+		MsgInt32Custom{},
+		MsgInt16Custom{},
+		MsgInt8Custom{},
+		MsgBoolCustom{},
+		MsgFloat64Custom{},
+		MsgFloat32Custom{},
+		MsgStringCustom{},
+		MsgArrayCustom{},
+		MsgSliceCustom{},
+		MsgMapCustom{},
+		MsgArrayUint8Custom{},
+		MsgArrayUint8Custom2{},
+		MsgArrayInt8Custom{},
+		MsgArrayFloat32Custom{},
+		MsgArrayFloat64Custom{},
+		MsgSliceUint8Custom{},
+		MsgSliceUint8Custom2{},
+		MsgSliceInt8Custom{},
+		MsgSliceFloat32Custom{},
+		MsgSliceFloat64Custom{},
+		MsgMixedCustom{},
+	}
+}
+
 // ID returns ID of message type.
 func (m Marshaller) ID(msg any) (uint64, error) {
 	switch msg.(type) {
