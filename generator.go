@@ -89,7 +89,7 @@ func generate(filePath string, msgs ...any) error {
 	}
 	defer out.Close()
 
-	if _, err := out.WriteString("package " + path.Base(pkg) + "\n"); err != nil {
+	if _, err := fmt.Fprint(out, "package "+path.Base(pkg)+"\n"); err != nil {
 		return errors.WithStack(err)
 	}
 
@@ -106,7 +106,7 @@ func generate(filePath string, msgs ...any) error {
 			}
 		}
 
-		if _, err := out.WriteString("\nimport (\n"); err != nil {
+		if _, err := fmt.Fprint(out, "\nimport (\n"); err != nil {
 			return errors.WithStack(err)
 		}
 
@@ -114,7 +114,7 @@ func generate(filePath string, msgs ...any) error {
 			return err
 		}
 		if len(sdkPkgs) > 0 && len(pkgs) > 0 {
-			if _, err := out.WriteString("\n"); err != nil {
+			if _, err := fmt.Fprint(out, "\n"); err != nil {
 				return errors.WithStack(err)
 			}
 		}
@@ -122,7 +122,7 @@ func generate(filePath string, msgs ...any) error {
 			return err
 		}
 
-		if _, err := out.WriteString(")\n"); err != nil {
+		if _, err := fmt.Fprint(out, ")\n"); err != nil {
 			return errors.WithStack(err)
 		}
 	}
@@ -202,19 +202,19 @@ func isSDKPkg(pkg string) bool {
 	return sdkPkgs[pkg]
 }
 
-func writeImports(out io.StringWriter, pkgs []string, aliases map[string]string) error {
+func writeImports(out io.Writer, pkgs []string, aliases map[string]string) error {
 	sort.Strings(pkgs)
 	for _, pkg := range pkgs {
-		if _, err := out.WriteString("	"); err != nil {
+		if _, err := fmt.Fprint(out, "	"); err != nil {
 			return errors.WithStack(err)
 		}
 		alias := aliases[pkg]
 		if path.Base(pkg) == alias {
-			if _, err := out.WriteString(fmt.Sprintf("\"%s\"\n", pkg)); err != nil {
+			if _, err := fmt.Fprintf(out, "\"%s\"\n", pkg); err != nil {
 				return errors.WithStack(err)
 			}
 		} else {
-			if _, err := out.WriteString(fmt.Sprintf("%s \"%s\"\n", alias, pkg)); err != nil {
+			if _, err := fmt.Fprintf(out, "%s \"%s\"\n", alias, pkg); err != nil {
 				return errors.WithStack(err)
 			}
 		}
@@ -223,36 +223,36 @@ func writeImports(out io.StringWriter, pkgs []string, aliases map[string]string)
 	return nil
 }
 
-func writeMsgConsts(out io.StringWriter, msgTypes []reflect.Type, tm *types.TypeMap) error {
+func writeMsgConsts(out io.Writer, msgTypes []reflect.Type, tm *types.TypeMap) error {
 	const header = `
 const (
 `
 
-	if _, err := out.WriteString(header); err != nil {
+	if _, err := fmt.Fprint(out, header); err != nil {
 		return errors.WithStack(err)
 	}
 
 	for i, msgType := range msgTypes {
 		varName := tm.VarName(msgType, "id")
 		if i == 0 {
-			if _, err := out.WriteString(fmt.Sprintf("\t%s uint64 = iota + 1\n", varName)); err != nil {
+			if _, err := fmt.Fprintf(out, "\t%s uint64 = iota + 1\n", varName); err != nil {
 				return errors.WithStack(err)
 			}
 		} else {
-			if _, err := out.WriteString(fmt.Sprintf("\t%s\n", varName)); err != nil {
+			if _, err := fmt.Fprintf(out, "\t%s\n", varName); err != nil {
 				return errors.WithStack(err)
 			}
 		}
 	}
 
-	if _, err := out.WriteString(")\n"); err != nil {
+	if _, err := fmt.Fprintf(out, ")\n"); err != nil {
 		return errors.WithStack(err)
 	}
 
 	return nil
 }
 
-func writeMarshaller(out io.StringWriter, msgTypes []reflect.Type, tm *types.TypeMap) error {
+func writeMarshaller(out io.Writer, msgTypes []reflect.Type, tm *types.TypeMap) error {
 	const constructor = `
 var _ proton.Marshaller = Marshaller{}
 
@@ -264,6 +264,18 @@ func NewMarshaller() Marshaller {
 	const typeHeader = `
 // Marshaller marshals and unmarshals messages.
 type Marshaller struct {
+`
+
+	const messagesHeader = `
+// Messages returns list of the message types supported by marshaller.
+func (m Marshaller) Messages() []any {
+	return []any {
+`
+	const messagesFooter = `	}
+}
+`
+
+	const messagesTemplate = `		%[1]s{},
 `
 
 	const idHeader = `
@@ -332,75 +344,91 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 }
 `
 
-	if _, err := out.WriteString(constructor); err != nil {
+	if _, err := fmt.Fprint(out, constructor); err != nil {
 		return errors.WithStack(err)
 	}
 
-	if _, err := out.WriteString(typeHeader); err != nil {
+	if _, err := fmt.Fprint(out, typeHeader); err != nil {
 		return errors.WithStack(err)
 	}
 
-	if _, err := out.WriteString("}\n"); err != nil {
+	if _, err := fmt.Fprint(out, "}\n"); err != nil {
 		return errors.WithStack(err)
 	}
 
-	if _, err := out.WriteString(idHeader); err != nil {
-		return errors.WithStack(err)
-	}
+	// ==============
 
-	for _, msgType := range msgTypes {
-		if _, err := out.WriteString(fmt.Sprintf(idTemplate, tm.TypeName(msgType),
-			tm.VarName(msgType, "id"))); err != nil {
-			return errors.WithStack(err)
-		}
-	}
-
-	if _, err := out.WriteString(idFooter); err != nil {
-		return errors.WithStack(err)
-	}
-
-	if _, err := out.WriteString(sizeHeader); err != nil {
+	if _, err := fmt.Fprint(out, messagesHeader); err != nil {
 		return errors.WithStack(err)
 	}
 
 	for _, msgType := range msgTypes {
-		if _, err := out.WriteString(fmt.Sprintf(sizeTemplate, tm.TypeName(msgType),
-			tm.VarName(msgType, "size"))); err != nil {
+		if _, err := fmt.Fprintf(out, messagesTemplate, tm.TypeName(msgType)); err != nil {
 			return errors.WithStack(err)
 		}
 	}
 
-	if _, err := out.WriteString(sizeFooter); err != nil {
+	if _, err := fmt.Fprint(out, messagesFooter); err != nil {
 		return errors.WithStack(err)
 	}
 
-	if _, err := out.WriteString(marshalHeader); err != nil {
+	// ==============
+
+	if _, err := fmt.Fprint(out, idHeader); err != nil {
 		return errors.WithStack(err)
 	}
 
 	for _, msgType := range msgTypes {
-		if _, err := out.WriteString(fmt.Sprintf(marshalTemplate, tm.TypeName(msgType),
-			tm.VarName(msgType, "id"), tm.VarName(msgType, "marshal"))); err != nil {
+		if _, err := fmt.Fprintf(out, idTemplate, tm.TypeName(msgType), tm.VarName(msgType, "id")); err != nil {
 			return errors.WithStack(err)
 		}
 	}
 
-	if _, err := out.WriteString(marshalFooter); err != nil {
+	if _, err := out.Write([]byte(idFooter)); err != nil {
 		return errors.WithStack(err)
 	}
 
-	if _, err := out.WriteString(unmarshalHeader); err != nil {
+	if _, err := fmt.Fprint(out, sizeHeader); err != nil {
 		return errors.WithStack(err)
 	}
 
 	for _, msgType := range msgTypes {
-		if _, err := out.WriteString(fmt.Sprintf(unmarshalTemplate, tm.VarName(msgType, "unmarshal"),
-			tm.VarName(msgType, "id"), tm.TypeName(msgType))); err != nil {
+		if _, err := fmt.Fprintf(out, sizeTemplate, tm.TypeName(msgType), tm.VarName(msgType, "size")); err != nil {
 			return errors.WithStack(err)
 		}
 	}
 
-	if _, err := out.WriteString(unmarshalFooter); err != nil {
+	if _, err := out.Write([]byte(sizeFooter)); err != nil {
+		return errors.WithStack(err)
+	}
+
+	if _, err := fmt.Fprint(out, marshalHeader); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, msgType := range msgTypes {
+		if _, err := fmt.Fprintf(out, marshalTemplate, tm.TypeName(msgType), tm.VarName(msgType, "id"),
+			tm.VarName(msgType, "marshal")); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if _, err := out.Write([]byte(marshalFooter)); err != nil {
+		return errors.WithStack(err)
+	}
+
+	if _, err := fmt.Fprint(out, unmarshalHeader); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, msgType := range msgTypes {
+		if _, err := fmt.Fprintf(out, unmarshalTemplate, tm.VarName(msgType, "unmarshal"),
+			tm.VarName(msgType, "id"), tm.TypeName(msgType)); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if _, err := out.Write([]byte(unmarshalFooter)); err != nil {
 		return errors.WithStack(err)
 	}
 
