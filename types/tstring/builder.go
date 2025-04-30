@@ -1,11 +1,9 @@
 package tstring
 
 import (
-	"bytes"
 	"fmt"
 	"reflect"
 
-	"github.com/outofforest/proton/helpers"
 	"github.com/outofforest/proton/types"
 )
 
@@ -36,46 +34,29 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCodeTemplate(_ *uint64) (string, bool) {
-	code := `{
+	return `{
 	l := uint64(len({{ . }}))
+	helpers.UInt64Size(l, &n)
 	n += l
-`
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64SizeCode(), "l")
-	code += types.AddIndent(buf.String(), 1)
-
-	code += `
-}`
-	return code, true
+}`, true
 }
 
 // MarshalCodeTemplate returns code template marshaling the data.
 func (b Builder) MarshalCodeTemplate(_ *uint64) string {
-	code := `{
+	return `{
 	l := uint64(len({{ . }}))
-`
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64Marshal(), "l")
-	code += types.AddIndent(buf.String(), 1) + "\n"
-
-	code += `	copy(b[o:o+l], {{ . }})
+	helpers.UInt64Marshal(l, b, &o)
+	copy(b[o:o+l], {{ . }})
 	o += l
 }`
-
-	return code
 }
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
 	code := `{
 	var l uint64
+	helpers.UInt64Unmarshal(&l, b, &o)
 `
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64Unmarshal("uint64"), "l")
-	code += types.AddIndent(buf.String(), 1) + "\n"
 
 	code += fmt.Sprintf(`	if l > 0 {
 		{{ . }} = %[1]s(b[o:o+l])

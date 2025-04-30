@@ -41,6 +41,5 @@ func (b Builder) MarshalCodeTemplate(_ *uint64) string {
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
-	return fmt.Sprintf(`o += %[1]s(&{{ . }}, b[o:])
-`, b.tm.VarName(b.fieldType, "unmarshal"))
+	return fmt.Sprintf(`o += %[1]s(&{{ . }}, b[o:])`, b.tm.VarName(b.fieldType, "unmarshal"))
 }

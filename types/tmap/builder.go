@@ -52,11 +52,9 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCodeTemplate(varIndex *uint64) (string, bool) {
-	code := "l := uint64(len({{ . }}))\n"
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64SizeCode(), "l")
-	code += buf.String() + "\n"
+	code := `l := uint64(len({{ . }}))
+	helpers.UInt64Size(l, &n)
+`
 
 	constSize := b.keyBuilder.ConstantSize() + b.elementBuilder.ConstantSize()
 	if constSize > 0 {
@@ -106,15 +104,14 @@ func (b Builder) MarshalCodeTemplate(varIndex *uint64) string {
 	keyTpl := b.keyBuilder.MarshalCodeTemplate(varIndex)
 	elementTpl := b.elementBuilder.MarshalCodeTemplate(varIndex)
 
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64Marshal(), "uint64(len({{ . }}))")
-	code := buf.String() + "\n"
+	code := `helpers.UInt64Marshal(uint64(len({{ . }})), b, &o)
+`
 
 	mk := types.Var("mk", varIndex)
 	mv := types.Var("mv", varIndex)
 	code += fmt.Sprintf("for %[1]s, %[2]s := range {{ . }} {\n", mk, mv)
 
-	buf = &bytes.Buffer{}
+	buf := &bytes.Buffer{}
 	helpers.Execute(buf, keyTpl, mk)
 	code += types.AddIndent(buf.String(), 1) + "\n"
 
@@ -132,11 +129,9 @@ func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
 	keyTpl := b.keyBuilder.UnmarshalCodeTemplate(varIndex)
 	elementTpl := b.elementBuilder.UnmarshalCodeTemplate(varIndex)
 
-	code := "var l uint64\n"
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64Unmarshal("uint64"), "l")
-	code += buf.String() + "\n"
+	code := `var l uint64
+helpers.UInt64Unmarshal(&l, b, &o)
+`
 
 	mk := types.Var("mk", varIndex)
 	mv := types.Var("mv", varIndex)
@@ -150,7 +145,7 @@ func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
 	for range l {
 `, b.tm.TypeName(b.fieldType), mk, mv, b.tm.TypeName(b.fieldType.Key()), b.tm.TypeName(b.fieldType.Elem()))
 
-	buf = &bytes.Buffer{}
+	buf := &bytes.Buffer{}
 	helpers.Execute(buf, keyTpl, mk)
 	code += types.AddIndent(buf.String(), 2) + "\n"
 

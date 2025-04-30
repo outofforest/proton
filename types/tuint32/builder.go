@@ -2,23 +2,15 @@ package tuint32
 
 import (
 	"reflect"
-
-	"github.com/outofforest/proton/types"
 )
 
 // New returns new code builder.
-func New(fieldType reflect.Type, tm *types.TypeMap) Builder {
-	return Builder{
-		fieldType: fieldType,
-		tm:        tm,
-	}
+func New() Builder {
+	return Builder{}
 }
 
 // Builder generates the code.
-type Builder struct {
-	fieldType reflect.Type
-	tm        *types.TypeMap
-}
+type Builder struct{}
 
 // Dependencies returns the list of other types which code must be generated for.
 func (b Builder) Dependencies() []reflect.Type {
@@ -33,15 +25,15 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCodeTemplate(_ *uint64) (string, bool) {
-	return types.UInt32SizeCode(), true
+	return `helpers.UInt32Size({{ . }}, &n)`, true
 }
 
 // MarshalCodeTemplate returns code template marshaling the data.
 func (b Builder) MarshalCodeTemplate(_ *uint64) string {
-	return types.UInt32Marshal()
+	return `helpers.UInt32Marshal({{ . }}, b, &o)`
 }
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
-	return types.UInt32Unmarshal(b.tm.TypeName(b.fieldType))
+	return `helpers.UInt32Unmarshal(&{{ . }}, b, &o)`
 }
