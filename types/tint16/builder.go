@@ -1,24 +1,14 @@
 package tint16
 
-import (
-	"reflect"
-
-	"github.com/outofforest/proton/types"
-)
+import "reflect"
 
 // New returns new code builder.
-func New(fieldType reflect.Type, tm *types.TypeMap) Builder {
-	return Builder{
-		fieldType: fieldType,
-		tm:        tm,
-	}
+func New() Builder {
+	return Builder{}
 }
 
 // Builder generates the code.
-type Builder struct {
-	fieldType reflect.Type
-	tm        *types.TypeMap
-}
+type Builder struct{}
 
 // Dependencies returns the list of other types which code must be generated for.
 func (b Builder) Dependencies() []reflect.Type {
@@ -33,15 +23,15 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCodeTemplate(_ *uint64) (string, bool) {
-	return types.Int16SizeCode(), true
+	return `helpers.Int16Size({{ . }}, &n)`, true
 }
 
 // MarshalCodeTemplate returns code template marshaling the data.
 func (b Builder) MarshalCodeTemplate(_ *uint64) string {
-	return types.Int16Marshal()
+	return `helpers.Int16Marshal({{ . }}, b, &o)`
 }
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
-	return types.Int16Unmarshal(b.tm.TypeName(b.fieldType))
+	return `helpers.Int16Unmarshal(&{{ . }}, b, &o)`
 }

@@ -1,11 +1,9 @@
 package tslicefloat32
 
 import (
-	"bytes"
 	"fmt"
 	"reflect"
 
-	"github.com/outofforest/proton/helpers"
 	"github.com/outofforest/proton/types"
 )
 
@@ -36,24 +34,16 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCodeTemplate(_ *uint64) (string, bool) {
-	code := "l := uint64(len({{ . }}))\n"
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64SizeCode(), "l")
-	code += buf.String() + "\n"
-
-	code += "n += l * 4"
-
-	return code, true
+	return `l := uint64(len({{ . }}))
+helpers.UInt64Size(l, &n)
+n += l * 4`, true
 }
 
 // MarshalCodeTemplate returns code template marshaling the data.
 func (b Builder) MarshalCodeTemplate(_ *uint64) string {
-	code := "l := uint64(len({{ . }}))\n"
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64Marshal(), "l")
-	code += buf.String() + "\n"
+	code := `l := uint64(len({{ . }}))
+helpers.UInt64Marshal(l, b, &o)
+`
 
 	unsafe := b.tm.Import("unsafe")
 	code += fmt.Sprintf(`if l > 0 {
@@ -66,11 +56,9 @@ func (b Builder) MarshalCodeTemplate(_ *uint64) string {
 
 // UnmarshalCodeTemplate returns code template unmarshaling the data.
 func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
-	code := "var l uint64\n"
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64Unmarshal("uint64"), "l")
-	code += buf.String() + "\n"
+	code := `var l uint64
+helpers.UInt64Unmarshal(&l, b, &o)
+`
 
 	unsafe := b.tm.Import("unsafe")
 	code += fmt.Sprintf(`if l > 0 {

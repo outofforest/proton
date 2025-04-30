@@ -38,11 +38,9 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCodeTemplate returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCodeTemplate(varIndex *uint64) (string, bool) {
-	code := "l := uint64(len({{ . }}))\n"
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64SizeCode(), "l")
-	code += buf.String() + "\n"
+	code := `l := uint64(len({{ . }}))
+helpers.UInt64Size(l, &n)
+`
 
 	constSize := b.elementBuilder.ConstantSize()
 	switch {
@@ -65,7 +63,7 @@ func (b Builder) SizeCodeTemplate(varIndex *uint64) (string, bool) {
 	sv := types.Var("sv", varIndex)
 	code += fmt.Sprintf("for _, %s := range {{ . }} {\n", sv)
 
-	buf = &bytes.Buffer{}
+	buf := &bytes.Buffer{}
 	helpers.Execute(buf, elementTpl, sv)
 
 	code += types.AddIndent(buf.String(), 1) + "\n}"
@@ -77,14 +75,13 @@ func (b Builder) SizeCodeTemplate(varIndex *uint64) (string, bool) {
 func (b Builder) MarshalCodeTemplate(varIndex *uint64) string {
 	elementTpl := b.elementBuilder.MarshalCodeTemplate(varIndex)
 
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64Marshal(), "uint64(len({{ . }}))")
-	code := buf.String() + "\n"
+	code := `helpers.UInt64Marshal(uint64(len({{ . }})), b, &o)
+`
 
 	sv := types.Var("sv", varIndex)
 	code += fmt.Sprintf("for _, %s := range {{ . }} {\n", sv)
 
-	buf = &bytes.Buffer{}
+	buf := &bytes.Buffer{}
 	helpers.Execute(buf, elementTpl, sv)
 	code += types.AddIndent(buf.String(), 1) + "\n"
 
@@ -97,13 +94,9 @@ func (b Builder) MarshalCodeTemplate(varIndex *uint64) string {
 func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
 	elementTpl := b.elementBuilder.UnmarshalCodeTemplate(varIndex)
 
-	code := "var l uint64\n"
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, types.UInt64Unmarshal("uint64"), "l")
-	code += buf.String() + "\n"
-
-	code += `if l > 0 {
+	code := `var l uint64
+helpers.UInt64Unmarshal(&l, b, &o)
+if l > 0 {
 `
 	code += fmt.Sprintf(`	{{ . }} = make([]%[1]s, l)
 `, b.tm.TypeName(b.fieldType.Elem()))
@@ -111,7 +104,7 @@ func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
 	i := types.Var("i", varIndex)
 	code += fmt.Sprintf("	for %[1]s := range l {\n", i)
 
-	buf = &bytes.Buffer{}
+	buf := &bytes.Buffer{}
 	helpers.Execute(buf, elementTpl, fmt.Sprintf("{{ . }}[%s]", i))
 	code += types.AddIndent(buf.String(), 2) + "\n"
 
