@@ -323,3 +323,7 @@ func TestIDsAreGeneratedInSequence(t *testing.T) {
 		requireT.EqualValues(i+1, id)
 	}
 }
+
+func TestMessages(t *testing.T) {
+	require.Equal(t, pkg1.List, pkg1.NewMarshaller().Messages())
+}
