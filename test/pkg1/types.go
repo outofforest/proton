@@ -1,6 +1,8 @@
 package pkg1
 
 import (
+	"time"
+
 	"github.com/outofforest/proton/test/custom"
 	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
 	"github.com/outofforest/proton/test/pkg2"
@@ -278,6 +280,11 @@ type MsgSliceFloat64 struct {
 // MsgSliceFloat64Custom is used in tests.
 type MsgSliceFloat64Custom struct {
 	Value custom.SliceFloat64
+}
+
+// MsgTime is used in tests.
+type MsgTime struct {
+	Value time.Time
 }
 
 // MsgMixed is used in tests.

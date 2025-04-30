@@ -2,6 +2,7 @@ package factory
 
 import (
 	"reflect"
+	"time"
 
 	"github.com/pkg/errors"
 
@@ -26,11 +27,14 @@ import (
 	"github.com/outofforest/proton/types/tsliceuint8"
 	"github.com/outofforest/proton/types/tstring"
 	"github.com/outofforest/proton/types/tstruct"
+	"github.com/outofforest/proton/types/ttime"
 	"github.com/outofforest/proton/types/tuint16"
 	"github.com/outofforest/proton/types/tuint32"
 	"github.com/outofforest/proton/types/tuint64"
 	"github.com/outofforest/proton/types/tuint8"
 )
+
+var timeType = reflect.TypeOf(time.Time{})
 
 // Get returns builder for particular type.
 //
@@ -109,19 +113,24 @@ func Get(fieldType reflect.Type, tm *types.TypeMap) (types.BuilderFactory, error
 	case reflect.String:
 		return tstring.New(fieldType, tm), nil
 	case reflect.Struct:
-		fieldCount := fieldType.NumField()
-		fieldBuilders := make([]types.BuilderFactory, 0, fieldCount)
+		switch fieldType {
+		case timeType:
+			return ttime.New(tm), nil
+		default:
+			fieldCount := fieldType.NumField()
+			fieldBuilders := make([]types.BuilderFactory, 0, fieldCount)
 
-		for i := range fieldCount {
-			fieldType := fieldType.Field(i).Type
-			fieldBuilder, err := Get(fieldType, tm)
-			if err != nil {
-				return nil, err
+			for i := range fieldCount {
+				fieldType := fieldType.Field(i).Type
+				fieldBuilder, err := Get(fieldType, tm)
+				if err != nil {
+					return nil, err
+				}
+				fieldBuilders = append(fieldBuilders, fieldBuilder)
 			}
-			fieldBuilders = append(fieldBuilders, fieldBuilder)
-		}
 
-		return newNonConstantAdapter(tstruct.New(fieldType, fieldBuilders, tm)), nil
+			return newNonConstantAdapter(tstruct.New(fieldType, fieldBuilders, tm)), nil
+		}
 	default:
 		return nil, errors.Errorf("unsupported type %s", fieldType.Name())
 	}

@@ -1,6 +1,7 @@
 package pkg1
 
 import (
+	"time"
 	"unsafe"
 
 	"github.com/outofforest/proton"
@@ -8,12 +9,13 @@ import (
 	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1/spkg"
 	"github.com/outofforest/proton/test/pkg2"
-	spkg6 "github.com/outofforest/proton/test/pkg2/spkg"
+	spkg7 "github.com/outofforest/proton/test/pkg2/spkg"
 	"github.com/pkg/errors"
 )
 
 const (
-	id37 uint64 = iota + 1
+	id38 uint64 = iota + 1
+	id58
 	id57
 	id56
 	id55
@@ -31,8 +33,8 @@ const (
 	id43
 	id42
 	id41
-	id40
-	id38
+	id39
+	id36
 	id35
 	id34
 	id33
@@ -41,7 +43,7 @@ const (
 	id30
 	id29
 	id28
-	id27
+	id26
 	id25
 	id24
 	id23
@@ -138,6 +140,7 @@ func (m Marshaller) Messages() []any {
 		MsgSliceInt8Custom{},
 		MsgSliceFloat32Custom{},
 		MsgSliceFloat64Custom{},
+		MsgTime{},
 		MsgMixedCustom{},
 	}
 }
@@ -146,112 +149,114 @@ func (m Marshaller) Messages() []any {
 func (m Marshaller) ID(msg any) (uint64, error) {
 	switch msg.(type) {
 	case *pkg2.SubMsg:
-		return id37, nil
-	case *MsgUint64:
-		return id57, nil
-	case *MsgUint32:
-		return id56, nil
-	case *MsgUint16:
-		return id55, nil
-	case *MsgUint8:
-		return id54, nil
-	case *MsgInt64:
-		return id53, nil
-	case *MsgInt32:
-		return id52, nil
-	case *MsgInt16:
-		return id51, nil
-	case *MsgInt8:
-		return id50, nil
-	case *MsgBool3:
-		return id49, nil
-	case *MsgBool10:
-		return id48, nil
-	case *MsgFloat64:
-		return id47, nil
-	case *MsgFloat32:
-		return id46, nil
-	case *MsgString:
-		return id45, nil
-	case *MsgArray:
-		return id44, nil
-	case *MsgSlice:
-		return id43, nil
-	case *MsgMap:
-		return id42, nil
-	case *MsgMapString:
-		return id41, nil
-	case *MsgStruct:
-		return id40, nil
-	case *MsgStructAnonymous:
 		return id38, nil
+	case *MsgUint64:
+		return id58, nil
+	case *MsgUint32:
+		return id57, nil
+	case *MsgUint16:
+		return id56, nil
+	case *MsgUint8:
+		return id55, nil
+	case *MsgInt64:
+		return id54, nil
+	case *MsgInt32:
+		return id53, nil
+	case *MsgInt16:
+		return id52, nil
+	case *MsgInt8:
+		return id51, nil
+	case *MsgBool3:
+		return id50, nil
+	case *MsgBool10:
+		return id49, nil
+	case *MsgFloat64:
+		return id48, nil
+	case *MsgFloat32:
+		return id47, nil
+	case *MsgString:
+		return id46, nil
+	case *MsgArray:
+		return id45, nil
+	case *MsgSlice:
+		return id44, nil
+	case *MsgMap:
+		return id43, nil
+	case *MsgMapString:
+		return id42, nil
+	case *MsgStruct:
+		return id41, nil
+	case *MsgStructAnonymous:
+		return id39, nil
 	case *MsgArrayUint8:
-		return id35, nil
+		return id36, nil
 	case *MsgArrayInt8:
-		return id34, nil
+		return id35, nil
 	case *MsgArrayFloat32:
-		return id33, nil
+		return id34, nil
 	case *MsgArrayFloat64:
-		return id32, nil
+		return id33, nil
 	case *MsgSliceUint8:
-		return id31, nil
+		return id32, nil
 	case *MsgSliceInt8:
-		return id30, nil
+		return id31, nil
 	case *MsgSliceFloat32:
-		return id29, nil
+		return id30, nil
 	case *MsgSliceFloat64:
-		return id28, nil
+		return id29, nil
 	case *MsgMixed:
-		return id27, nil
+		return id28, nil
 	case *MsgUint64Custom:
-		return id25, nil
+		return id26, nil
 	case *MsgUint32Custom:
-		return id24, nil
+		return id25, nil
 	case *MsgUint16Custom:
-		return id23, nil
+		return id24, nil
 	case *MsgUint8Custom:
-		return id22, nil
+		return id23, nil
 	case *MsgInt64Custom:
-		return id21, nil
+		return id22, nil
 	case *MsgInt32Custom:
-		return id20, nil
+		return id21, nil
 	case *MsgInt16Custom:
-		return id19, nil
+		return id20, nil
 	case *MsgInt8Custom:
-		return id18, nil
+		return id19, nil
 	case *MsgBoolCustom:
-		return id17, nil
+		return id18, nil
 	case *MsgFloat64Custom:
-		return id16, nil
+		return id17, nil
 	case *MsgFloat32Custom:
-		return id15, nil
+		return id16, nil
 	case *MsgStringCustom:
-		return id14, nil
+		return id15, nil
 	case *MsgArrayCustom:
-		return id13, nil
+		return id14, nil
 	case *MsgSliceCustom:
-		return id12, nil
+		return id13, nil
 	case *MsgMapCustom:
-		return id11, nil
+		return id12, nil
 	case *MsgArrayUint8Custom:
-		return id10, nil
+		return id11, nil
 	case *MsgArrayUint8Custom2:
-		return id9, nil
+		return id10, nil
 	case *MsgArrayInt8Custom:
-		return id8, nil
+		return id9, nil
 	case *MsgArrayFloat32Custom:
-		return id7, nil
+		return id8, nil
 	case *MsgArrayFloat64Custom:
-		return id6, nil
+		return id7, nil
 	case *MsgSliceUint8Custom:
-		return id5, nil
+		return id6, nil
 	case *MsgSliceUint8Custom2:
-		return id4, nil
+		return id5, nil
 	case *MsgSliceInt8Custom:
-		return id3, nil
+		return id4, nil
 	case *MsgSliceFloat32Custom:
-		return id2, nil
+		return id3, nil
 	case *MsgSliceFloat64Custom:
+		return id2, nil
+	case *MsgTime:
 		return id1, nil
 	case *MsgMixedCustom:
 		return id0, nil
@@ -264,112 +269,114 @@ func (m Marshaller) ID(msg any) (uint64, error) {
 func (m Marshaller) Size(msg any) (uint64, error) {
 	switch msg2 := msg.(type) {
 	case *pkg2.SubMsg:
-		return size37(msg2), nil
-	case *MsgUint64:
-		return size57(msg2), nil
-	case *MsgUint32:
-		return size56(msg2), nil
-	case *MsgUint16:
-		return size55(msg2), nil
-	case *MsgUint8:
-		return size54(msg2), nil
-	case *MsgInt64:
-		return size53(msg2), nil
-	case *MsgInt32:
-		return size52(msg2), nil
-	case *MsgInt16:
-		return size51(msg2), nil
-	case *MsgInt8:
-		return size50(msg2), nil
-	case *MsgBool3:
-		return size49(msg2), nil
-	case *MsgBool10:
-		return size48(msg2), nil
-	case *MsgFloat64:
-		return size47(msg2), nil
-	case *MsgFloat32:
-		return size46(msg2), nil
-	case *MsgString:
-		return size45(msg2), nil
-	case *MsgArray:
-		return size44(msg2), nil
-	case *MsgSlice:
-		return size43(msg2), nil
-	case *MsgMap:
-		return size42(msg2), nil
-	case *MsgMapString:
-		return size41(msg2), nil
-	case *MsgStruct:
-		return size40(msg2), nil
-	case *MsgStructAnonymous:
 		return size38(msg2), nil
+	case *MsgUint64:
+		return size58(msg2), nil
+	case *MsgUint32:
+		return size57(msg2), nil
+	case *MsgUint16:
+		return size56(msg2), nil
+	case *MsgUint8:
+		return size55(msg2), nil
+	case *MsgInt64:
+		return size54(msg2), nil
+	case *MsgInt32:
+		return size53(msg2), nil
+	case *MsgInt16:
+		return size52(msg2), nil
+	case *MsgInt8:
+		return size51(msg2), nil
+	case *MsgBool3:
+		return size50(msg2), nil
+	case *MsgBool10:
+		return size49(msg2), nil
+	case *MsgFloat64:
+		return size48(msg2), nil
+	case *MsgFloat32:
+		return size47(msg2), nil
+	case *MsgString:
+		return size46(msg2), nil
+	case *MsgArray:
+		return size45(msg2), nil
+	case *MsgSlice:
+		return size44(msg2), nil
+	case *MsgMap:
+		return size43(msg2), nil
+	case *MsgMapString:
+		return size42(msg2), nil
+	case *MsgStruct:
+		return size41(msg2), nil
+	case *MsgStructAnonymous:
+		return size39(msg2), nil
 	case *MsgArrayUint8:
-		return size35(msg2), nil
+		return size36(msg2), nil
 	case *MsgArrayInt8:
-		return size34(msg2), nil
+		return size35(msg2), nil
 	case *MsgArrayFloat32:
-		return size33(msg2), nil
+		return size34(msg2), nil
 	case *MsgArrayFloat64:
-		return size32(msg2), nil
+		return size33(msg2), nil
 	case *MsgSliceUint8:
-		return size31(msg2), nil
+		return size32(msg2), nil
 	case *MsgSliceInt8:
-		return size30(msg2), nil
+		return size31(msg2), nil
 	case *MsgSliceFloat32:
-		return size29(msg2), nil
+		return size30(msg2), nil
 	case *MsgSliceFloat64:
-		return size28(msg2), nil
+		return size29(msg2), nil
 	case *MsgMixed:
-		return size27(msg2), nil
+		return size28(msg2), nil
 	case *MsgUint64Custom:
-		return size25(msg2), nil
+		return size26(msg2), nil
 	case *MsgUint32Custom:
-		return size24(msg2), nil
+		return size25(msg2), nil
 	case *MsgUint16Custom:
-		return size23(msg2), nil
+		return size24(msg2), nil
 	case *MsgUint8Custom:
-		return size22(msg2), nil
+		return size23(msg2), nil
 	case *MsgInt64Custom:
-		return size21(msg2), nil
+		return size22(msg2), nil
 	case *MsgInt32Custom:
-		return size20(msg2), nil
+		return size21(msg2), nil
 	case *MsgInt16Custom:
-		return size19(msg2), nil
+		return size20(msg2), nil
 	case *MsgInt8Custom:
-		return size18(msg2), nil
+		return size19(msg2), nil
 	case *MsgBoolCustom:
-		return size17(msg2), nil
+		return size18(msg2), nil
 	case *MsgFloat64Custom:
-		return size16(msg2), nil
+		return size17(msg2), nil
 	case *MsgFloat32Custom:
-		return size15(msg2), nil
+		return size16(msg2), nil
 	case *MsgStringCustom:
-		return size14(msg2), nil
+		return size15(msg2), nil
 	case *MsgArrayCustom:
-		return size13(msg2), nil
+		return size14(msg2), nil
 	case *MsgSliceCustom:
-		return size12(msg2), nil
+		return size13(msg2), nil
 	case *MsgMapCustom:
-		return size11(msg2), nil
+		return size12(msg2), nil
 	case *MsgArrayUint8Custom:
-		return size10(msg2), nil
+		return size11(msg2), nil
 	case *MsgArrayUint8Custom2:
-		return size9(msg2), nil
+		return size10(msg2), nil
 	case *MsgArrayInt8Custom:
-		return size8(msg2), nil
+		return size9(msg2), nil
 	case *MsgArrayFloat32Custom:
-		return size7(msg2), nil
+		return size8(msg2), nil
 	case *MsgArrayFloat64Custom:
-		return size6(msg2), nil
+		return size7(msg2), nil
 	case *MsgSliceUint8Custom:
-		return size5(msg2), nil
+		return size6(msg2), nil
 	case *MsgSliceUint8Custom2:
-		return size4(msg2), nil
+		return size5(msg2), nil
 	case *MsgSliceInt8Custom:
-		return size3(msg2), nil
+		return size4(msg2), nil
 	case *MsgSliceFloat32Custom:
-		return size2(msg2), nil
+		return size3(msg2), nil
 	case *MsgSliceFloat64Custom:
+		return size2(msg2), nil
+	case *MsgTime:
 		return size1(msg2), nil
 	case *MsgMixedCustom:
 		return size0(msg2), nil
@@ -384,112 +391,114 @@ func (m Marshaller) Marshal(msg any, buf []byte) (retID, retSize uint64, retErr 
 
 	switch msg2 := msg.(type) {
 	case *pkg2.SubMsg:
-		return id37, marshal37(msg2, buf), nil
-	case *MsgUint64:
-		return id57, marshal57(msg2, buf), nil
-	case *MsgUint32:
-		return id56, marshal56(msg2, buf), nil
-	case *MsgUint16:
-		return id55, marshal55(msg2, buf), nil
-	case *MsgUint8:
-		return id54, marshal54(msg2, buf), nil
-	case *MsgInt64:
-		return id53, marshal53(msg2, buf), nil
-	case *MsgInt32:
-		return id52, marshal52(msg2, buf), nil
-	case *MsgInt16:
-		return id51, marshal51(msg2, buf), nil
-	case *MsgInt8:
-		return id50, marshal50(msg2, buf), nil
-	case *MsgBool3:
-		return id49, marshal49(msg2, buf), nil
-	case *MsgBool10:
-		return id48, marshal48(msg2, buf), nil
-	case *MsgFloat64:
-		return id47, marshal47(msg2, buf), nil
-	case *MsgFloat32:
-		return id46, marshal46(msg2, buf), nil
-	case *MsgString:
-		return id45, marshal45(msg2, buf), nil
-	case *MsgArray:
-		return id44, marshal44(msg2, buf), nil
-	case *MsgSlice:
-		return id43, marshal43(msg2, buf), nil
-	case *MsgMap:
-		return id42, marshal42(msg2, buf), nil
-	case *MsgMapString:
-		return id41, marshal41(msg2, buf), nil
-	case *MsgStruct:
-		return id40, marshal40(msg2, buf), nil
-	case *MsgStructAnonymous:
 		return id38, marshal38(msg2, buf), nil
+	case *MsgUint64:
+		return id58, marshal58(msg2, buf), nil
+	case *MsgUint32:
+		return id57, marshal57(msg2, buf), nil
+	case *MsgUint16:
+		return id56, marshal56(msg2, buf), nil
+	case *MsgUint8:
+		return id55, marshal55(msg2, buf), nil
+	case *MsgInt64:
+		return id54, marshal54(msg2, buf), nil
+	case *MsgInt32:
+		return id53, marshal53(msg2, buf), nil
+	case *MsgInt16:
+		return id52, marshal52(msg2, buf), nil
+	case *MsgInt8:
+		return id51, marshal51(msg2, buf), nil
+	case *MsgBool3:
+		return id50, marshal50(msg2, buf), nil
+	case *MsgBool10:
+		return id49, marshal49(msg2, buf), nil
+	case *MsgFloat64:
+		return id48, marshal48(msg2, buf), nil
+	case *MsgFloat32:
+		return id47, marshal47(msg2, buf), nil
+	case *MsgString:
+		return id46, marshal46(msg2, buf), nil
+	case *MsgArray:
+		return id45, marshal45(msg2, buf), nil
+	case *MsgSlice:
+		return id44, marshal44(msg2, buf), nil
+	case *MsgMap:
+		return id43, marshal43(msg2, buf), nil
+	case *MsgMapString:
+		return id42, marshal42(msg2, buf), nil
+	case *MsgStruct:
+		return id41, marshal41(msg2, buf), nil
+	case *MsgStructAnonymous:
+		return id39, marshal39(msg2, buf), nil
 	case *MsgArrayUint8:
-		return id35, marshal35(msg2, buf), nil
+		return id36, marshal36(msg2, buf), nil
 	case *MsgArrayInt8:
-		return id34, marshal34(msg2, buf), nil
+		return id35, marshal35(msg2, buf), nil
 	case *MsgArrayFloat32:
-		return id33, marshal33(msg2, buf), nil
+		return id34, marshal34(msg2, buf), nil
 	case *MsgArrayFloat64:
-		return id32, marshal32(msg2, buf), nil
+		return id33, marshal33(msg2, buf), nil
 	case *MsgSliceUint8:
-		return id31, marshal31(msg2, buf), nil
+		return id32, marshal32(msg2, buf), nil
 	case *MsgSliceInt8:
-		return id30, marshal30(msg2, buf), nil
+		return id31, marshal31(msg2, buf), nil
 	case *MsgSliceFloat32:
-		return id29, marshal29(msg2, buf), nil
+		return id30, marshal30(msg2, buf), nil
 	case *MsgSliceFloat64:
-		return id28, marshal28(msg2, buf), nil
+		return id29, marshal29(msg2, buf), nil
 	case *MsgMixed:
-		return id27, marshal27(msg2, buf), nil
+		return id28, marshal28(msg2, buf), nil
 	case *MsgUint64Custom:
-		return id25, marshal25(msg2, buf), nil
+		return id26, marshal26(msg2, buf), nil
 	case *MsgUint32Custom:
-		return id24, marshal24(msg2, buf), nil
+		return id25, marshal25(msg2, buf), nil
 	case *MsgUint16Custom:
-		return id23, marshal23(msg2, buf), nil
+		return id24, marshal24(msg2, buf), nil
 	case *MsgUint8Custom:
-		return id22, marshal22(msg2, buf), nil
+		return id23, marshal23(msg2, buf), nil
 	case *MsgInt64Custom:
-		return id21, marshal21(msg2, buf), nil
+		return id22, marshal22(msg2, buf), nil
 	case *MsgInt32Custom:
-		return id20, marshal20(msg2, buf), nil
+		return id21, marshal21(msg2, buf), nil
 	case *MsgInt16Custom:
-		return id19, marshal19(msg2, buf), nil
+		return id20, marshal20(msg2, buf), nil
 	case *MsgInt8Custom:
-		return id18, marshal18(msg2, buf), nil
+		return id19, marshal19(msg2, buf), nil
 	case *MsgBoolCustom:
-		return id17, marshal17(msg2, buf), nil
+		return id18, marshal18(msg2, buf), nil
 	case *MsgFloat64Custom:
-		return id16, marshal16(msg2, buf), nil
+		return id17, marshal17(msg2, buf), nil
 	case *MsgFloat32Custom:
-		return id15, marshal15(msg2, buf), nil
+		return id16, marshal16(msg2, buf), nil
 	case *MsgStringCustom:
-		return id14, marshal14(msg2, buf), nil
+		return id15, marshal15(msg2, buf), nil
 	case *MsgArrayCustom:
-		return id13, marshal13(msg2, buf), nil
+		return id14, marshal14(msg2, buf), nil
 	case *MsgSliceCustom:
-		return id12, marshal12(msg2, buf), nil
+		return id13, marshal13(msg2, buf), nil
 	case *MsgMapCustom:
-		return id11, marshal11(msg2, buf), nil
+		return id12, marshal12(msg2, buf), nil
 	case *MsgArrayUint8Custom:
-		return id10, marshal10(msg2, buf), nil
+		return id11, marshal11(msg2, buf), nil
 	case *MsgArrayUint8Custom2:
-		return id9, marshal9(msg2, buf), nil
+		return id10, marshal10(msg2, buf), nil
 	case *MsgArrayInt8Custom:
-		return id8, marshal8(msg2, buf), nil
+		return id9, marshal9(msg2, buf), nil
 	case *MsgArrayFloat32Custom:
-		return id7, marshal7(msg2, buf), nil
+		return id8, marshal8(msg2, buf), nil
 	case *MsgArrayFloat64Custom:
-		return id6, marshal6(msg2, buf), nil
+		return id7, marshal7(msg2, buf), nil
 	case *MsgSliceUint8Custom:
-		return id5, marshal5(msg2, buf), nil
+		return id6, marshal6(msg2, buf), nil
 	case *MsgSliceUint8Custom2:
-		return id4, marshal4(msg2, buf), nil
+		return id5, marshal5(msg2, buf), nil
 	case *MsgSliceInt8Custom:
-		return id3, marshal3(msg2, buf), nil
+		return id4, marshal4(msg2, buf), nil
 	case *MsgSliceFloat32Custom:
-		return id2, marshal2(msg2, buf), nil
+		return id3, marshal3(msg2, buf), nil
 	case *MsgSliceFloat64Custom:
+		return id2, marshal2(msg2, buf), nil
+	case *MsgTime:
 		return id1, marshal1(msg2, buf), nil
 	case *MsgMixedCustom:
 		return id0, marshal0(msg2, buf), nil
@@ -503,167 +512,170 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 	defer helpers.RecoverUnmarshal(&retErr)
 
 	switch id {
-	case id37:
+	case id38:
 		msg := &pkg2.SubMsg{}
-		return msg, unmarshal37(msg, buf), nil
-	case id57:
+		return msg, unmarshal38(msg, buf), nil
+	case id58:
 		msg := &MsgUint64{}
+		return msg, unmarshal58(msg, buf), nil
+	case id57:
+		msg := &MsgUint32{}
 		return msg, unmarshal57(msg, buf), nil
 	case id56:
-		msg := &MsgUint32{}
+		msg := &MsgUint16{}
 		return msg, unmarshal56(msg, buf), nil
 	case id55:
-		msg := &MsgUint16{}
+		msg := &MsgUint8{}
 		return msg, unmarshal55(msg, buf), nil
 	case id54:
-		msg := &MsgUint8{}
+		msg := &MsgInt64{}
 		return msg, unmarshal54(msg, buf), nil
 	case id53:
-		msg := &MsgInt64{}
+		msg := &MsgInt32{}
 		return msg, unmarshal53(msg, buf), nil
 	case id52:
-		msg := &MsgInt32{}
+		msg := &MsgInt16{}
 		return msg, unmarshal52(msg, buf), nil
 	case id51:
-		msg := &MsgInt16{}
+		msg := &MsgInt8{}
 		return msg, unmarshal51(msg, buf), nil
 	case id50:
-		msg := &MsgInt8{}
+		msg := &MsgBool3{}
 		return msg, unmarshal50(msg, buf), nil
 	case id49:
-		msg := &MsgBool3{}
+		msg := &MsgBool10{}
 		return msg, unmarshal49(msg, buf), nil
 	case id48:
-		msg := &MsgBool10{}
+		msg := &MsgFloat64{}
 		return msg, unmarshal48(msg, buf), nil
 	case id47:
-		msg := &MsgFloat64{}
+		msg := &MsgFloat32{}
 		return msg, unmarshal47(msg, buf), nil
 	case id46:
-		msg := &MsgFloat32{}
+		msg := &MsgString{}
 		return msg, unmarshal46(msg, buf), nil
 	case id45:
-		msg := &MsgString{}
+		msg := &MsgArray{}
 		return msg, unmarshal45(msg, buf), nil
 	case id44:
-		msg := &MsgArray{}
+		msg := &MsgSlice{}
 		return msg, unmarshal44(msg, buf), nil
 	case id43:
-		msg := &MsgSlice{}
+		msg := &MsgMap{}
 		return msg, unmarshal43(msg, buf), nil
 	case id42:
-		msg := &MsgMap{}
+		msg := &MsgMapString{}
 		return msg, unmarshal42(msg, buf), nil
 	case id41:
-		msg := &MsgMapString{}
-		return msg, unmarshal41(msg, buf), nil
-	case id40:
 		msg := &MsgStruct{}
-		return msg, unmarshal40(msg, buf), nil
-	case id38:
+		return msg, unmarshal41(msg, buf), nil
+	case id39:
 		msg := &MsgStructAnonymous{}
-		return msg, unmarshal38(msg, buf), nil
-	case id35:
+		return msg, unmarshal39(msg, buf), nil
+	case id36:
 		msg := &MsgArrayUint8{}
+		return msg, unmarshal36(msg, buf), nil
+	case id35:
+		msg := &MsgArrayInt8{}
 		return msg, unmarshal35(msg, buf), nil
 	case id34:
-		msg := &MsgArrayInt8{}
+		msg := &MsgArrayFloat32{}
 		return msg, unmarshal34(msg, buf), nil
 	case id33:
-		msg := &MsgArrayFloat32{}
+		msg := &MsgArrayFloat64{}
 		return msg, unmarshal33(msg, buf), nil
 	case id32:
-		msg := &MsgArrayFloat64{}
+		msg := &MsgSliceUint8{}
 		return msg, unmarshal32(msg, buf), nil
 	case id31:
-		msg := &MsgSliceUint8{}
+		msg := &MsgSliceInt8{}
 		return msg, unmarshal31(msg, buf), nil
 	case id30:
-		msg := &MsgSliceInt8{}
+		msg := &MsgSliceFloat32{}
 		return msg, unmarshal30(msg, buf), nil
 	case id29:
-		msg := &MsgSliceFloat32{}
+		msg := &MsgSliceFloat64{}
 		return msg, unmarshal29(msg, buf), nil
 	case id28:
-		msg := &MsgSliceFloat64{}
-		return msg, unmarshal28(msg, buf), nil
-	case id27:
 		msg := &MsgMixed{}
-		return msg, unmarshal27(msg, buf), nil
-	case id25:
+		return msg, unmarshal28(msg, buf), nil
+	case id26:
 		msg := &MsgUint64Custom{}
+		return msg, unmarshal26(msg, buf), nil
+	case id25:
+		msg := &MsgUint32Custom{}
 		return msg, unmarshal25(msg, buf), nil
 	case id24:
-		msg := &MsgUint32Custom{}
+		msg := &MsgUint16Custom{}
 		return msg, unmarshal24(msg, buf), nil
 	case id23:
-		msg := &MsgUint16Custom{}
+		msg := &MsgUint8Custom{}
 		return msg, unmarshal23(msg, buf), nil
 	case id22:
-		msg := &MsgUint8Custom{}
+		msg := &MsgInt64Custom{}
 		return msg, unmarshal22(msg, buf), nil
 	case id21:
-		msg := &MsgInt64Custom{}
+		msg := &MsgInt32Custom{}
 		return msg, unmarshal21(msg, buf), nil
 	case id20:
-		msg := &MsgInt32Custom{}
+		msg := &MsgInt16Custom{}
 		return msg, unmarshal20(msg, buf), nil
 	case id19:
-		msg := &MsgInt16Custom{}
+		msg := &MsgInt8Custom{}
 		return msg, unmarshal19(msg, buf), nil
 	case id18:
-		msg := &MsgInt8Custom{}
+		msg := &MsgBoolCustom{}
 		return msg, unmarshal18(msg, buf), nil
 	case id17:
-		msg := &MsgBoolCustom{}
+		msg := &MsgFloat64Custom{}
 		return msg, unmarshal17(msg, buf), nil
 	case id16:
-		msg := &MsgFloat64Custom{}
+		msg := &MsgFloat32Custom{}
 		return msg, unmarshal16(msg, buf), nil
 	case id15:
-		msg := &MsgFloat32Custom{}
+		msg := &MsgStringCustom{}
 		return msg, unmarshal15(msg, buf), nil
 	case id14:
-		msg := &MsgStringCustom{}
+		msg := &MsgArrayCustom{}
 		return msg, unmarshal14(msg, buf), nil
 	case id13:
-		msg := &MsgArrayCustom{}
+		msg := &MsgSliceCustom{}
 		return msg, unmarshal13(msg, buf), nil
 	case id12:
-		msg := &MsgSliceCustom{}
+		msg := &MsgMapCustom{}
 		return msg, unmarshal12(msg, buf), nil
 	case id11:
-		msg := &MsgMapCustom{}
+		msg := &MsgArrayUint8Custom{}
 		return msg, unmarshal11(msg, buf), nil
 	case id10:
-		msg := &MsgArrayUint8Custom{}
+		msg := &MsgArrayUint8Custom2{}
 		return msg, unmarshal10(msg, buf), nil
 	case id9:
-		msg := &MsgArrayUint8Custom2{}
+		msg := &MsgArrayInt8Custom{}
 		return msg, unmarshal9(msg, buf), nil
 	case id8:
-		msg := &MsgArrayInt8Custom{}
+		msg := &MsgArrayFloat32Custom{}
 		return msg, unmarshal8(msg, buf), nil
 	case id7:
-		msg := &MsgArrayFloat32Custom{}
+		msg := &MsgArrayFloat64Custom{}
 		return msg, unmarshal7(msg, buf), nil
 	case id6:
-		msg := &MsgArrayFloat64Custom{}
+		msg := &MsgSliceUint8Custom{}
 		return msg, unmarshal6(msg, buf), nil
 	case id5:
-		msg := &MsgSliceUint8Custom{}
+		msg := &MsgSliceUint8Custom2{}
 		return msg, unmarshal5(msg, buf), nil
 	case id4:
-		msg := &MsgSliceUint8Custom2{}
+		msg := &MsgSliceInt8Custom{}
 		return msg, unmarshal4(msg, buf), nil
 	case id3:
-		msg := &MsgSliceInt8Custom{}
+		msg := &MsgSliceFloat32Custom{}
 		return msg, unmarshal3(msg, buf), nil
 	case id2:
-		msg := &MsgSliceFloat32Custom{}
+		msg := &MsgSliceFloat64Custom{}
 		return msg, unmarshal2(msg, buf), nil
 	case id1:
-		msg := &MsgSliceFloat64Custom{}
+		msg := &MsgTime{}
 		return msg, unmarshal1(msg, buf), nil
 	case id0:
 		msg := &MsgMixedCustom{}
@@ -770,7 +782,41 @@ func unmarshal0(m *MsgMixedCustom, b []byte) uint64 {
 	return o
 }
 
-func size1(m *MsgSliceFloat64Custom) uint64 {
+func size1(m *MsgTime) uint64 {
+	var n uint64 = 1
+	{
+		// Value
+
+		helpers.Int64Size(m.Value.Unix(), &n)
+	}
+	return n
+}
+
+func marshal1(m *MsgTime, b []byte) uint64 {
+	var o uint64
+	{
+		// Value
+
+		helpers.Int64Marshal(m.Value.Unix(), b, &o)
+	}
+
+	return o
+}
+
+func unmarshal1(m *MsgTime, b []byte) uint64 {
+	var o uint64
+	{
+		// Value
+
+		var vi int64
+		helpers.Int64Unmarshal(&vi, b, &o)
+		m.Value = time.Unix(vi, 0)
+	}
+
+	return o
+}
+
+func size2(m *MsgSliceFloat64Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -782,7 +828,7 @@ func size1(m *MsgSliceFloat64Custom) uint64 {
 	return n
 }
 
-func marshal1(m *MsgSliceFloat64Custom, b []byte) uint64 {
+func marshal2(m *MsgSliceFloat64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -798,7 +844,7 @@ func marshal1(m *MsgSliceFloat64Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal1(m *MsgSliceFloat64Custom, b []byte) uint64 {
+func unmarshal2(m *MsgSliceFloat64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -815,7 +861,7 @@ func unmarshal1(m *MsgSliceFloat64Custom, b []byte) uint64 {
 	return o
 }
 
-func size2(m *MsgSliceFloat32Custom) uint64 {
+func size3(m *MsgSliceFloat32Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -827,7 +873,7 @@ func size2(m *MsgSliceFloat32Custom) uint64 {
 	return n
 }
 
-func marshal2(m *MsgSliceFloat32Custom, b []byte) uint64 {
+func marshal3(m *MsgSliceFloat32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -843,7 +889,7 @@ func marshal2(m *MsgSliceFloat32Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal2(m *MsgSliceFloat32Custom, b []byte) uint64 {
+func unmarshal3(m *MsgSliceFloat32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -860,7 +906,7 @@ func unmarshal2(m *MsgSliceFloat32Custom, b []byte) uint64 {
 	return o
 }
 
-func size3(m *MsgSliceInt8Custom) uint64 {
+func size4(m *MsgSliceInt8Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -872,7 +918,7 @@ func size3(m *MsgSliceInt8Custom) uint64 {
 	return n
 }
 
-func marshal3(m *MsgSliceInt8Custom, b []byte) uint64 {
+func marshal4(m *MsgSliceInt8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -888,7 +934,7 @@ func marshal3(m *MsgSliceInt8Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal3(m *MsgSliceInt8Custom, b []byte) uint64 {
+func unmarshal4(m *MsgSliceInt8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -905,7 +951,7 @@ func unmarshal3(m *MsgSliceInt8Custom, b []byte) uint64 {
 	return o
 }
 
-func size4(m *MsgSliceUint8Custom2) uint64 {
+func size5(m *MsgSliceUint8Custom2) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -917,7 +963,7 @@ func size4(m *MsgSliceUint8Custom2) uint64 {
 	return n
 }
 
-func marshal4(m *MsgSliceUint8Custom2, b []byte) uint64 {
+func marshal5(m *MsgSliceUint8Custom2, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -933,7 +979,7 @@ func marshal4(m *MsgSliceUint8Custom2, b []byte) uint64 {
 	return o
 }
 
-func unmarshal4(m *MsgSliceUint8Custom2, b []byte) uint64 {
+func unmarshal5(m *MsgSliceUint8Custom2, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -950,7 +996,7 @@ func unmarshal4(m *MsgSliceUint8Custom2, b []byte) uint64 {
 	return o
 }
 
-func size5(m *MsgSliceUint8Custom) uint64 {
+func size6(m *MsgSliceUint8Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -962,7 +1008,7 @@ func size5(m *MsgSliceUint8Custom) uint64 {
 	return n
 }
 
-func marshal5(m *MsgSliceUint8Custom, b []byte) uint64 {
+func marshal6(m *MsgSliceUint8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -978,7 +1024,7 @@ func marshal5(m *MsgSliceUint8Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal5(m *MsgSliceUint8Custom, b []byte) uint64 {
+func unmarshal6(m *MsgSliceUint8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -995,12 +1041,12 @@ func unmarshal5(m *MsgSliceUint8Custom, b []byte) uint64 {
 	return o
 }
 
-func size6(m *MsgArrayFloat64Custom) uint64 {
+func size7(m *MsgArrayFloat64Custom) uint64 {
 	var n uint64 = 40
 	return n
 }
 
-func marshal6(m *MsgArrayFloat64Custom, b []byte) uint64 {
+func marshal7(m *MsgArrayFloat64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1012,7 +1058,7 @@ func marshal6(m *MsgArrayFloat64Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal6(m *MsgArrayFloat64Custom, b []byte) uint64 {
+func unmarshal7(m *MsgArrayFloat64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1024,12 +1070,12 @@ func unmarshal6(m *MsgArrayFloat64Custom, b []byte) uint64 {
 	return o
 }
 
-func size7(m *MsgArrayFloat32Custom) uint64 {
+func size8(m *MsgArrayFloat32Custom) uint64 {
 	var n uint64 = 20
 	return n
 }
 
-func marshal7(m *MsgArrayFloat32Custom, b []byte) uint64 {
+func marshal8(m *MsgArrayFloat32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1041,7 +1087,7 @@ func marshal7(m *MsgArrayFloat32Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal7(m *MsgArrayFloat32Custom, b []byte) uint64 {
+func unmarshal8(m *MsgArrayFloat32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1053,12 +1099,12 @@ func unmarshal7(m *MsgArrayFloat32Custom, b []byte) uint64 {
 	return o
 }
 
-func size8(m *MsgArrayInt8Custom) uint64 {
+func size9(m *MsgArrayInt8Custom) uint64 {
 	var n uint64 = 5
 	return n
 }
 
-func marshal8(m *MsgArrayInt8Custom, b []byte) uint64 {
+func marshal9(m *MsgArrayInt8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1070,7 +1116,7 @@ func marshal8(m *MsgArrayInt8Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal8(m *MsgArrayInt8Custom, b []byte) uint64 {
+func unmarshal9(m *MsgArrayInt8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1082,12 +1128,12 @@ func unmarshal8(m *MsgArrayInt8Custom, b []byte) uint64 {
 	return o
 }
 
-func size9(m *MsgArrayUint8Custom2) uint64 {
+func size10(m *MsgArrayUint8Custom2) uint64 {
 	var n uint64 = 5
 	return n
 }
 
-func marshal9(m *MsgArrayUint8Custom2, b []byte) uint64 {
+func marshal10(m *MsgArrayUint8Custom2, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1099,7 +1145,7 @@ func marshal9(m *MsgArrayUint8Custom2, b []byte) uint64 {
 	return o
 }
 
-func unmarshal9(m *MsgArrayUint8Custom2, b []byte) uint64 {
+func unmarshal10(m *MsgArrayUint8Custom2, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1111,12 +1157,12 @@ func unmarshal9(m *MsgArrayUint8Custom2, b []byte) uint64 {
 	return o
 }
 
-func size10(m *MsgArrayUint8Custom) uint64 {
+func size11(m *MsgArrayUint8Custom) uint64 {
 	var n uint64 = 5
 	return n
 }
 
-func marshal10(m *MsgArrayUint8Custom, b []byte) uint64 {
+func marshal11(m *MsgArrayUint8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1128,7 +1174,7 @@ func marshal10(m *MsgArrayUint8Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal10(m *MsgArrayUint8Custom, b []byte) uint64 {
+func unmarshal11(m *MsgArrayUint8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1140,7 +1186,7 @@ func unmarshal10(m *MsgArrayUint8Custom, b []byte) uint64 {
 	return o
 }
 
-func size11(m *MsgMapCustom) uint64 {
+func size12(m *MsgMapCustom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -1160,7 +1206,7 @@ func size11(m *MsgMapCustom) uint64 {
 	return n
 }
 
-func marshal11(m *MsgMapCustom, b []byte) uint64 {
+func marshal12(m *MsgMapCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1180,7 +1226,7 @@ func marshal11(m *MsgMapCustom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal11(m *MsgMapCustom, b []byte) uint64 {
+func unmarshal12(m *MsgMapCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1211,7 +1257,7 @@ func unmarshal11(m *MsgMapCustom, b []byte) uint64 {
 	return o
 }
 
-func size12(m *MsgSliceCustom) uint64 {
+func size13(m *MsgSliceCustom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -1226,7 +1272,7 @@ func size12(m *MsgSliceCustom) uint64 {
 	return n
 }
 
-func marshal12(m *MsgSliceCustom, b []byte) uint64 {
+func marshal13(m *MsgSliceCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1240,7 +1286,7 @@ func marshal12(m *MsgSliceCustom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal12(m *MsgSliceCustom, b []byte) uint64 {
+func unmarshal13(m *MsgSliceCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1258,7 +1304,7 @@ func unmarshal12(m *MsgSliceCustom, b []byte) uint64 {
 	return o
 }
 
-func size13(m *MsgArrayCustom) uint64 {
+func size14(m *MsgArrayCustom) uint64 {
 	var n uint64 = 2
 	{
 		// Value
@@ -1270,7 +1316,7 @@ func size13(m *MsgArrayCustom) uint64 {
 	return n
 }
 
-func marshal13(m *MsgArrayCustom, b []byte) uint64 {
+func marshal14(m *MsgArrayCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1283,7 +1329,7 @@ func marshal13(m *MsgArrayCustom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal13(m *MsgArrayCustom, b []byte) uint64 {
+func unmarshal14(m *MsgArrayCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1296,7 +1342,7 @@ func unmarshal13(m *MsgArrayCustom, b []byte) uint64 {
 	return o
 }
 
-func size14(m *MsgStringCustom) uint64 {
+func size15(m *MsgStringCustom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -1310,7 +1356,7 @@ func size14(m *MsgStringCustom) uint64 {
 	return n
 }
 
-func marshal14(m *MsgStringCustom, b []byte) uint64 {
+func marshal15(m *MsgStringCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1326,7 +1372,7 @@ func marshal14(m *MsgStringCustom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal14(m *MsgStringCustom, b []byte) uint64 {
+func unmarshal15(m *MsgStringCustom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1344,12 +1390,12 @@ func unmarshal14(m *MsgStringCustom, b []byte) uint64 {
 	return o
 }
 
-func size15(m *MsgFloat32Custom) uint64 {
+func size16(m *MsgFloat32Custom) uint64 {
 	var n uint64 = 4
 	return n
 }
 
-func marshal15(m *MsgFloat32Custom, b []byte) uint64 {
+func marshal16(m *MsgFloat32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1361,7 +1407,7 @@ func marshal15(m *MsgFloat32Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal15(m *MsgFloat32Custom, b []byte) uint64 {
+func unmarshal16(m *MsgFloat32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1373,12 +1419,12 @@ func unmarshal15(m *MsgFloat32Custom, b []byte) uint64 {
 	return o
 }
 
-func size16(m *MsgFloat64Custom) uint64 {
+func size17(m *MsgFloat64Custom) uint64 {
 	var n uint64 = 8
 	return n
 }
 
-func marshal16(m *MsgFloat64Custom, b []byte) uint64 {
+func marshal17(m *MsgFloat64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1390,7 +1436,7 @@ func marshal16(m *MsgFloat64Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal16(m *MsgFloat64Custom, b []byte) uint64 {
+func unmarshal17(m *MsgFloat64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1402,12 +1448,12 @@ func unmarshal16(m *MsgFloat64Custom, b []byte) uint64 {
 	return o
 }
 
-func size17(m *MsgBoolCustom) uint64 {
+func size18(m *MsgBoolCustom) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-func marshal17(m *MsgBoolCustom, b []byte) uint64 {
+func marshal18(m *MsgBoolCustom, b []byte) uint64 {
 	var o uint64 = 1
 	{
 		// Value
@@ -1422,7 +1468,7 @@ func marshal17(m *MsgBoolCustom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal17(m *MsgBoolCustom, b []byte) uint64 {
+func unmarshal18(m *MsgBoolCustom, b []byte) uint64 {
 	var o uint64 = 1
 	{
 		// Value
@@ -1433,12 +1479,12 @@ func unmarshal17(m *MsgBoolCustom, b []byte) uint64 {
 	return o
 }
 
-func size18(m *MsgInt8Custom) uint64 {
+func size19(m *MsgInt8Custom) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-func marshal18(m *MsgInt8Custom, b []byte) uint64 {
+func marshal19(m *MsgInt8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1450,7 +1496,7 @@ func marshal18(m *MsgInt8Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal18(m *MsgInt8Custom, b []byte) uint64 {
+func unmarshal19(m *MsgInt8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1462,7 +1508,7 @@ func unmarshal18(m *MsgInt8Custom, b []byte) uint64 {
 	return o
 }
 
-func size19(m *MsgInt16Custom) uint64 {
+func size20(m *MsgInt16Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -1472,7 +1518,7 @@ func size19(m *MsgInt16Custom) uint64 {
 	return n
 }
 
-func marshal19(m *MsgInt16Custom, b []byte) uint64 {
+func marshal20(m *MsgInt16Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1483,7 +1529,7 @@ func marshal19(m *MsgInt16Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal19(m *MsgInt16Custom, b []byte) uint64 {
+func unmarshal20(m *MsgInt16Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1494,7 +1540,7 @@ func unmarshal19(m *MsgInt16Custom, b []byte) uint64 {
 	return o
 }
 
-func size20(m *MsgInt32Custom) uint64 {
+func size21(m *MsgInt32Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -1504,7 +1550,7 @@ func size20(m *MsgInt32Custom) uint64 {
 	return n
 }
 
-func marshal20(m *MsgInt32Custom, b []byte) uint64 {
+func marshal21(m *MsgInt32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1515,7 +1561,7 @@ func marshal20(m *MsgInt32Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal20(m *MsgInt32Custom, b []byte) uint64 {
+func unmarshal21(m *MsgInt32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1526,7 +1572,7 @@ func unmarshal20(m *MsgInt32Custom, b []byte) uint64 {
 	return o
 }
 
-func size21(m *MsgInt64Custom) uint64 {
+func size22(m *MsgInt64Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -1536,7 +1582,7 @@ func size21(m *MsgInt64Custom) uint64 {
 	return n
 }
 
-func marshal21(m *MsgInt64Custom, b []byte) uint64 {
+func marshal22(m *MsgInt64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1547,7 +1593,7 @@ func marshal21(m *MsgInt64Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal21(m *MsgInt64Custom, b []byte) uint64 {
+func unmarshal22(m *MsgInt64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1558,12 +1604,12 @@ func unmarshal21(m *MsgInt64Custom, b []byte) uint64 {
 	return o
 }
 
-func size22(m *MsgUint8Custom) uint64 {
+func size23(m *MsgUint8Custom) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-func marshal22(m *MsgUint8Custom, b []byte) uint64 {
+func marshal23(m *MsgUint8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1575,7 +1621,7 @@ func marshal22(m *MsgUint8Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal22(m *MsgUint8Custom, b []byte) uint64 {
+func unmarshal23(m *MsgUint8Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1587,7 +1633,7 @@ func unmarshal22(m *MsgUint8Custom, b []byte) uint64 {
 	return o
 }
 
-func size23(m *MsgUint16Custom) uint64 {
+func size24(m *MsgUint16Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -1597,7 +1643,7 @@ func size23(m *MsgUint16Custom) uint64 {
 	return n
 }
 
-func marshal23(m *MsgUint16Custom, b []byte) uint64 {
+func marshal24(m *MsgUint16Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1608,7 +1654,7 @@ func marshal23(m *MsgUint16Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal23(m *MsgUint16Custom, b []byte) uint64 {
+func unmarshal24(m *MsgUint16Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1619,7 +1665,7 @@ func unmarshal23(m *MsgUint16Custom, b []byte) uint64 {
 	return o
 }
 
-func size24(m *MsgUint32Custom) uint64 {
+func size25(m *MsgUint32Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -1629,7 +1675,7 @@ func size24(m *MsgUint32Custom) uint64 {
 	return n
 }
 
-func marshal24(m *MsgUint32Custom, b []byte) uint64 {
+func marshal25(m *MsgUint32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1640,7 +1686,7 @@ func marshal24(m *MsgUint32Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal24(m *MsgUint32Custom, b []byte) uint64 {
+func unmarshal25(m *MsgUint32Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1651,7 +1697,7 @@ func unmarshal24(m *MsgUint32Custom, b []byte) uint64 {
 	return o
 }
 
-func size25(m *MsgUint64Custom) uint64 {
+func size26(m *MsgUint64Custom) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -1661,7 +1707,7 @@ func size25(m *MsgUint64Custom) uint64 {
 	return n
 }
 
-func marshal25(m *MsgUint64Custom, b []byte) uint64 {
+func marshal26(m *MsgUint64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1672,7 +1718,7 @@ func marshal25(m *MsgUint64Custom, b []byte) uint64 {
 	return o
 }
 
-func unmarshal25(m *MsgUint64Custom, b []byte) uint64 {
+func unmarshal26(m *MsgUint64Custom, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -1683,7 +1729,7 @@ func unmarshal25(m *MsgUint64Custom, b []byte) uint64 {
 	return o
 }
 
-func size27(m *MsgMixed) uint64 {
+func size28(m *MsgMixed) uint64 {
 	var n uint64 = 18
 	{
 		// Value1
@@ -1697,7 +1743,7 @@ func size27(m *MsgMixed) uint64 {
 				helpers.UInt64Size(l, &n)
 				n += l
 			}
-			n += size26(&mv2)
+			n += size27(&mv2)
 		}
 	}
 	{
@@ -1777,7 +1823,7 @@ func size27(m *MsgMixed) uint64 {
 	return n
 }
 
-func marshal27(m *MsgMixed, b []byte) uint64 {
+func marshal28(m *MsgMixed, b []byte) uint64 {
 	var o uint64 = 1
 	{
 		// Value1
@@ -1790,7 +1836,7 @@ func marshal27(m *MsgMixed, b []byte) uint64 {
 				copy(b[o:o+l], mk1)
 				o += l
 			}
-			o += marshal26(&mv2, b[o:])
+			o += marshal27(&mv2, b[o:])
 		}
 	}
 	{
@@ -1885,7 +1931,7 @@ func marshal27(m *MsgMixed, b []byte) uint64 {
 	return o
 }
 
-func unmarshal27(m *MsgMixed, b []byte) uint64 {
+func unmarshal28(m *MsgMixed, b []byte) uint64 {
 	var o uint64 = 1
 	{
 		// Value1
@@ -1907,7 +1953,7 @@ func unmarshal27(m *MsgMixed, b []byte) uint64 {
 						o += l
 					}
 				}
-				o += unmarshal26(&mv2, b[o:])
+				o += unmarshal27(&mv2, b[o:])
 				m.Value1[mk1] = mv2
 			}
 		}
@@ -2043,7 +2089,7 @@ func unmarshal27(m *MsgMixed, b []byte) uint64 {
 	return o
 }
 
-func size26(m *spkg.SubMsg) uint64 {
+func size27(m *spkg.SubMsg) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2053,7 +2099,7 @@ func size26(m *spkg.SubMsg) uint64 {
 	return n
 }
 
-func marshal26(m *spkg.SubMsg, b []byte) uint64 {
+func marshal27(m *spkg.SubMsg, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2064,7 +2110,7 @@ func marshal26(m *spkg.SubMsg, b []byte) uint64 {
 	return o
 }
 
-func unmarshal26(m *spkg.SubMsg, b []byte) uint64 {
+func unmarshal27(m *spkg.SubMsg, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2075,7 +2121,7 @@ func unmarshal26(m *spkg.SubMsg, b []byte) uint64 {
 	return o
 }
 
-func size28(m *MsgSliceFloat64) uint64 {
+func size29(m *MsgSliceFloat64) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2087,7 +2133,7 @@ func size28(m *MsgSliceFloat64) uint64 {
 	return n
 }
 
-func marshal28(m *MsgSliceFloat64, b []byte) uint64 {
+func marshal29(m *MsgSliceFloat64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2103,7 +2149,7 @@ func marshal28(m *MsgSliceFloat64, b []byte) uint64 {
 	return o
 }
 
-func unmarshal28(m *MsgSliceFloat64, b []byte) uint64 {
+func unmarshal29(m *MsgSliceFloat64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2120,7 +2166,7 @@ func unmarshal28(m *MsgSliceFloat64, b []byte) uint64 {
 	return o
 }
 
-func size29(m *MsgSliceFloat32) uint64 {
+func size30(m *MsgSliceFloat32) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2132,7 +2178,7 @@ func size29(m *MsgSliceFloat32) uint64 {
 	return n
 }
 
-func marshal29(m *MsgSliceFloat32, b []byte) uint64 {
+func marshal30(m *MsgSliceFloat32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2148,7 +2194,7 @@ func marshal29(m *MsgSliceFloat32, b []byte) uint64 {
 	return o
 }
 
-func unmarshal29(m *MsgSliceFloat32, b []byte) uint64 {
+func unmarshal30(m *MsgSliceFloat32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2165,7 +2211,7 @@ func unmarshal29(m *MsgSliceFloat32, b []byte) uint64 {
 	return o
 }
 
-func size30(m *MsgSliceInt8) uint64 {
+func size31(m *MsgSliceInt8) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2177,7 +2223,7 @@ func size30(m *MsgSliceInt8) uint64 {
 	return n
 }
 
-func marshal30(m *MsgSliceInt8, b []byte) uint64 {
+func marshal31(m *MsgSliceInt8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2193,7 +2239,7 @@ func marshal30(m *MsgSliceInt8, b []byte) uint64 {
 	return o
 }
 
-func unmarshal30(m *MsgSliceInt8, b []byte) uint64 {
+func unmarshal31(m *MsgSliceInt8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2210,7 +2256,7 @@ func unmarshal30(m *MsgSliceInt8, b []byte) uint64 {
 	return o
 }
 
-func size31(m *MsgSliceUint8) uint64 {
+func size32(m *MsgSliceUint8) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2222,7 +2268,7 @@ func size31(m *MsgSliceUint8) uint64 {
 	return n
 }
 
-func marshal31(m *MsgSliceUint8, b []byte) uint64 {
+func marshal32(m *MsgSliceUint8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2238,7 +2284,7 @@ func marshal31(m *MsgSliceUint8, b []byte) uint64 {
 	return o
 }
 
-func unmarshal31(m *MsgSliceUint8, b []byte) uint64 {
+func unmarshal32(m *MsgSliceUint8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2255,12 +2301,12 @@ func unmarshal31(m *MsgSliceUint8, b []byte) uint64 {
 	return o
 }
 
-func size32(m *MsgArrayFloat64) uint64 {
+func size33(m *MsgArrayFloat64) uint64 {
 	var n uint64 = 40
 	return n
 }
 
-func marshal32(m *MsgArrayFloat64, b []byte) uint64 {
+func marshal33(m *MsgArrayFloat64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2272,7 +2318,7 @@ func marshal32(m *MsgArrayFloat64, b []byte) uint64 {
 	return o
 }
 
-func unmarshal32(m *MsgArrayFloat64, b []byte) uint64 {
+func unmarshal33(m *MsgArrayFloat64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2284,12 +2330,12 @@ func unmarshal32(m *MsgArrayFloat64, b []byte) uint64 {
 	return o
 }
 
-func size33(m *MsgArrayFloat32) uint64 {
+func size34(m *MsgArrayFloat32) uint64 {
 	var n uint64 = 20
 	return n
 }
 
-func marshal33(m *MsgArrayFloat32, b []byte) uint64 {
+func marshal34(m *MsgArrayFloat32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2301,7 +2347,7 @@ func marshal33(m *MsgArrayFloat32, b []byte) uint64 {
 	return o
 }
 
-func unmarshal33(m *MsgArrayFloat32, b []byte) uint64 {
+func unmarshal34(m *MsgArrayFloat32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2313,12 +2359,12 @@ func unmarshal33(m *MsgArrayFloat32, b []byte) uint64 {
 	return o
 }
 
-func size34(m *MsgArrayInt8) uint64 {
+func size35(m *MsgArrayInt8) uint64 {
 	var n uint64 = 5
 	return n
 }
 
-func marshal34(m *MsgArrayInt8, b []byte) uint64 {
+func marshal35(m *MsgArrayInt8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2330,7 +2376,7 @@ func marshal34(m *MsgArrayInt8, b []byte) uint64 {
 	return o
 }
 
-func unmarshal34(m *MsgArrayInt8, b []byte) uint64 {
+func unmarshal35(m *MsgArrayInt8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2342,12 +2388,12 @@ func unmarshal34(m *MsgArrayInt8, b []byte) uint64 {
 	return o
 }
 
-func size35(m *MsgArrayUint8) uint64 {
+func size36(m *MsgArrayUint8) uint64 {
 	var n uint64 = 5
 	return n
 }
 
-func marshal35(m *MsgArrayUint8, b []byte) uint64 {
+func marshal36(m *MsgArrayUint8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2359,7 +2405,7 @@ func marshal35(m *MsgArrayUint8, b []byte) uint64 {
 	return o
 }
 
-func unmarshal35(m *MsgArrayUint8, b []byte) uint64 {
+func unmarshal36(m *MsgArrayUint8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2371,54 +2417,54 @@ func unmarshal35(m *MsgArrayUint8, b []byte) uint64 {
 	return o
 }
 
-func size38(m *MsgStructAnonymous) uint64 {
+func size39(m *MsgStructAnonymous) uint64 {
 	var n uint64
 	{
 		// SubMsg
 
-		n += size36(&m.SubMsg)
+		n += size37(&m.SubMsg)
 	}
 	{
 		// Value2
 
-		n += size37(&m.Value2)
+		n += size38(&m.Value2)
 	}
 	return n
 }
 
-func marshal38(m *MsgStructAnonymous, b []byte) uint64 {
+func marshal39(m *MsgStructAnonymous, b []byte) uint64 {
 	var o uint64
 	{
 		// SubMsg
 
-		o += marshal36(&m.SubMsg, b[o:])
+		o += marshal37(&m.SubMsg, b[o:])
 	}
 	{
 		// Value2
 
-		o += marshal37(&m.Value2, b[o:])
+		o += marshal38(&m.Value2, b[o:])
 	}
 
 	return o
 }
 
-func unmarshal38(m *MsgStructAnonymous, b []byte) uint64 {
+func unmarshal39(m *MsgStructAnonymous, b []byte) uint64 {
 	var o uint64
 	{
 		// SubMsg
 
-		o += unmarshal36(&m.SubMsg, b[o:])
+		o += unmarshal37(&m.SubMsg, b[o:])
 	}
 	{
 		// Value2
 
-		o += unmarshal37(&m.Value2, b[o:])
+		o += unmarshal38(&m.Value2, b[o:])
 	}
 
 	return o
 }
 
-func size36(m *SubMsg) uint64 {
+func size37(m *SubMsg) uint64 {
 	var n uint64 = 3
 	{
 		// Value1
@@ -2433,7 +2479,7 @@ func size36(m *SubMsg) uint64 {
 		l := uint64(len(m.Value2))
 		helpers.UInt64Size(l, &n)
 		for _, sv1 := range m.Value2 {
-			n += size26(&sv1)
+			n += size27(&sv1)
 		}
 	}
 	{
@@ -2442,13 +2488,13 @@ func size36(m *SubMsg) uint64 {
 		l := uint64(len(m.Value3))
 		helpers.UInt64Size(l, &n)
 		for _, sv1 := range m.Value3 {
-			n += size39(&sv1)
+			n += size40(&sv1)
 		}
 	}
 	return n
 }
 
-func marshal36(m *SubMsg, b []byte) uint64 {
+func marshal37(m *SubMsg, b []byte) uint64 {
 	var o uint64
 	{
 		// Value1
@@ -2465,7 +2511,7 @@ func marshal36(m *SubMsg, b []byte) uint64 {
 
 		helpers.UInt64Marshal(uint64(len(m.Value2)), b, &o)
 		for _, sv1 := range m.Value2 {
-			o += marshal26(&sv1, b[o:])
+			o += marshal27(&sv1, b[o:])
 		}
 	}
 	{
@@ -2473,14 +2519,14 @@ func marshal36(m *SubMsg, b []byte) uint64 {
 
 		helpers.UInt64Marshal(uint64(len(m.Value3)), b, &o)
 		for _, sv1 := range m.Value3 {
-			o += marshal39(&sv1, b[o:])
+			o += marshal40(&sv1, b[o:])
 		}
 	}
 
 	return o
 }
 
-func unmarshal36(m *SubMsg, b []byte) uint64 {
+func unmarshal37(m *SubMsg, b []byte) uint64 {
 	var o uint64
 	{
 		// Value1
@@ -2501,7 +2547,7 @@ func unmarshal36(m *SubMsg, b []byte) uint64 {
 		if l > 0 {
 			m.Value2 = make([]spkg.SubMsg, l)
 			for i1 := range l {
-				o += unmarshal26(&m.Value2[i1], b[o:])
+				o += unmarshal27(&m.Value2[i1], b[o:])
 			}
 		}
 	}
@@ -2511,9 +2557,9 @@ func unmarshal36(m *SubMsg, b []byte) uint64 {
 		var l uint64
 		helpers.UInt64Unmarshal(&l, b, &o)
 		if l > 0 {
-			m.Value3 = make([]spkg6.SubMsg, l)
+			m.Value3 = make([]spkg7.SubMsg, l)
 			for i1 := range l {
-				o += unmarshal39(&m.Value3[i1], b[o:])
+				o += unmarshal40(&m.Value3[i1], b[o:])
 			}
 		}
 	}
@@ -2521,7 +2567,7 @@ func unmarshal36(m *SubMsg, b []byte) uint64 {
 	return o
 }
 
-func size39(m *spkg6.SubMsg) uint64 {
+func size40(m *spkg7.SubMsg) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2531,7 +2577,7 @@ func size39(m *spkg6.SubMsg) uint64 {
 	return n
 }
 
-func marshal39(m *spkg6.SubMsg, b []byte) uint64 {
+func marshal40(m *spkg7.SubMsg, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2542,7 +2588,7 @@ func marshal39(m *spkg6.SubMsg, b []byte) uint64 {
 	return o
 }
 
-func unmarshal39(m *spkg6.SubMsg, b []byte) uint64 {
+func unmarshal40(m *spkg7.SubMsg, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2553,54 +2599,54 @@ func unmarshal39(m *spkg6.SubMsg, b []byte) uint64 {
 	return o
 }
 
-func size40(m *MsgStruct) uint64 {
+func size41(m *MsgStruct) uint64 {
 	var n uint64
 	{
 		// Value1
 
-		n += size36(&m.Value1)
+		n += size37(&m.Value1)
 	}
 	{
 		// Value2
 
-		n += size37(&m.Value2)
+		n += size38(&m.Value2)
 	}
 	return n
 }
 
-func marshal40(m *MsgStruct, b []byte) uint64 {
+func marshal41(m *MsgStruct, b []byte) uint64 {
 	var o uint64
 	{
 		// Value1
 
-		o += marshal36(&m.Value1, b[o:])
+		o += marshal37(&m.Value1, b[o:])
 	}
 	{
 		// Value2
 
-		o += marshal37(&m.Value2, b[o:])
+		o += marshal38(&m.Value2, b[o:])
 	}
 
 	return o
 }
 
-func unmarshal40(m *MsgStruct, b []byte) uint64 {
+func unmarshal41(m *MsgStruct, b []byte) uint64 {
 	var o uint64
 	{
 		// Value1
 
-		o += unmarshal36(&m.Value1, b[o:])
+		o += unmarshal37(&m.Value1, b[o:])
 	}
 	{
 		// Value2
 
-		o += unmarshal37(&m.Value2, b[o:])
+		o += unmarshal38(&m.Value2, b[o:])
 	}
 
 	return o
 }
 
-func size41(m *MsgMapString) uint64 {
+func size42(m *MsgMapString) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2624,7 +2670,7 @@ func size41(m *MsgMapString) uint64 {
 	return n
 }
 
-func marshal41(m *MsgMapString, b []byte) uint64 {
+func marshal42(m *MsgMapString, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2649,7 +2695,7 @@ func marshal41(m *MsgMapString, b []byte) uint64 {
 	return o
 }
 
-func unmarshal41(m *MsgMapString, b []byte) uint64 {
+func unmarshal42(m *MsgMapString, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2687,7 +2733,7 @@ func unmarshal41(m *MsgMapString, b []byte) uint64 {
 	return o
 }
 
-func size42(m *MsgMap) uint64 {
+func size43(m *MsgMap) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2703,7 +2749,7 @@ func size42(m *MsgMap) uint64 {
 	return n
 }
 
-func marshal42(m *MsgMap, b []byte) uint64 {
+func marshal43(m *MsgMap, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2718,7 +2764,7 @@ func marshal42(m *MsgMap, b []byte) uint64 {
 	return o
 }
 
-func unmarshal42(m *MsgMap, b []byte) uint64 {
+func unmarshal43(m *MsgMap, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2742,7 +2788,7 @@ func unmarshal42(m *MsgMap, b []byte) uint64 {
 	return o
 }
 
-func size43(m *MsgSlice) uint64 {
+func size44(m *MsgSlice) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2754,7 +2800,7 @@ func size43(m *MsgSlice) uint64 {
 	return n
 }
 
-func marshal43(m *MsgSlice, b []byte) uint64 {
+func marshal44(m *MsgSlice, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2773,7 +2819,7 @@ func marshal43(m *MsgSlice, b []byte) uint64 {
 	return o
 }
 
-func unmarshal43(m *MsgSlice, b []byte) uint64 {
+func unmarshal44(m *MsgSlice, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2792,12 +2838,12 @@ func unmarshal43(m *MsgSlice, b []byte) uint64 {
 	return o
 }
 
-func size44(m *MsgArray) uint64 {
+func size45(m *MsgArray) uint64 {
 	var n uint64 = 3
 	return n
 }
 
-func marshal44(m *MsgArray, b []byte) uint64 {
+func marshal45(m *MsgArray, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2815,7 +2861,7 @@ func marshal44(m *MsgArray, b []byte) uint64 {
 	return o
 }
 
-func unmarshal44(m *MsgArray, b []byte) uint64 {
+func unmarshal45(m *MsgArray, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2829,7 +2875,7 @@ func unmarshal44(m *MsgArray, b []byte) uint64 {
 	return o
 }
 
-func size45(m *MsgString) uint64 {
+func size46(m *MsgString) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -2843,7 +2889,7 @@ func size45(m *MsgString) uint64 {
 	return n
 }
 
-func marshal45(m *MsgString, b []byte) uint64 {
+func marshal46(m *MsgString, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2859,7 +2905,7 @@ func marshal45(m *MsgString, b []byte) uint64 {
 	return o
 }
 
-func unmarshal45(m *MsgString, b []byte) uint64 {
+func unmarshal46(m *MsgString, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2877,12 +2923,12 @@ func unmarshal45(m *MsgString, b []byte) uint64 {
 	return o
 }
 
-func size46(m *MsgFloat32) uint64 {
+func size47(m *MsgFloat32) uint64 {
 	var n uint64 = 4
 	return n
 }
 
-func marshal46(m *MsgFloat32, b []byte) uint64 {
+func marshal47(m *MsgFloat32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2894,7 +2940,7 @@ func marshal46(m *MsgFloat32, b []byte) uint64 {
 	return o
 }
 
-func unmarshal46(m *MsgFloat32, b []byte) uint64 {
+func unmarshal47(m *MsgFloat32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2906,12 +2952,12 @@ func unmarshal46(m *MsgFloat32, b []byte) uint64 {
 	return o
 }
 
-func size47(m *MsgFloat64) uint64 {
+func size48(m *MsgFloat64) uint64 {
 	var n uint64 = 8
 	return n
 }
 
-func marshal47(m *MsgFloat64, b []byte) uint64 {
+func marshal48(m *MsgFloat64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2923,7 +2969,7 @@ func marshal47(m *MsgFloat64, b []byte) uint64 {
 	return o
 }
 
-func unmarshal47(m *MsgFloat64, b []byte) uint64 {
+func unmarshal48(m *MsgFloat64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -2935,12 +2981,12 @@ func unmarshal47(m *MsgFloat64, b []byte) uint64 {
 	return o
 }
 
-func size48(m *MsgBool10) uint64 {
+func size49(m *MsgBool10) uint64 {
 	var n uint64 = 2
 	return n
 }
 
-func marshal48(m *MsgBool10, b []byte) uint64 {
+func marshal49(m *MsgBool10, b []byte) uint64 {
 	var o uint64 = 2
 	{
 		// Value1
@@ -3036,7 +3082,7 @@ func marshal48(m *MsgBool10, b []byte) uint64 {
 	return o
 }
 
-func unmarshal48(m *MsgBool10, b []byte) uint64 {
+func unmarshal49(m *MsgBool10, b []byte) uint64 {
 	var o uint64 = 2
 	{
 		// Value1
@@ -3092,12 +3138,12 @@ func unmarshal48(m *MsgBool10, b []byte) uint64 {
 	return o
 }
 
-func size49(m *MsgBool3) uint64 {
+func size50(m *MsgBool3) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-func marshal49(m *MsgBool3, b []byte) uint64 {
+func marshal50(m *MsgBool3, b []byte) uint64 {
 	var o uint64 = 1
 	{
 		// Value1
@@ -3130,7 +3176,7 @@ func marshal49(m *MsgBool3, b []byte) uint64 {
 	return o
 }
 
-func unmarshal49(m *MsgBool3, b []byte) uint64 {
+func unmarshal50(m *MsgBool3, b []byte) uint64 {
 	var o uint64 = 1
 	{
 		// Value1
@@ -3151,12 +3197,12 @@ func unmarshal49(m *MsgBool3, b []byte) uint64 {
 	return o
 }
 
-func size50(m *MsgInt8) uint64 {
+func size51(m *MsgInt8) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-func marshal50(m *MsgInt8, b []byte) uint64 {
+func marshal51(m *MsgInt8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3168,7 +3214,7 @@ func marshal50(m *MsgInt8, b []byte) uint64 {
 	return o
 }
 
-func unmarshal50(m *MsgInt8, b []byte) uint64 {
+func unmarshal51(m *MsgInt8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3180,7 +3226,7 @@ func unmarshal50(m *MsgInt8, b []byte) uint64 {
 	return o
 }
 
-func size51(m *MsgInt16) uint64 {
+func size52(m *MsgInt16) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -3190,7 +3236,7 @@ func size51(m *MsgInt16) uint64 {
 	return n
 }
 
-func marshal51(m *MsgInt16, b []byte) uint64 {
+func marshal52(m *MsgInt16, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3201,7 +3247,7 @@ func marshal51(m *MsgInt16, b []byte) uint64 {
 	return o
 }
 
-func unmarshal51(m *MsgInt16, b []byte) uint64 {
+func unmarshal52(m *MsgInt16, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3212,7 +3258,7 @@ func unmarshal51(m *MsgInt16, b []byte) uint64 {
 	return o
 }
 
-func size52(m *MsgInt32) uint64 {
+func size53(m *MsgInt32) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -3222,7 +3268,7 @@ func size52(m *MsgInt32) uint64 {
 	return n
 }
 
-func marshal52(m *MsgInt32, b []byte) uint64 {
+func marshal53(m *MsgInt32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3233,7 +3279,7 @@ func marshal52(m *MsgInt32, b []byte) uint64 {
 	return o
 }
 
-func unmarshal52(m *MsgInt32, b []byte) uint64 {
+func unmarshal53(m *MsgInt32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3244,7 +3290,7 @@ func unmarshal52(m *MsgInt32, b []byte) uint64 {
 	return o
 }
 
-func size53(m *MsgInt64) uint64 {
+func size54(m *MsgInt64) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -3254,7 +3300,7 @@ func size53(m *MsgInt64) uint64 {
 	return n
 }
 
-func marshal53(m *MsgInt64, b []byte) uint64 {
+func marshal54(m *MsgInt64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3265,7 +3311,7 @@ func marshal53(m *MsgInt64, b []byte) uint64 {
 	return o
 }
 
-func unmarshal53(m *MsgInt64, b []byte) uint64 {
+func unmarshal54(m *MsgInt64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3276,12 +3322,12 @@ func unmarshal53(m *MsgInt64, b []byte) uint64 {
 	return o
 }
 
-func size54(m *MsgUint8) uint64 {
+func size55(m *MsgUint8) uint64 {
 	var n uint64 = 1
 	return n
 }
 
-func marshal54(m *MsgUint8, b []byte) uint64 {
+func marshal55(m *MsgUint8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3293,7 +3339,7 @@ func marshal54(m *MsgUint8, b []byte) uint64 {
 	return o
 }
 
-func unmarshal54(m *MsgUint8, b []byte) uint64 {
+func unmarshal55(m *MsgUint8, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3305,7 +3351,7 @@ func unmarshal54(m *MsgUint8, b []byte) uint64 {
 	return o
 }
 
-func size55(m *MsgUint16) uint64 {
+func size56(m *MsgUint16) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -3315,7 +3361,7 @@ func size55(m *MsgUint16) uint64 {
 	return n
 }
 
-func marshal55(m *MsgUint16, b []byte) uint64 {
+func marshal56(m *MsgUint16, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3326,7 +3372,7 @@ func marshal55(m *MsgUint16, b []byte) uint64 {
 	return o
 }
 
-func unmarshal55(m *MsgUint16, b []byte) uint64 {
+func unmarshal56(m *MsgUint16, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3337,7 +3383,7 @@ func unmarshal55(m *MsgUint16, b []byte) uint64 {
 	return o
 }
 
-func size56(m *MsgUint32) uint64 {
+func size57(m *MsgUint32) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -3347,7 +3393,7 @@ func size56(m *MsgUint32) uint64 {
 	return n
 }
 
-func marshal56(m *MsgUint32, b []byte) uint64 {
+func marshal57(m *MsgUint32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3358,7 +3404,7 @@ func marshal56(m *MsgUint32, b []byte) uint64 {
 	return o
 }
 
-func unmarshal56(m *MsgUint32, b []byte) uint64 {
+func unmarshal57(m *MsgUint32, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3369,7 +3415,7 @@ func unmarshal56(m *MsgUint32, b []byte) uint64 {
 	return o
 }
 
-func size57(m *MsgUint64) uint64 {
+func size58(m *MsgUint64) uint64 {
 	var n uint64 = 1
 	{
 		// Value
@@ -3379,7 +3425,7 @@ func size57(m *MsgUint64) uint64 {
 	return n
 }
 
-func marshal57(m *MsgUint64, b []byte) uint64 {
+func marshal58(m *MsgUint64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3390,7 +3436,7 @@ func marshal57(m *MsgUint64, b []byte) uint64 {
 	return o
 }
 
-func unmarshal57(m *MsgUint64, b []byte) uint64 {
+func unmarshal58(m *MsgUint64, b []byte) uint64 {
 	var o uint64
 	{
 		// Value
@@ -3401,7 +3447,7 @@ func unmarshal57(m *MsgUint64, b []byte) uint64 {
 	return o
 }
 
-func size37(m *pkg2.SubMsg) uint64 {
+func size38(m *pkg2.SubMsg) uint64 {
 	var n uint64 = 3
 	{
 		// Value1
@@ -3434,7 +3480,7 @@ func size37(m *pkg2.SubMsg) uint64 {
 	return n
 }
 
-func marshal37(m *pkg2.SubMsg, b []byte) uint64 {
+func marshal38(m *pkg2.SubMsg, b []byte) uint64 {
 	var o uint64
 	{
 		// Value1
@@ -3474,7 +3520,7 @@ func marshal37(m *pkg2.SubMsg, b []byte) uint64 {
 	return o
 }
 
-func unmarshal37(m *pkg2.SubMsg, b []byte) uint64 {
+func unmarshal38(m *pkg2.SubMsg, b []byte) uint64 {
 	var o uint64
 	{
 		// Value1

@@ -58,5 +58,6 @@ var List = []any{
 	MsgSliceInt8Custom{},
 	MsgSliceFloat32Custom{},
 	MsgSliceFloat64Custom{},
+	MsgTime{},
 	MsgMixedCustom{},
 }
