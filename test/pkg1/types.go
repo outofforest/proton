@@ -310,3 +310,16 @@ type SubMsg struct {
 	Value2 []spkg1.SubMsg
 	Value3 []spkg2.SubMsg
 }
+
+// MsgIgnore is used in tests.
+type MsgIgnore struct {
+	Value1        bool
+	Value2Ignored bool
+	Value3        string
+	Value4Ignored string
+}
+
+// MsgNotIgnore is used in tests.
+type MsgNotIgnore struct {
+	SubMsg MsgIgnore
+}

@@ -327,3 +327,81 @@ func TestIDsAreGeneratedInSequence(t *testing.T) {
 func TestMessages(t *testing.T) {
 	require.Equal(t, pkg1.List, pkg1.NewMarshaller().Messages())
 }
+
+func TestFieldsInMessageAreIgnored(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msg1 := &pkg1.MsgIgnore{
+		Value1:        true,
+		Value2Ignored: true,
+		Value3:        "A",
+		Value4Ignored: "B",
+	}
+
+	size, err := m.Size(msg1)
+	requireT.NoError(err)
+	requireT.EqualValues(3, size)
+
+	b := make([]byte, size)
+	id, l, err := m.Marshal(msg1, b)
+	requireT.NoError(err)
+	requireT.Equal(size, l)
+	requireT.Equal([]byte{0x01, 0x01, 0x41}, b)
+
+	msg2, l, err := m.Unmarshal(id, b)
+	requireT.NoError(err)
+	requireT.Equal(size, l)
+	requireT.Equal(&pkg1.MsgIgnore{
+		Value1:        true,
+		Value2Ignored: false,
+		Value3:        "A",
+		Value4Ignored: "",
+	}, msg2)
+
+	id2, err := m.ID(msg2)
+	requireT.NoError(err)
+	requireT.Equal(id, id2)
+}
+
+func TestFieldsInSubmessageAreNotIgnored(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msg1 := &pkg1.MsgNotIgnore{
+		SubMsg: pkg1.MsgIgnore{
+			Value1:        true,
+			Value2Ignored: true,
+			Value3:        "A",
+			Value4Ignored: "B",
+		},
+	}
+
+	size, err := m.Size(msg1)
+	requireT.NoError(err)
+	requireT.EqualValues(5, size)
+
+	b := make([]byte, size)
+	id, l, err := m.Marshal(msg1, b)
+	requireT.NoError(err)
+	requireT.Equal(size, l)
+	requireT.Equal([]byte{0x03, 0x01, 0x41, 0x01, 0x42}, b)
+
+	msg2, l, err := m.Unmarshal(id, b)
+	requireT.NoError(err)
+	requireT.Equal(size, l)
+	requireT.Equal(&pkg1.MsgNotIgnore{
+		SubMsg: pkg1.MsgIgnore{
+			Value1:        true,
+			Value2Ignored: true,
+			Value3:        "A",
+			Value4Ignored: "B",
+		},
+	}, msg2)
+
+	id2, err := m.ID(msg2)
+	requireT.NoError(err)
+	requireT.Equal(id, id2)
+}

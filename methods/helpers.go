@@ -5,6 +5,7 @@ import "reflect"
 // Config stores config for generators.
 type Config struct {
 	Type               reflect.Type
+	IgnoreFields       map[string]bool
 	NumOfBooleanFields uint64
 }
 
