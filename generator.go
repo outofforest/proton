@@ -25,15 +25,34 @@ import (
 	"github.com/outofforest/run"
 )
 
+// Msg represents message to generate code for.
+type Msg struct {
+	MsgType      reflect.Type
+	IgnoreFields map[string]bool
+}
+
+// Message defines message to generate code for.
+func Message(msg any, ignoreFields ...string) Msg {
+	ifMap := map[string]bool{}
+	for _, f := range ignoreFields {
+		ifMap[f] = true
+	}
+
+	return Msg{
+		MsgType:      reflect.TypeOf(msg),
+		IgnoreFields: ifMap,
+	}
+}
+
 // Generate generates proton methods for provided types and stores them in a file.
-func Generate(filePath string, msgs ...any) {
+func Generate(filePath string, msgs ...Msg) {
 	run.New().Run(context.Background(), "generator", func(ctx context.Context) error {
-		return generate(filePath, msgs...)
+		return generate(filePath, msgs)
 	})
 }
 
-func generate(filePath string, msgs ...any) error {
-	if len(msgs) == 0 {
+func generate(filePath string, rootMsgs []Msg) error {
+	if len(rootMsgs) == 0 {
 		return nil
 	}
 
@@ -43,18 +62,18 @@ func generate(filePath string, msgs ...any) error {
 		return err
 	}
 
-	msgTypes := make([]reflect.Type, 0, len(msgs))
-	rootMsgTypes := make([]reflect.Type, 0, len(msgs))
-	processed := map[reflect.Type]bool{}
-	stack := make([]reflect.Type, 0, len(msgs))
-	for _, msg := range msgs {
-		msgType := reflect.TypeOf(msg)
-		stack = append(stack, msgType)
-		if !processed[msgType] {
-			msgTypes = append(msgTypes, msgType)
-			rootMsgTypes = append(rootMsgTypes, msgType)
+	rootProcessed := map[reflect.Type]bool{}
+	subProcessed := map[reflect.Type]bool{}
+	stack := make([]Msg, 0, len(rootMsgs))
+	for _, msg := range rootMsgs {
+		stack = append(stack, msg)
+		if _, exists := rootProcessed[msg.MsgType]; exists {
+			return errors.Errorf("duplicate message type %s", msg.MsgType)
 		}
-		processed[msgType] = true
+		rootProcessed[msg.MsgType] = true
+		if len(msg.IgnoreFields) == 0 {
+			subProcessed[msg.MsgType] = true
+		}
 	}
 
 	tm := types.NewTypeMap(pkg)
@@ -63,18 +82,18 @@ func generate(filePath string, msgs ...any) error {
 	tm.Import("github.com/outofforest/proton/helpers")
 
 	for len(stack) > 0 {
-		msgType := stack[len(stack)-1]
+		msg := stack[len(stack)-1]
 		stack = stack[:len(stack)-1]
 
-		code, dependencies, err := generateMsg(msgType, tm)
+		code, dependencies, err := generateMsg(msg, tm)
 		if err != nil {
 			return err
 		}
 
 		for _, dep := range dependencies {
-			if !processed[dep] {
+			if !subProcessed[dep.MsgType] {
 				stack = append(stack, dep)
-				processed[dep] = true
+				subProcessed[dep.MsgType] = true
 			}
 		}
 
@@ -127,11 +146,11 @@ func generate(filePath string, msgs ...any) error {
 		}
 	}
 
-	if err := writeMsgConsts(out, msgTypes, tm); err != nil {
+	if err := writeMsgConsts(out, rootMsgs, tm); err != nil {
 		return errors.WithStack(err)
 	}
 
-	if err := writeMarshaller(out, rootMsgTypes, tm); err != nil {
+	if err := writeMarshaller(out, rootMsgs, tm); err != nil {
 		return errors.WithStack(err)
 	}
 
@@ -142,19 +161,25 @@ func generate(filePath string, msgs ...any) error {
 	return nil
 }
 
-func generateMsg(msgType reflect.Type, tm *types.TypeMap) ([]byte, []reflect.Type, error) {
-	if msgType.Kind() != reflect.Struct {
-		return nil, nil, errors.Errorf("type %s is not a struct", msgType)
+func generateMsg(msg Msg, tm *types.TypeMap) ([]byte, []Msg, error) {
+	if msg.MsgType.Kind() != reflect.Struct {
+		return nil, nil, errors.Errorf("type %s is not a struct", msg.MsgType)
+	}
+	for f := range msg.IgnoreFields {
+		if _, exists := msg.MsgType.FieldByName(f); !exists {
+			return nil, nil, errors.Errorf("field %s does not exist in message %s", f, msg.MsgType)
+		}
 	}
 
 	cfg := methods.Config{
-		Type: msgType,
+		Type:         msg.MsgType,
+		IgnoreFields: msg.IgnoreFields,
 	}
 
-	dependencies := []reflect.Type{}
+	dependencies := []Msg{}
 	dependenciesMap := map[reflect.Type]struct{}{}
 
-	err := helpers.ForEachField(msgType, func(field reflect.StructField) error {
+	err := helpers.ForEachField(msg.MsgType, func(field reflect.StructField) error {
 		builder, err := factory.Get(field.Type, tm)
 		if err != nil {
 			return err
@@ -163,11 +188,11 @@ func generateMsg(msgType reflect.Type, tm *types.TypeMap) ([]byte, []reflect.Typ
 		for _, d := range builder.Dependencies() {
 			if _, exists := dependenciesMap[d]; !exists {
 				dependenciesMap[d] = struct{}{}
-				dependencies = append(dependencies, d)
+				dependencies = append(dependencies, Msg{MsgType: d})
 			}
 		}
 
-		if field.Type.Kind() == reflect.Bool {
+		if field.Type.Kind() == reflect.Bool && !cfg.IgnoreFields[field.Name] {
 			cfg.NumOfBooleanFields++
 		}
 		return nil
@@ -223,7 +248,7 @@ func writeImports(out io.Writer, pkgs []string, aliases map[string]string) error
 	return nil
 }
 
-func writeMsgConsts(out io.Writer, msgTypes []reflect.Type, tm *types.TypeMap) error {
+func writeMsgConsts(out io.Writer, msgs []Msg, tm *types.TypeMap) error {
 	const header = `
 const (
 `
@@ -232,8 +257,8 @@ const (
 		return errors.WithStack(err)
 	}
 
-	for i, msgType := range msgTypes {
-		varName := tm.VarName(msgType, "id")
+	for i, msg := range msgs {
+		varName := tm.VarName(msg.MsgType, "id")
 		if i == 0 {
 			if _, err := fmt.Fprintf(out, "\t%s uint64 = iota + 1\n", varName); err != nil {
 				return errors.WithStack(err)
@@ -252,7 +277,7 @@ const (
 	return nil
 }
 
-func writeMarshaller(out io.Writer, msgTypes []reflect.Type, tm *types.TypeMap) error {
+func writeMarshaller(out io.Writer, msgs []Msg, tm *types.TypeMap) error {
 	const constructor = `
 var _ proton.Marshaller = Marshaller{}
 
@@ -356,14 +381,12 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 		return errors.WithStack(err)
 	}
 
-	// ==============
-
 	if _, err := fmt.Fprint(out, messagesHeader); err != nil {
 		return errors.WithStack(err)
 	}
 
-	for _, msgType := range msgTypes {
-		if _, err := fmt.Fprintf(out, messagesTemplate, tm.TypeName(msgType)); err != nil {
+	for _, msg := range msgs {
+		if _, err := fmt.Fprintf(out, messagesTemplate, tm.TypeName(msg.MsgType)); err != nil {
 			return errors.WithStack(err)
 		}
 	}
@@ -372,14 +395,12 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 		return errors.WithStack(err)
 	}
 
-	// ==============
-
 	if _, err := fmt.Fprint(out, idHeader); err != nil {
 		return errors.WithStack(err)
 	}
 
-	for _, msgType := range msgTypes {
-		if _, err := fmt.Fprintf(out, idTemplate, tm.TypeName(msgType), tm.VarName(msgType, "id")); err != nil {
+	for _, msg := range msgs {
+		if _, err := fmt.Fprintf(out, idTemplate, tm.TypeName(msg.MsgType), tm.VarName(msg.MsgType, "id")); err != nil {
 			return errors.WithStack(err)
 		}
 	}
@@ -392,8 +413,14 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 		return errors.WithStack(err)
 	}
 
-	for _, msgType := range msgTypes {
-		if _, err := fmt.Fprintf(out, sizeTemplate, tm.TypeName(msgType), tm.VarName(msgType, "size")); err != nil {
+	for _, msg := range msgs {
+		methodName := "size"
+		if len(msg.IgnoreFields) > 0 {
+			methodName += "i"
+		}
+
+		if _, err := fmt.Fprintf(out, sizeTemplate, tm.TypeName(msg.MsgType),
+			tm.VarName(msg.MsgType, methodName)); err != nil {
 			return errors.WithStack(err)
 		}
 	}
@@ -406,9 +433,14 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 		return errors.WithStack(err)
 	}
 
-	for _, msgType := range msgTypes {
-		if _, err := fmt.Fprintf(out, marshalTemplate, tm.TypeName(msgType), tm.VarName(msgType, "id"),
-			tm.VarName(msgType, "marshal")); err != nil {
+	for _, msg := range msgs {
+		methodName := "marshal"
+		if len(msg.IgnoreFields) > 0 {
+			methodName += "i"
+		}
+
+		if _, err := fmt.Fprintf(out, marshalTemplate, tm.TypeName(msg.MsgType), tm.VarName(msg.MsgType, "id"),
+			tm.VarName(msg.MsgType, methodName)); err != nil {
 			return errors.WithStack(err)
 		}
 	}
@@ -421,9 +453,14 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 		return errors.WithStack(err)
 	}
 
-	for _, msgType := range msgTypes {
-		if _, err := fmt.Fprintf(out, unmarshalTemplate, tm.VarName(msgType, "unmarshal"),
-			tm.VarName(msgType, "id"), tm.TypeName(msgType)); err != nil {
+	for _, msg := range msgs {
+		methodName := "unmarshal"
+		if len(msg.IgnoreFields) > 0 {
+			methodName += "i"
+		}
+
+		if _, err := fmt.Fprintf(out, unmarshalTemplate, tm.VarName(msg.MsgType, methodName),
+			tm.VarName(msg.MsgType, "id"), tm.TypeName(msg.MsgType)); err != nil {
 			return errors.WithStack(err)
 		}
 	}

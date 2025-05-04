@@ -60,4 +60,6 @@ var List = []any{
 	MsgSliceFloat64Custom{},
 	MsgTime{},
 	MsgMixedCustom{},
+	MsgIgnore{},
+	MsgNotIgnore{},
 }

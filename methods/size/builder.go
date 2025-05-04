@@ -27,7 +27,11 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 
 	code := &bytes.Buffer{}
 	lo.Must0(helpers.ForEachField(cfg.Type, func(field reflect.StructField) error {
-		// Booleans are handled separately as a series of bits
+		if cfg.IgnoreFields[field.Name] {
+			return nil
+		}
+
+		// Booleans are handled separately as a series of bits.
 		if field.Type.Kind() == reflect.Bool {
 			return nil
 		}
@@ -49,12 +53,17 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 		return nil
 	}))
 
+	methodName := "size"
+	if len(cfg.IgnoreFields) > 0 {
+		methodName += "i"
+	}
+
 	b := &bytes.Buffer{}
 	helpers.Execute(b, header, struct {
 		FuncName string
 		TypeName string
 	}{
-		FuncName: tm.VarName(cfg.Type, "size"),
+		FuncName: tm.VarName(cfg.Type, methodName),
 		TypeName: tm.TypeName(cfg.Type),
 	})
 

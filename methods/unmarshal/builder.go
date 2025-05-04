@@ -26,6 +26,10 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 
 	var boolIndex uint64
 	lo.Must0(helpers.ForEachField(cfg.Type, func(field reflect.StructField) error {
+		if cfg.IgnoreFields[field.Name] {
+			return nil
+		}
+
 		if field.Type.Kind() == reflect.Bool {
 			byteIndex, bitIndex := methods.BitMapPosition(boolIndex)
 			boolIndex++
@@ -54,10 +58,15 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 		return nil
 	}))
 
+	methodName := "unmarshal"
+	if len(cfg.IgnoreFields) > 0 {
+		methodName += "i"
+	}
+
 	b := &bytes.Buffer{}
 
 	_, _ = fmt.Fprintf(b, `func %[1]s(m *%[2]s, b []byte) uint64 {
-`, tm.VarName(cfg.Type, "unmarshal"), tm.TypeName(cfg.Type))
+`, tm.VarName(cfg.Type, methodName), tm.TypeName(cfg.Type))
 
 	if code.Len() > 0 {
 		lo.Must(code.WriteTo(b))
