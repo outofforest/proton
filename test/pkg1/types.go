@@ -323,3 +323,17 @@ type MsgIgnore struct {
 type MsgNotIgnore struct {
 	SubMsg MsgIgnore
 }
+
+// MsgStrings is used in tests.
+type MsgStrings struct {
+	Value1  string
+	Value2  string
+	Value3  string
+	Value4  string
+	Value5  string
+	Value6  string
+	Value7  string
+	Value8  string
+	Value9  string
+	Value10 string
+}

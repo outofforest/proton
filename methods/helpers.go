@@ -6,6 +6,7 @@ import "reflect"
 type Config struct {
 	Type               reflect.Type
 	IgnoreFields       map[string]bool
+	NumOfFields        uint64
 	NumOfBooleanFields uint64
 }
 

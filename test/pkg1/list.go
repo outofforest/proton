@@ -62,4 +62,5 @@ var List = []any{
 	MsgMixedCustom{},
 	MsgIgnore{},
 	MsgNotIgnore{},
+	MsgStrings{},
 }
