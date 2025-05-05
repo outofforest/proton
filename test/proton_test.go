@@ -405,3 +405,935 @@ func TestFieldsInSubmessageAreNotIgnored(t *testing.T) {
 	requireT.NoError(err)
 	requireT.Equal(id, id2)
 }
+
+const maxPatchSize = 128
+
+func TestPatch3Bools1(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: true,
+		Value3: true,
+	}
+	msgDst := &pkg1.MsgBool3{
+		Value1: true,
+		Value2: true,
+		Value3: false,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x05}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch3Bools2(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool3{
+		Value1: true,
+		Value2: true,
+		Value3: false,
+	}
+	msgDst := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: true,
+		Value3: true,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x05}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch3Bools3(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: false,
+		Value3: false,
+	}
+	msgDst := &pkg1.MsgBool3{
+		Value1: true,
+		Value2: true,
+		Value3: true,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x07}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch3Bools4(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool3{
+		Value1: true,
+		Value2: true,
+		Value3: true,
+	}
+	msgDst := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: false,
+		Value3: false,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x07}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch3Bools5(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool3{
+		Value1: true,
+		Value2: false,
+		Value3: false,
+	}
+	msgDst := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: true,
+		Value3: false,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x03}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch3Bools6(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: true,
+		Value3: false,
+	}
+	msgDst := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: false,
+		Value3: true,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x06}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch3Bools7(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: false,
+		Value3: true,
+	}
+	msgDst := &pkg1.MsgBool3{
+		Value1: true,
+		Value2: false,
+		Value3: false,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x05}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch3Bools8(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: false,
+		Value3: false,
+	}
+	msgDst := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: false,
+		Value3: false,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x00}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch3Bools9(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool3{
+		Value1: true,
+		Value2: true,
+		Value3: true,
+	}
+	msgDst := &pkg1.MsgBool3{
+		Value1: true,
+		Value2: true,
+		Value3: true,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x00}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch3Bools10(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool3{
+		Value1: true,
+		Value2: false,
+		Value3: true,
+	}
+	msgDst := &pkg1.MsgBool3{
+		Value1: true,
+		Value2: false,
+		Value3: true,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x00}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch3Bools11(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: true,
+		Value3: false,
+	}
+	msgDst := &pkg1.MsgBool3{
+		Value1: false,
+		Value2: true,
+		Value3: false,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x00}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch10Bools1(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool10{
+		Value1:  false,
+		Value2:  true,
+		Value3:  false,
+		Value4:  true,
+		Value5:  false,
+		Value6:  true,
+		Value7:  false,
+		Value8:  true,
+		Value9:  false,
+		Value10: true,
+	}
+	msgDst := &pkg1.MsgBool10{
+		Value1:  true,
+		Value2:  false,
+		Value3:  true,
+		Value4:  false,
+		Value5:  true,
+		Value6:  false,
+		Value7:  true,
+		Value8:  false,
+		Value9:  true,
+		Value10: false,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0xff, 0x03}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch10Bools2(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool10{
+		Value1:  true,
+		Value2:  false,
+		Value3:  true,
+		Value4:  false,
+		Value5:  true,
+		Value6:  false,
+		Value7:  true,
+		Value8:  false,
+		Value9:  true,
+		Value10: false,
+	}
+	msgDst := &pkg1.MsgBool10{
+		Value1:  false,
+		Value2:  true,
+		Value3:  false,
+		Value4:  true,
+		Value5:  false,
+		Value6:  true,
+		Value7:  false,
+		Value8:  true,
+		Value9:  false,
+		Value10: true,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0xff, 0x03}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch10Bools3(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool10{
+		Value1:  true,
+		Value2:  false,
+		Value3:  true,
+		Value4:  false,
+		Value5:  true,
+		Value6:  false,
+		Value7:  true,
+		Value8:  false,
+		Value9:  true,
+		Value10: false,
+	}
+	msgDst := &pkg1.MsgBool10{
+		Value1:  true,
+		Value2:  false,
+		Value3:  true,
+		Value4:  false,
+		Value5:  true,
+		Value6:  false,
+		Value7:  true,
+		Value8:  false,
+		Value9:  true,
+		Value10: false,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x00, 0x00}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatch10Bools4(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgBool10{
+		Value1:  true,
+		Value2:  false,
+		Value3:  true,
+		Value4:  false,
+		Value5:  true,
+		Value6:  false,
+		Value7:  true,
+		Value8:  false,
+		Value9:  true,
+		Value10: false,
+	}
+	msgDst := &pkg1.MsgBool10{
+		Value1:  false,
+		Value2:  false,
+		Value3:  true,
+		Value4:  false,
+		Value5:  true,
+		Value6:  false,
+		Value7:  false,
+		Value8:  true,
+		Value9:  true,
+		Value10: true,
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0xc1, 0x02}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatchIgnored1(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgIgnore{
+		Value1:        false,
+		Value2Ignored: false,
+		Value3:        "",
+		Value4Ignored: "",
+	}
+	msgDst := &pkg1.MsgIgnore{
+		Value1:        true,
+		Value2Ignored: true,
+		Value3:        "A",
+		Value4Ignored: "B",
+	}
+	msgExpected := &pkg1.MsgIgnore{
+		Value1:        true,
+		Value2Ignored: false,
+		Value3:        "A",
+		Value4Ignored: "",
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x01, 0x01, 0x01, 0x41}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgExpected, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatchIgnored2(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgIgnore{
+		Value1:        false,
+		Value2Ignored: false,
+		Value3:        "",
+		Value4Ignored: "",
+	}
+	msgDst := &pkg1.MsgIgnore{
+		Value1:        false,
+		Value2Ignored: true,
+		Value3:        "",
+		Value4Ignored: "B",
+	}
+	msgExpected := &pkg1.MsgIgnore{
+		Value1:        false,
+		Value2Ignored: false,
+		Value3:        "",
+		Value4Ignored: "",
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x00, 0x00}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgExpected, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatchIgnored3(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgIgnore{
+		Value1:        true,
+		Value2Ignored: false,
+		Value3:        "A",
+		Value4Ignored: "",
+	}
+	msgDst := &pkg1.MsgIgnore{
+		Value1:        false,
+		Value2Ignored: true,
+		Value3:        "C",
+		Value4Ignored: "B",
+	}
+	msgExpected := &pkg1.MsgIgnore{
+		Value1:        false,
+		Value2Ignored: false,
+		Value3:        "C",
+		Value4Ignored: "",
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x01, 0x01, 0x01, 0x43}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgExpected, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatchMixed1(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgMixed{
+		Value1: map[string]spkg1.SubMsg{"a": {Value: 1}},
+		Value2: map[uint8][]string{1: {"b"}},
+		Value3: [][32]uint16{{1, 2}},
+		Value4: [12]map[int8]float32{{1: 2}},
+		Value5: [][3][]map[int16][2]int64{{{{1: {2}}}}},
+		Value6: true,
+		Value7: true,
+		Value8: "A",
+	}
+	msgDst := &pkg1.MsgMixed{
+		Value1: map[string]spkg1.SubMsg{"a": {Value: 1}},
+		Value2: map[uint8][]string{1: {"b"}},
+		Value3: [][32]uint16{{1, 2}},
+		Value4: [12]map[int8]float32{{1: 2}},
+		Value5: [][3][]map[int16][2]int64{{{{1: {2}}}}},
+		Value6: true,
+		Value7: true,
+		Value8: "A",
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x0, 0x0}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatchMixed2(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgMixed{
+		Value1: map[string]spkg1.SubMsg{"a": {Value: 1}},
+		Value2: map[uint8][]string{1: {"b"}},
+		Value3: [][32]uint16{{1, 2}},
+		Value4: [12]map[int8]float32{{1: 2}},
+		Value5: [][3][]map[int16][2]int64{{{{1: {2}}}}},
+		Value6: true,
+		Value7: true,
+		Value8: "A",
+	}
+	msgDst := &pkg1.MsgMixed{
+		Value1: map[string]spkg1.SubMsg{"a": {Value: 1}, "b": {Value: 2}},
+		Value2: map[uint8][]string{1: {"c"}},
+		Value3: [][32]uint16{{1}},
+		Value4: [12]map[int8]float32{{2: 2}},
+		Value5: [][3][]map[int16][2]int64{{{{2: {3}}}}},
+		Value6: false,
+		Value7: false,
+		Value8: "B",
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{
+		0x3f, 0x03, 0x02, 0x01, 0x61, 0x02, 0x01, 0x62, 0x04, 0x01, 0x01, 0x01, 0x01, 0x63, 0x01, 0x01, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x00, 0x00, 0x00, 0x40, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x04, 0x06, 0x00, 0x00, 0x00,
+		0x01, 0x42,
+	}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatchMixed3(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgMixed{
+		Value1: map[string]spkg1.SubMsg{"a": {Value: 1}},
+		Value2: map[uint8][]string{1: {"b"}},
+		Value3: [][32]uint16{{1, 2}},
+		Value4: [12]map[int8]float32{{1: 2}},
+		Value5: [][3][]map[int16][2]int64{{{{1: {2}}}}},
+		Value6: true,
+		Value7: true,
+		Value8: "A",
+	}
+	msgDst := &pkg1.MsgMixed{
+		Value1: map[string]spkg1.SubMsg{"a": {Value: 1}},
+		Value2: map[uint8][]string{1: {"c"}},
+		Value3: [][32]uint16{{1, 2}},
+		Value4: [12]map[int8]float32{{1: 2}},
+		Value5: [][3][]map[int16][2]int64{{{{2: {2}}}}},
+		Value6: true,
+		Value7: false,
+		Value8: "A",
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x12, 0x02, 0x01, 0x01, 0x01, 0x01, 0x63, 0x01, 0x01, 0x01, 0x04, 0x04, 0x00, 0x00, 0x00},
+		b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatchStrings1(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgStrings{
+		Value1:  "",
+		Value2:  "",
+		Value3:  "",
+		Value4:  "",
+		Value5:  "",
+		Value6:  "",
+		Value7:  "",
+		Value8:  "",
+		Value9:  "",
+		Value10: "",
+	}
+	msgDst := &pkg1.MsgStrings{
+		Value1:  "",
+		Value2:  "",
+		Value3:  "",
+		Value4:  "",
+		Value5:  "",
+		Value6:  "",
+		Value7:  "",
+		Value8:  "",
+		Value9:  "",
+		Value10: "",
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0x0, 0x0}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatchStrings2(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgStrings{
+		Value1:  "",
+		Value2:  "",
+		Value3:  "",
+		Value4:  "",
+		Value5:  "",
+		Value6:  "",
+		Value7:  "",
+		Value8:  "",
+		Value9:  "",
+		Value10: "",
+	}
+	msgDst := &pkg1.MsgStrings{
+		Value1:  "A",
+		Value2:  "B",
+		Value3:  "C",
+		Value4:  "D",
+		Value5:  "E",
+		Value6:  "F",
+		Value7:  "G",
+		Value8:  "H",
+		Value9:  "I",
+		Value10: "J",
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{
+		0xff, 0x03, 0x01, 0x41, 0x01, 0x42, 0x01, 0x43, 0x01, 0x44, 0x01, 0x45, 0x01, 0x46, 0x01, 0x47, 0x01, 0x48,
+		0x01, 0x49, 0x01, 0x4a,
+	}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}
+
+func TestPatchStrings3(t *testing.T) {
+	requireT := require.New(t)
+
+	m := pkg1.NewMarshaller()
+
+	msgSrc := &pkg1.MsgStrings{
+		Value1:  "A",
+		Value2:  "",
+		Value3:  "C",
+		Value4:  "",
+		Value5:  "E",
+		Value6:  "",
+		Value7:  "G",
+		Value8:  "",
+		Value9:  "I",
+		Value10: "",
+	}
+	msgDst := &pkg1.MsgStrings{
+		Value1:  "A",
+		Value2:  "B",
+		Value3:  "C",
+		Value4:  "D",
+		Value5:  "E",
+		Value6:  "F",
+		Value7:  "G",
+		Value8:  "H",
+		Value9:  "I",
+		Value10: "J",
+	}
+
+	msgSrc2 := *msgSrc
+	b := make([]byte, maxPatchSize)
+	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
+	requireT.NoError(err)
+	requireT.Equal([]byte{0xaa, 0x02, 0x01, 0x42, 0x01, 0x44, 0x01, 0x46, 0x01, 0x48, 0x01, 0x4a}, b[:l])
+
+	l2, err := m.ApplyPatch(msgSrc, b[:l])
+	requireT.NoError(err)
+	requireT.Equal(l, l2)
+	requireT.Equal(msgDst, msgSrc)
+
+	id2, err := m.ID(msgDst)
+	requireT.NoError(err)
+	requireT.Equal(id2, id)
+}

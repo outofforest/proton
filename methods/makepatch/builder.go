@@ -1,4 +1,4 @@
-package marshal
+package makepatch
 
 import (
 	"bytes"
@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	header = `func {{ .FuncName}}(m *{{ .TypeName }}, b []byte) uint64 {
+	header = `func {{ .FuncName}}(m, mSrc *{{ .TypeName }}, b []byte) uint64 {
 `
 )
 
@@ -22,14 +22,15 @@ const (
 func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 	code := &bytes.Buffer{}
 
-	offset := methods.BitMapLength(cfg.NumOfBooleanFields)
-	if offset == 0 {
+	boolOffset := methods.BitMapLength(cfg.NumOfFields)
+	dataOffset := boolOffset + methods.BitMapLength(cfg.NumOfBooleanFields)
+	if dataOffset == 0 {
 		_, _ = fmt.Fprint(code, "	var o uint64\n")
 	} else {
-		_, _ = fmt.Fprintf(code, "	var o uint64 = %d\n", offset)
+		_, _ = fmt.Fprintf(code, "	var o uint64 = %d\n", dataOffset)
 	}
 
-	var boolIndex uint64
+	var presenceIndex, boolIndex uint64
 	lo.Must0(helpers.ForEachField(cfg.Type, func(field reflect.StructField) error {
 		if cfg.IgnoreFields[field.Name] {
 			return nil
@@ -42,15 +43,18 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 			_, _ = fmt.Fprintf(code, `	{
 		// %[1]s
 
-		if m.%[1]s {
-			b[%[2]d] |= 0x%02[3]X
-		} else {
+		if m.%[1]s == mSrc.%[1]s {
 			b[%[2]d] &= 0x%02[4]X
+		} else {
+			b[%[2]d] |= 0x%02[3]X
 		}
 	}
-`, field.Name, byteIndex, 0x01<<bitIndex, 0xFF^(0x01<<bitIndex))
+`, field.Name, boolOffset+byteIndex, 0x01<<bitIndex, 0xFF^(0x01<<bitIndex))
 			return nil
 		}
+
+		byteIndex, bitIndex := methods.BitMapPosition(presenceIndex)
+		presenceIndex++
 
 		builder, err := factory.Get(field.Type, tm)
 		if err != nil {
@@ -59,14 +63,22 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 
 		marshalCode := builder.MarshalCodeTemplate(new(uint64))
 
-		_, _ = fmt.Fprint(code, "	{\n		// "+field.Name+"\n\n")
-		helpers.Execute(code, types.AddIndent(marshalCode, 2), "m."+field.Name)
-		_, _ = fmt.Fprint(code, "\n	}\n")
+		reflect := tm.Import("reflect")
+		_, _ = fmt.Fprintf(code, `	{
+		// %[2]s
+
+		if %[1]s.DeepEqual(m.%[2]s, mSrc.%[2]s) {
+			b[%[3]d] &= 0x%02[5]X
+		} else {
+			b[%[3]d] |= 0x%02[4]X
+`, reflect, field.Name, byteIndex, 0x01<<bitIndex, 0xFF^(0x01<<bitIndex))
+		helpers.Execute(code, types.AddIndent(marshalCode, 3), "m."+field.Name)
+		_, _ = fmt.Fprint(code, "\n		}\n	}\n")
 
 		return nil
 	}))
 
-	methodName := "marshal"
+	methodName := "makePatch"
 	if len(cfg.IgnoreFields) > 0 {
 		methodName += "i"
 	}

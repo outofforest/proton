@@ -17,6 +17,8 @@ import (
 
 	"github.com/outofforest/proton/helpers"
 	"github.com/outofforest/proton/methods"
+	"github.com/outofforest/proton/methods/applypatch"
+	"github.com/outofforest/proton/methods/makepatch"
 	"github.com/outofforest/proton/methods/marshal"
 	"github.com/outofforest/proton/methods/size"
 	"github.com/outofforest/proton/methods/unmarshal"
@@ -85,7 +87,7 @@ func generate(filePath string, rootMsgs []Msg) error {
 		msg := stack[len(stack)-1]
 		stack = stack[:len(stack)-1]
 
-		code, dependencies, err := generateMsg(msg, tm)
+		code, dependencies, err := generateMsg(msg, tm, rootProcessed[msg.MsgType])
 		if err != nil {
 			return err
 		}
@@ -161,7 +163,7 @@ func generate(filePath string, rootMsgs []Msg) error {
 	return nil
 }
 
-func generateMsg(msg Msg, tm *types.TypeMap) ([]byte, []Msg, error) {
+func generateMsg(msg Msg, tm *types.TypeMap, isRoot bool) ([]byte, []Msg, error) {
 	if msg.MsgType.Kind() != reflect.Struct {
 		return nil, nil, errors.Errorf("type %s is not a struct", msg.MsgType)
 	}
@@ -192,8 +194,12 @@ func generateMsg(msg Msg, tm *types.TypeMap) ([]byte, []Msg, error) {
 			}
 		}
 
-		if field.Type.Kind() == reflect.Bool && !cfg.IgnoreFields[field.Name] {
-			cfg.NumOfBooleanFields++
+		if !cfg.IgnoreFields[field.Name] {
+			if field.Type.Kind() == reflect.Bool {
+				cfg.NumOfBooleanFields++
+			} else {
+				cfg.NumOfFields++
+			}
 		}
 		return nil
 	})
@@ -207,6 +213,12 @@ func generateMsg(msg Msg, tm *types.TypeMap) ([]byte, []Msg, error) {
 	b.Write(marshal.Build(cfg, tm))
 	b.WriteString("\n\n")
 	b.Write(unmarshal.Build(cfg, tm))
+	if isRoot {
+		b.WriteString("\n\n")
+		b.Write(makepatch.Build(cfg, tm))
+		b.WriteString("\n\n")
+		b.Write(applypatch.Build(cfg, tm))
+	}
 
 	return b.Bytes(), dependencies, nil
 }
@@ -277,6 +289,7 @@ const (
 	return nil
 }
 
+//nolint:gocyclo
 func writeMarshaller(out io.Writer, msgs []Msg, tm *types.TypeMap) error {
 	const constructor = `
 var _ proton.Marshaller = Marshaller{}
@@ -365,6 +378,41 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 
 	const unmarshalFooter = `	default:
 		return nil, 0, errors.Errorf("unknown ID %d", id)
+	}
+}
+`
+
+	const makePatchHeader = `
+// MakePatch creates a patch.
+func (m Marshaller) MakePatch(msgDst, msgSrc any, buf []byte) (retID, retSize uint64, retErr error) {
+	defer helpers.RecoverMakePatch(&retErr)
+
+	switch msg2 := msgDst.(type) {
+`
+	const makePatchFooter = `	default:
+		return 0, 0, errors.Errorf("unknown message type %T", msgDst)
+	}
+}
+`
+
+	const makePatchTemplate = `	case *%[1]s:
+		return %[2]s, %[3]s(msg2, msgSrc.(*%[1]s), buf), nil
+`
+
+	const applyPatchHeader = `
+// ApplyPatch applies patch.
+func (m Marshaller) ApplyPatch(msg any, buf []byte) (retSize uint64, retErr error) {
+	defer helpers.RecoverUnmarshal(&retErr)
+
+	switch msg2 := msg.(type) {
+`
+
+	const applyPatchTemplate = `	case *%[1]s:
+		return %[2]s(msg2, buf), nil
+`
+
+	const applyPatchFooter = `	default:
+		return 0, errors.Errorf("unknown message type %T", msg)
 	}
 }
 `
@@ -466,6 +514,46 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 	}
 
 	if _, err := out.Write([]byte(unmarshalFooter)); err != nil {
+		return errors.WithStack(err)
+	}
+
+	if _, err := fmt.Fprint(out, makePatchHeader); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, msg := range msgs {
+		methodName := "makePatch"
+		if len(msg.IgnoreFields) > 0 {
+			methodName += "i"
+		}
+
+		if _, err := fmt.Fprintf(out, makePatchTemplate, tm.TypeName(msg.MsgType), tm.VarName(msg.MsgType, "id"),
+			tm.VarName(msg.MsgType, methodName)); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if _, err := out.Write([]byte(makePatchFooter)); err != nil {
+		return errors.WithStack(err)
+	}
+
+	if _, err := fmt.Fprint(out, applyPatchHeader); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, msg := range msgs {
+		methodName := "applyPatch"
+		if len(msg.IgnoreFields) > 0 {
+			methodName += "i"
+		}
+
+		if _, err := fmt.Fprintf(out, applyPatchTemplate, tm.TypeName(msg.MsgType),
+			tm.VarName(msg.MsgType, methodName)); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if _, err := out.Write([]byte(applyPatchFooter)); err != nil {
 		return errors.WithStack(err)
 	}
 

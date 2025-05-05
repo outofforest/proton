@@ -45,6 +45,20 @@ func RecoverUnmarshal(err *error) {
 	}
 }
 
+// RecoverMakePatch recovers from panic inside make patch.
+func RecoverMakePatch(err *error) {
+	if res := recover(); res != nil {
+		*err = errors.Errorf("making patch failed: %s", res)
+	}
+}
+
+// RecoverApplyPatch recovers from panic inside apply patch.
+func RecoverApplyPatch(err *error) {
+	if res := recover(); res != nil {
+		*err = errors.Errorf("applying patch failed: %s", res)
+	}
+}
+
 // Cases when varint takes one byte are ignored because they should be handled in more optimal way by
 // `ConstantSize` method of the builders.
 
