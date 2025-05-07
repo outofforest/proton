@@ -14,18 +14,18 @@ func TestZero(t *testing.T) {
 	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgTime{
-		Value: time.Unix(0, 0),
+		Value: time.Time{}.Local(), //nolint:gosmopolitan
 	}
 
 	size, err := m.Size(msg1)
 	requireT.NoError(err)
-	requireT.EqualValues(1, size)
+	requireT.EqualValues(2, size)
 
 	b := make([]byte, size)
 	id, l, err := m.Marshal(msg1, b)
 	requireT.NoError(err)
 	requireT.Equal(size, l)
-	requireT.Equal([]byte{0x00}, b)
+	requireT.Equal([]byte{0x00, 0x00}, b)
 
 	msg2, l, err := m.Unmarshal(id, b)
 	requireT.NoError(err)
@@ -42,18 +42,18 @@ func TestPositive(t *testing.T) {
 	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgTime{
-		Value: time.Unix(1, 0),
+		Value: time.Unix(1, 99),
 	}
 
 	size, err := m.Size(msg1)
 	requireT.NoError(err)
-	requireT.EqualValues(1, size)
+	requireT.EqualValues(7, size)
 
 	b := make([]byte, size)
 	id, l, err := m.Marshal(msg1, b)
 	requireT.NoError(err)
 	requireT.Equal(size, l)
-	requireT.Equal([]byte{0x02}, b)
+	requireT.Equal([]byte{0x82, 0xdc, 0x8f, 0xf9, 0xce, 0x3, 0x63}, b)
 
 	msg2, l, err := m.Unmarshal(id, b)
 	requireT.NoError(err)
@@ -70,18 +70,18 @@ func TestNegative(t *testing.T) {
 	m := pkg1.NewMarshaller()
 
 	msg1 := &pkg1.MsgTime{
-		Value: time.Unix(-1, 0),
+		Value: time.Unix(-1, 9999),
 	}
 
 	size, err := m.Size(msg1)
 	requireT.NoError(err)
-	requireT.EqualValues(1, size)
+	requireT.EqualValues(8, size)
 
 	b := make([]byte, size)
 	id, l, err := m.Marshal(msg1, b)
 	requireT.NoError(err)
 	requireT.Equal(size, l)
-	requireT.Equal([]byte{0x01}, b)
+	requireT.Equal([]byte{0xfe, 0xdb, 0x8f, 0xf9, 0xce, 0x3, 0x8f, 0x4e}, b)
 
 	msg2, l, err := m.Unmarshal(id, b)
 	requireT.NoError(err)
