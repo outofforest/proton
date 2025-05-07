@@ -2165,11 +2165,12 @@ func applyPatch3(m *MsgMixedCustom, b []byte) uint64 {
 }
 
 func size4(m *MsgTime) uint64 {
-	var n uint64 = 1
+	var n uint64 = 2
 	{
 		// Value
 
-		helpers.Int64Size(m.Value.Unix(), &n)
+		helpers.Int64Size(m.Value.Unix() - -62135596800, &n)
+		helpers.UInt32Size(uint32(m.Value.Nanosecond()), &n)
 	}
 	return n
 }
@@ -2179,7 +2180,8 @@ func marshal4(m *MsgTime, b []byte) uint64 {
 	{
 		// Value
 
-		helpers.Int64Marshal(m.Value.Unix(), b, &o)
+		helpers.Int64Marshal(m.Value.Unix() - -62135596800, b, &o)
+		helpers.UInt32Marshal(uint32(m.Value.Nanosecond()), b, &o)
 	}
 
 	return o
@@ -2190,9 +2192,11 @@ func unmarshal4(m *MsgTime, b []byte) uint64 {
 	{
 		// Value
 
-		var vi int64
-		helpers.Int64Unmarshal(&vi, b, &o)
-		m.Value = time.Unix(vi, 0)
+		var seconds int64
+		var nanoseconds uint32
+		helpers.Int64Unmarshal(&seconds, b, &o)
+		helpers.UInt32Unmarshal(&nanoseconds, b, &o)
+		m.Value = time.Unix(seconds + -62135596800, int64(nanoseconds))
 	}
 
 	return o
@@ -2207,7 +2211,8 @@ func makePatch4(m, mSrc *MsgTime, b []byte) uint64 {
 			b[0] &= 0xFE
 		} else {
 			b[0] |= 0x01
-			helpers.Int64Marshal(m.Value.Unix(), b, &o)
+			helpers.Int64Marshal(m.Value.Unix() - -62135596800, b, &o)
+			helpers.UInt32Marshal(uint32(m.Value.Nanosecond()), b, &o)
 		}
 	}
 
@@ -2220,9 +2225,11 @@ func applyPatch4(m *MsgTime, b []byte) uint64 {
 		// Value
 
 		if b[0]&0x01 != 0 {
-			var vi int64
-			helpers.Int64Unmarshal(&vi, b, &o)
-			m.Value = time.Unix(vi, 0)
+			var seconds int64
+			var nanoseconds uint32
+			helpers.Int64Unmarshal(&seconds, b, &o)
+			helpers.UInt32Unmarshal(&nanoseconds, b, &o)
+			m.Value = time.Unix(seconds + -62135596800, int64(nanoseconds))
 		}
 	}
 
