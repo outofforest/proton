@@ -6,7 +6,7 @@ require (
 	github.com/outofforest/run v0.8.0
 	github.com/pkg/errors v0.9.1
 	github.com/samber/lo v1.50.0
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	golang.org/x/mod v0.24.0
 	golang.org/x/text v0.25.0
 )
