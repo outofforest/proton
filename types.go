@@ -1,5 +1,10 @@
 package proton
 
+import "github.com/outofforest/proton/helpers"
+
+// ErrBufferFailure means proton panicked because buffer was too small.
+var ErrBufferFailure = helpers.ErrBufferFailure
+
 // Marshaller is the interface implemented by marshallers.
 type Marshaller interface {
 	Messages() []any
