@@ -3,7 +3,7 @@ module build
 go 1.25
 
 require (
-	github.com/outofforest/build/v2 v2.7.0
+	github.com/outofforest/build/v2 v2.8.0
 	github.com/outofforest/tools v1.5.0
 )
 
