@@ -9,6 +9,9 @@ import (
 	"github.com/samber/lo"
 )
 
+// ErrBufferFailure means proton panicked because buffer was too small.
+var ErrBufferFailure = errors.New("buffer failure")
+
 // ForEachField iterates over fields in the type and calls a function for each public one.
 func ForEachField(msgType reflect.Type, fn func(field reflect.StructField) error) error {
 	numOfFields := msgType.NumField()
@@ -34,28 +37,28 @@ func Execute(b io.Writer, code string, data any) {
 // RecoverMarshal recovers from panic inside marshaller.
 func RecoverMarshal(err *error) {
 	if res := recover(); res != nil {
-		*err = errors.Errorf("marshaling message failed: %s", res)
+		*err = errors.Wrapf(ErrBufferFailure, "marshaling message failed: %s", res)
 	}
 }
 
 // RecoverUnmarshal recovers from panic inside unmarshaller.
 func RecoverUnmarshal(err *error) {
 	if res := recover(); res != nil {
-		*err = errors.Errorf("unmarshaling message failed: %s", res)
+		*err = errors.Wrapf(ErrBufferFailure, "unmarshaling message failed: %s", res)
 	}
 }
 
 // RecoverMakePatch recovers from panic inside make patch.
 func RecoverMakePatch(err *error) {
 	if res := recover(); res != nil {
-		*err = errors.Errorf("making patch failed: %s", res)
+		*err = errors.Wrapf(ErrBufferFailure, "making patch failed: %s", res)
 	}
 }
 
 // RecoverApplyPatch recovers from panic inside apply patch.
 func RecoverApplyPatch(err *error) {
 	if res := recover(); res != nil {
-		*err = errors.Errorf("applying patch failed: %s", res)
+		*err = errors.Wrapf(ErrBufferFailure, "applying patch failed: %s", res)
 	}
 }
 

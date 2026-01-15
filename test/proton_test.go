@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/outofforest/proton"
 	"github.com/outofforest/proton/test/custom"
 	"github.com/outofforest/proton/test/pkg1"
 	spkg1 "github.com/outofforest/proton/test/pkg1/spkg"
@@ -234,7 +235,7 @@ func TestMarshalBufferTooSmall(t *testing.T) {
 	requireT.NoError(err)
 	b := make([]byte, size-1)
 	_, _, err = m.Marshal(msg1, b)
-	requireT.Error(err)
+	requireT.ErrorIs(err, proton.ErrBufferFailure)
 }
 
 func TestUnmarshalBufferTooSmall(t *testing.T) {
@@ -310,7 +311,7 @@ func TestUnmarshalBufferTooSmall(t *testing.T) {
 	copy(b2, b)
 
 	_, _, err = m.Unmarshal(id, b2)
-	requireT.Error(err)
+	requireT.ErrorIs(err, proton.ErrBufferFailure)
 }
 
 func TestIDsAreGeneratedInSequence(t *testing.T) {

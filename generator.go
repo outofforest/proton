@@ -402,7 +402,7 @@ func (m Marshaller) MakePatch(msgDst, msgSrc any, buf []byte) (retID, retSize ui
 	const applyPatchHeader = `
 // ApplyPatch applies patch.
 func (m Marshaller) ApplyPatch(msg any, buf []byte) (retSize uint64, retErr error) {
-	defer helpers.RecoverUnmarshal(&retErr)
+	defer helpers.RecoverApplyPatch(&retErr)
 
 	switch msg2 := msg.(type) {
 `
