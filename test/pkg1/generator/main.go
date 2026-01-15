@@ -12,7 +12,7 @@ import (
 func main() {
 	msgs := make([]proton.Msg, 0, len(pkg1.List))
 	for _, m := range pkg1.List {
-		if reflect.TypeOf(m) == reflect.TypeOf(pkg1.MsgIgnore{}) {
+		if reflect.TypeOf(m) == reflect.TypeFor[pkg1.MsgIgnore]() {
 			msgs = append(msgs, proton.Message(m, "Value2Ignored", "Value4Ignored"))
 			continue
 		}

@@ -7,11 +7,7 @@ import (
 
 // AddIndent adds indentation to the code.
 func AddIndent(code string, numOfIndentations int) string {
-	var indent string
-	for range numOfIndentations {
-		indent += "\t"
-	}
-
+	indent := strings.Repeat("\t", numOfIndentations)
 	return indent + strings.ReplaceAll(code, "\n", "\n"+indent)
 }
 

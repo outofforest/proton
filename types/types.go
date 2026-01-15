@@ -37,6 +37,15 @@ type BuilderFactoryNonConstant interface {
 	UnmarshalCodeTemplate(varIndex *uint64) string
 }
 
+// TypeMap implements type mapping required by go code.
+type TypeMap struct {
+	pkg          string
+	imports      map[string]string
+	aliases      map[string]struct{}
+	varIndexes   map[reflect.Type]uint64
+	varNameCaser cases.Caser
+}
+
 // NewTypeMap creates new type map.
 func NewTypeMap(pkg string) *TypeMap {
 	return &TypeMap{
@@ -46,15 +55,6 @@ func NewTypeMap(pkg string) *TypeMap {
 		varIndexes:   map[reflect.Type]uint64{},
 		varNameCaser: cases.Title(language.English, cases.NoLower),
 	}
-}
-
-// TypeMap implements type mapping required by go code.
-type TypeMap struct {
-	pkg          string
-	imports      map[string]string
-	aliases      map[string]struct{}
-	varIndexes   map[reflect.Type]uint64
-	varNameCaser cases.Caser
 }
 
 // TypeName generates a type name for type.

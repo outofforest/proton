@@ -34,7 +34,7 @@ import (
 	"github.com/outofforest/proton/types/tuint8"
 )
 
-var timeType = reflect.TypeOf(time.Time{})
+var timeType = reflect.TypeFor[time.Time]()
 
 // Get returns builder for particular type.
 //
