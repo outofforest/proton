@@ -13,14 +13,11 @@ import (
 // go tool pprof -http="localhost:8000" pprofbin ./profile.out
 
 func BenchmarkValue(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	s := implValue{}
 
 	r := str
 
-	for range b.N {
+	for b.Loop() {
 		b.StartTimer()
 		for range 100000 {
 			r = s.Method(r)
@@ -30,14 +27,11 @@ func BenchmarkValue(b *testing.B) {
 }
 
 func BenchmarkPointer(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	s := &implPointer{}
 
 	r := str
 
-	for range b.N {
+	for b.Loop() {
 		b.StartTimer()
 		for range 100000 {
 			r = s.Method(r)
@@ -47,14 +41,11 @@ func BenchmarkPointer(b *testing.B) {
 }
 
 func BenchmarkInterfaceValue(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	var s iface = implValue{}
 
 	r := str
 
-	for range b.N {
+	for b.Loop() {
 		b.StartTimer()
 		for range 100000 {
 			r = s.Method(r)
@@ -64,14 +55,11 @@ func BenchmarkInterfaceValue(b *testing.B) {
 }
 
 func BenchmarkInterfacePointer(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	var s iface = &implPointer{}
 
 	r := str
 
-	for range b.N {
+	for b.Loop() {
 		b.StartTimer()
 		for range 100000 {
 			r = s.Method(r)
@@ -81,12 +69,9 @@ func BenchmarkInterfacePointer(b *testing.B) {
 }
 
 func BenchmarkFunction(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	r := str
 
-	for range b.N {
+	for b.Loop() {
 		b.StartTimer()
 		for range 100000 {
 			r = method(r)
@@ -96,12 +81,9 @@ func BenchmarkFunction(b *testing.B) {
 }
 
 func BenchmarkVarFunction(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	r := str
 
-	for range b.N {
+	for b.Loop() {
 		b.StartTimer()
 		for range 100000 {
 			r = methodVar(r)
@@ -111,13 +93,10 @@ func BenchmarkVarFunction(b *testing.B) {
 }
 
 func BenchmarkFunctionInVar(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	r := str
 	f := method
 
-	for range b.N {
+	for b.Loop() {
 		b.StartTimer()
 		for range 100000 {
 			r = f(r)
@@ -127,15 +106,12 @@ func BenchmarkFunctionInVar(b *testing.B) {
 }
 
 func BenchmarkValueMethodInVar(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	r := str
 
 	s := implValue{}
 	f := s.Method
 
-	for range b.N {
+	for b.Loop() {
 		b.StartTimer()
 		for range 100000 {
 			r = f(r)
@@ -145,15 +121,12 @@ func BenchmarkValueMethodInVar(b *testing.B) {
 }
 
 func BenchmarkPointerMethodInVar(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	r := str
 
 	s := &implPointer{}
 	f := s.Method
 
-	for range b.N {
+	for b.Loop() {
 		b.StartTimer()
 		for range 100000 {
 			r = f(r)
@@ -163,15 +136,12 @@ func BenchmarkPointerMethodInVar(b *testing.B) {
 }
 
 func BenchmarkInterfaceValueMethodInVar(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	r := str
 
 	var s iface = implValue{}
 	f := s.Method
 
-	for range b.N {
+	for b.Loop() {
 		b.StartTimer()
 		for range 100000 {
 			r = f(r)
@@ -181,15 +151,12 @@ func BenchmarkInterfaceValueMethodInVar(b *testing.B) {
 }
 
 func BenchmarkInterfacePointerMethodInVar(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	r := str
 
 	var s iface = &implPointer{}
 	f := s.Method
 
-	for range b.N {
+	for b.Loop() {
 		b.StartTimer()
 		for range 100000 {
 			r = f(r)
@@ -199,9 +166,6 @@ func BenchmarkInterfacePointerMethodInVar(b *testing.B) {
 }
 
 func BenchmarkMarshalingMixed(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	m := pkg1.NewMarshaller()
 
 	var msg2 any
@@ -209,8 +173,7 @@ func BenchmarkMarshalingMixed(b *testing.B) {
 	size, _ := m.Size(msgMixed)
 	buf := make([]byte, size)
 
-	b.StartTimer()
-	for range b.N {
+	for b.Loop() {
 		id, _, _ := m.Marshal(msgMixed, buf)
 		msg2, _, _ = m.Unmarshal(id, buf)
 	}
@@ -220,17 +183,13 @@ func BenchmarkMarshalingMixed(b *testing.B) {
 }
 
 func BenchmarkMarshalingSlices(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	m := pkg1.NewMarshaller()
 
 	var msg2 any
 	size, _ := m.Size(msgSlice)
 	buf := make([]byte, size)
 
-	b.StartTimer()
-	for range b.N {
+	for b.Loop() {
 		id, _, _ := m.Marshal(msgSlice, buf)
 		msg2, _, _ = m.Unmarshal(id, buf)
 	}
@@ -240,17 +199,13 @@ func BenchmarkMarshalingSlices(b *testing.B) {
 }
 
 func BenchmarkMarshalingByteSlices(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	m := pkg1.NewMarshaller()
 
 	var msg2 any
 	size, _ := m.Size(msgBytes)
 	buf := make([]byte, size)
 
-	b.StartTimer()
-	for range b.N {
+	for b.Loop() {
 		id, _, _ := m.Marshal(msgBytes, buf)
 		msg2, _, _ = m.Unmarshal(id, buf)
 	}
@@ -260,17 +215,13 @@ func BenchmarkMarshalingByteSlices(b *testing.B) {
 }
 
 func BenchmarkMarshalingStrings(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	m := pkg1.NewMarshaller()
 
 	var msg2 any
 	size, _ := m.Size(msgStrings)
 	buf := make([]byte, size)
 
-	b.StartTimer()
-	for range b.N {
+	for b.Loop() {
 		id, _, _ := m.Marshal(msgStrings, buf)
 		msg2, _, _ = m.Unmarshal(id, buf)
 	}
@@ -280,9 +231,6 @@ func BenchmarkMarshalingStrings(b *testing.B) {
 }
 
 func BenchmarkMarshalingEmptySlices(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	m := pkg1.NewMarshaller()
 
 	var msg2 any
@@ -291,8 +239,7 @@ func BenchmarkMarshalingEmptySlices(b *testing.B) {
 	size, _ := m.Size(msg)
 	buf := make([]byte, size)
 
-	b.StartTimer()
-	for range b.N {
+	for b.Loop() {
 		id, _, _ := m.Marshal(msg, buf)
 		msg2, _, _ = m.Unmarshal(id, buf)
 	}
@@ -302,9 +249,6 @@ func BenchmarkMarshalingEmptySlices(b *testing.B) {
 }
 
 func BenchmarkMarshalingEmptyMaps(b *testing.B) {
-	b.StopTimer()
-	b.ResetTimer()
-
 	m := pkg1.NewMarshaller()
 
 	var msg2 any
@@ -313,8 +257,7 @@ func BenchmarkMarshalingEmptyMaps(b *testing.B) {
 	size, _ := m.Size(msg)
 	buf := make([]byte, size)
 
-	b.StartTimer()
-	for range b.N {
+	for b.Loop() {
 		id, _, _ := m.Marshal(msg, buf)
 		msg2, _, _ = m.Unmarshal(id, buf)
 	}

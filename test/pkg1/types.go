@@ -189,6 +189,7 @@ type MsgStruct struct {
 // MsgStructAnonymous is used in tests.
 type MsgStructAnonymous struct {
 	SubMsg
+
 	Value2 pkg2.SubMsg
 }
 
