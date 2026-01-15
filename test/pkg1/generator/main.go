@@ -1,22 +1,73 @@
 package main
 
 import (
-	"reflect"
-
 	"github.com/outofforest/proton"
 	"github.com/outofforest/proton/test/pkg1"
+	"github.com/outofforest/proton/test/pkg2"
 )
 
 //go:generate go run .
 
 func main() {
-	msgs := make([]proton.Msg, 0, len(pkg1.List))
-	for _, m := range pkg1.List {
-		if reflect.TypeOf(m) == reflect.TypeFor[pkg1.MsgIgnore]() {
-			msgs = append(msgs, proton.Message(m, "Value2Ignored", "Value4Ignored"))
-			continue
-		}
-		msgs = append(msgs, proton.Message(m))
-	}
-	proton.Generate("../types.proton.go", msgs...)
+	proton.Generate("../types.proton.go",
+		proton.Message[pkg2.SubMsg](),
+		proton.Message[pkg1.MsgUint64](),
+		proton.Message[pkg1.MsgUint32](),
+		proton.Message[pkg1.MsgUint16](),
+		proton.Message[pkg1.MsgUint8](),
+		proton.Message[pkg1.MsgInt64](),
+		proton.Message[pkg1.MsgInt32](),
+		proton.Message[pkg1.MsgInt16](),
+		proton.Message[pkg1.MsgInt8](),
+		proton.Message[pkg1.MsgBool3](),
+		proton.Message[pkg1.MsgBool10](),
+		proton.Message[pkg1.MsgFloat64](),
+		proton.Message[pkg1.MsgFloat32](),
+		proton.Message[pkg1.MsgString](),
+		proton.Message[pkg1.MsgArray](),
+		proton.Message[pkg1.MsgSlice](),
+		proton.Message[pkg1.MsgMap](),
+		proton.Message[pkg1.MsgMapString](),
+		proton.Message[pkg1.MsgStruct](),
+		proton.Message[pkg1.MsgStructAnonymous](),
+		proton.Message[pkg1.MsgArrayUint8](),
+		proton.Message[pkg1.MsgArrayInt8](),
+		proton.Message[pkg1.MsgArrayFloat32](),
+		proton.Message[pkg1.MsgArrayFloat64](),
+		proton.Message[pkg1.MsgSliceUint8](),
+		proton.Message[pkg1.MsgSliceInt8](),
+		proton.Message[pkg1.MsgSliceFloat32](),
+		proton.Message[pkg1.MsgSliceFloat64](),
+		proton.Message[pkg1.MsgMixed](),
+		proton.Message[pkg1.MsgUint64Custom](),
+		proton.Message[pkg1.MsgUint32Custom](),
+		proton.Message[pkg1.MsgUint16Custom](),
+		proton.Message[pkg1.MsgUint8Custom](),
+		proton.Message[pkg1.MsgInt64Custom](),
+		proton.Message[pkg1.MsgInt32Custom](),
+		proton.Message[pkg1.MsgInt16Custom](),
+		proton.Message[pkg1.MsgInt8Custom](),
+		proton.Message[pkg1.MsgBoolCustom](),
+		proton.Message[pkg1.MsgFloat64Custom](),
+		proton.Message[pkg1.MsgFloat32Custom](),
+		proton.Message[pkg1.MsgStringCustom](),
+		proton.Message[pkg1.MsgArrayCustom](),
+		proton.Message[pkg1.MsgSliceCustom](),
+		proton.Message[pkg1.MsgMapCustom](),
+		proton.Message[pkg1.MsgArrayUint8Custom](),
+		proton.Message[pkg1.MsgArrayUint8Custom2](),
+		proton.Message[pkg1.MsgArrayInt8Custom](),
+		proton.Message[pkg1.MsgArrayFloat32Custom](),
+		proton.Message[pkg1.MsgArrayFloat64Custom](),
+		proton.Message[pkg1.MsgSliceUint8Custom](),
+		proton.Message[pkg1.MsgSliceUint8Custom2](),
+		proton.Message[pkg1.MsgSliceInt8Custom](),
+		proton.Message[pkg1.MsgSliceFloat32Custom](),
+		proton.Message[pkg1.MsgSliceFloat64Custom](),
+		proton.Message[pkg1.MsgTime](),
+		proton.Message[pkg1.MsgMixedCustom](),
+		proton.Message[pkg1.MsgIgnore]("Value2Ignored", "Value4Ignored"),
+		proton.Message[pkg1.MsgNotIgnore](),
+		proton.Message[pkg1.MsgStrings](),
+	)
 }

@@ -34,14 +34,14 @@ type Msg struct {
 }
 
 // Message defines message to generate code for.
-func Message(msg any, ignoreFields ...string) Msg {
+func Message[T any](ignoreFields ...string) Msg {
 	ifMap := map[string]bool{}
 	for _, f := range ignoreFields {
 		ifMap[f] = true
 	}
 
 	return Msg{
-		MsgType:      reflect.TypeOf(msg),
+		MsgType:      reflect.TypeFor[T](),
 		IgnoreFields: ifMap,
 	}
 }
