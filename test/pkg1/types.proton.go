@@ -719,6 +719,132 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 	}
 }
 
+// IsPatchNeeded checks if non-empty patch exists.
+func (m Marshaller) IsPatchNeeded(msgDst, msgSrc any) (bool, error) {
+	switch msg2 := msgDst.(type) {
+	case *pkg2.SubMsg:
+		return isPatchNeeded41(msg2, msgSrc.(*pkg2.SubMsg)), nil
+	case *MsgUint64:
+		return isPatchNeeded61(msg2, msgSrc.(*MsgUint64)), nil
+	case *MsgUint32:
+		return isPatchNeeded60(msg2, msgSrc.(*MsgUint32)), nil
+	case *MsgUint16:
+		return isPatchNeeded59(msg2, msgSrc.(*MsgUint16)), nil
+	case *MsgUint8:
+		return isPatchNeeded58(msg2, msgSrc.(*MsgUint8)), nil
+	case *MsgInt64:
+		return isPatchNeeded57(msg2, msgSrc.(*MsgInt64)), nil
+	case *MsgInt32:
+		return isPatchNeeded56(msg2, msgSrc.(*MsgInt32)), nil
+	case *MsgInt16:
+		return isPatchNeeded55(msg2, msgSrc.(*MsgInt16)), nil
+	case *MsgInt8:
+		return isPatchNeeded54(msg2, msgSrc.(*MsgInt8)), nil
+	case *MsgBool3:
+		return isPatchNeeded53(msg2, msgSrc.(*MsgBool3)), nil
+	case *MsgBool10:
+		return isPatchNeeded52(msg2, msgSrc.(*MsgBool10)), nil
+	case *MsgFloat64:
+		return isPatchNeeded51(msg2, msgSrc.(*MsgFloat64)), nil
+	case *MsgFloat32:
+		return isPatchNeeded50(msg2, msgSrc.(*MsgFloat32)), nil
+	case *MsgString:
+		return isPatchNeeded49(msg2, msgSrc.(*MsgString)), nil
+	case *MsgArray:
+		return isPatchNeeded48(msg2, msgSrc.(*MsgArray)), nil
+	case *MsgSlice:
+		return isPatchNeeded47(msg2, msgSrc.(*MsgSlice)), nil
+	case *MsgMap:
+		return isPatchNeeded46(msg2, msgSrc.(*MsgMap)), nil
+	case *MsgMapString:
+		return isPatchNeeded45(msg2, msgSrc.(*MsgMapString)), nil
+	case *MsgStruct:
+		return isPatchNeeded44(msg2, msgSrc.(*MsgStruct)), nil
+	case *MsgStructAnonymous:
+		return isPatchNeeded42(msg2, msgSrc.(*MsgStructAnonymous)), nil
+	case *MsgArrayUint8:
+		return isPatchNeeded39(msg2, msgSrc.(*MsgArrayUint8)), nil
+	case *MsgArrayInt8:
+		return isPatchNeeded38(msg2, msgSrc.(*MsgArrayInt8)), nil
+	case *MsgArrayFloat32:
+		return isPatchNeeded37(msg2, msgSrc.(*MsgArrayFloat32)), nil
+	case *MsgArrayFloat64:
+		return isPatchNeeded36(msg2, msgSrc.(*MsgArrayFloat64)), nil
+	case *MsgSliceUint8:
+		return isPatchNeeded35(msg2, msgSrc.(*MsgSliceUint8)), nil
+	case *MsgSliceInt8:
+		return isPatchNeeded34(msg2, msgSrc.(*MsgSliceInt8)), nil
+	case *MsgSliceFloat32:
+		return isPatchNeeded33(msg2, msgSrc.(*MsgSliceFloat32)), nil
+	case *MsgSliceFloat64:
+		return isPatchNeeded32(msg2, msgSrc.(*MsgSliceFloat64)), nil
+	case *MsgMixed:
+		return isPatchNeeded31(msg2, msgSrc.(*MsgMixed)), nil
+	case *MsgUint64Custom:
+		return isPatchNeeded29(msg2, msgSrc.(*MsgUint64Custom)), nil
+	case *MsgUint32Custom:
+		return isPatchNeeded28(msg2, msgSrc.(*MsgUint32Custom)), nil
+	case *MsgUint16Custom:
+		return isPatchNeeded27(msg2, msgSrc.(*MsgUint16Custom)), nil
+	case *MsgUint8Custom:
+		return isPatchNeeded26(msg2, msgSrc.(*MsgUint8Custom)), nil
+	case *MsgInt64Custom:
+		return isPatchNeeded25(msg2, msgSrc.(*MsgInt64Custom)), nil
+	case *MsgInt32Custom:
+		return isPatchNeeded24(msg2, msgSrc.(*MsgInt32Custom)), nil
+	case *MsgInt16Custom:
+		return isPatchNeeded23(msg2, msgSrc.(*MsgInt16Custom)), nil
+	case *MsgInt8Custom:
+		return isPatchNeeded22(msg2, msgSrc.(*MsgInt8Custom)), nil
+	case *MsgBoolCustom:
+		return isPatchNeeded21(msg2, msgSrc.(*MsgBoolCustom)), nil
+	case *MsgFloat64Custom:
+		return isPatchNeeded20(msg2, msgSrc.(*MsgFloat64Custom)), nil
+	case *MsgFloat32Custom:
+		return isPatchNeeded19(msg2, msgSrc.(*MsgFloat32Custom)), nil
+	case *MsgStringCustom:
+		return isPatchNeeded18(msg2, msgSrc.(*MsgStringCustom)), nil
+	case *MsgArrayCustom:
+		return isPatchNeeded17(msg2, msgSrc.(*MsgArrayCustom)), nil
+	case *MsgSliceCustom:
+		return isPatchNeeded16(msg2, msgSrc.(*MsgSliceCustom)), nil
+	case *MsgMapCustom:
+		return isPatchNeeded15(msg2, msgSrc.(*MsgMapCustom)), nil
+	case *MsgArrayUint8Custom:
+		return isPatchNeeded14(msg2, msgSrc.(*MsgArrayUint8Custom)), nil
+	case *MsgArrayUint8Custom2:
+		return isPatchNeeded13(msg2, msgSrc.(*MsgArrayUint8Custom2)), nil
+	case *MsgArrayInt8Custom:
+		return isPatchNeeded12(msg2, msgSrc.(*MsgArrayInt8Custom)), nil
+	case *MsgArrayFloat32Custom:
+		return isPatchNeeded11(msg2, msgSrc.(*MsgArrayFloat32Custom)), nil
+	case *MsgArrayFloat64Custom:
+		return isPatchNeeded10(msg2, msgSrc.(*MsgArrayFloat64Custom)), nil
+	case *MsgSliceUint8Custom:
+		return isPatchNeeded9(msg2, msgSrc.(*MsgSliceUint8Custom)), nil
+	case *MsgSliceUint8Custom2:
+		return isPatchNeeded8(msg2, msgSrc.(*MsgSliceUint8Custom2)), nil
+	case *MsgSliceInt8Custom:
+		return isPatchNeeded7(msg2, msgSrc.(*MsgSliceInt8Custom)), nil
+	case *MsgSliceFloat32Custom:
+		return isPatchNeeded6(msg2, msgSrc.(*MsgSliceFloat32Custom)), nil
+	case *MsgSliceFloat64Custom:
+		return isPatchNeeded5(msg2, msgSrc.(*MsgSliceFloat64Custom)), nil
+	case *MsgTime:
+		return isPatchNeeded4(msg2, msgSrc.(*MsgTime)), nil
+	case *MsgMixedCustom:
+		return isPatchNeeded3(msg2, msgSrc.(*MsgMixedCustom)), nil
+	case *MsgIgnore:
+		return isPatchNeededi1(msg2, msgSrc.(*MsgIgnore)), nil
+	case *MsgNotIgnore:
+		return isPatchNeeded2(msg2, msgSrc.(*MsgNotIgnore)), nil
+	case *MsgStrings:
+		return isPatchNeeded0(msg2, msgSrc.(*MsgStrings)), nil
+	default:
+		return false, errors.Errorf("unknown message type %T", msgDst)
+	}
+}
+
 // MakePatch creates a patch.
 func (m Marshaller) MakePatch(msgDst, msgSrc any, buf []byte) (retID, retSize uint64, retErr error) {
 	defer helpers.RecoverMakePatch(&retErr)
@@ -1302,6 +1428,91 @@ func unmarshal0(m *MsgStrings, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded0(m, mSrc *MsgStrings) bool {
+	{
+		// Value1
+
+		if !reflect.DeepEqual(m.Value1, mSrc.Value1) {
+			return true
+		}
+
+	}
+	{
+		// Value2
+
+		if !reflect.DeepEqual(m.Value2, mSrc.Value2) {
+			return true
+		}
+
+	}
+	{
+		// Value3
+
+		if !reflect.DeepEqual(m.Value3, mSrc.Value3) {
+			return true
+		}
+
+	}
+	{
+		// Value4
+
+		if !reflect.DeepEqual(m.Value4, mSrc.Value4) {
+			return true
+		}
+
+	}
+	{
+		// Value5
+
+		if !reflect.DeepEqual(m.Value5, mSrc.Value5) {
+			return true
+		}
+
+	}
+	{
+		// Value6
+
+		if !reflect.DeepEqual(m.Value6, mSrc.Value6) {
+			return true
+		}
+
+	}
+	{
+		// Value7
+
+		if !reflect.DeepEqual(m.Value7, mSrc.Value7) {
+			return true
+		}
+
+	}
+	{
+		// Value8
+
+		if !reflect.DeepEqual(m.Value8, mSrc.Value8) {
+			return true
+		}
+
+	}
+	{
+		// Value9
+
+		if !reflect.DeepEqual(m.Value9, mSrc.Value9) {
+			return true
+		}
+
+	}
+	{
+		// Value10
+
+		if !reflect.DeepEqual(m.Value10, mSrc.Value10) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch0(m, mSrc *MsgStrings, b []byte) uint64 {
 	var o uint64 = 2
 	{
@@ -1636,6 +1847,19 @@ func unmarshal2(m *MsgNotIgnore, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded2(m, mSrc *MsgNotIgnore) bool {
+	{
+		// SubMsg
+
+		if !reflect.DeepEqual(m.SubMsg, mSrc.SubMsg) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch2(m, mSrc *MsgNotIgnore, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -1770,6 +1994,41 @@ func unmarshal1(m *MsgIgnore, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded1(m, mSrc *MsgIgnore) bool {
+	{
+		// Value1
+
+		if m.Value1 != mSrc.Value1 {
+			return true
+		}
+	}
+	{
+		// Value2Ignored
+
+		if m.Value2Ignored != mSrc.Value2Ignored {
+			return true
+		}
+	}
+	{
+		// Value3
+
+		if !reflect.DeepEqual(m.Value3, mSrc.Value3) {
+			return true
+		}
+
+	}
+	{
+		// Value4Ignored
+
+		if !reflect.DeepEqual(m.Value4Ignored, mSrc.Value4Ignored) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch1(m, mSrc *MsgIgnore, b []byte) uint64 {
@@ -1936,6 +2195,26 @@ func unmarshali1(m *MsgIgnore, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeededi1(m, mSrc *MsgIgnore) bool {
+	{
+		// Value1
+
+		if m.Value1 != mSrc.Value1 {
+			return true
+		}
+	}
+	{
+		// Value3
+
+		if !reflect.DeepEqual(m.Value3, mSrc.Value3) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatchi1(m, mSrc *MsgIgnore, b []byte) uint64 {
 	var o uint64 = 2
 	{
@@ -2090,6 +2369,19 @@ func unmarshal3(m *MsgMixedCustom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded3(m, mSrc *MsgMixedCustom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch3(m, mSrc *MsgMixedCustom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -2202,6 +2494,19 @@ func unmarshal4(m *MsgTime, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded4(m, mSrc *MsgTime) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch4(m, mSrc *MsgTime, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -2279,6 +2584,19 @@ func unmarshal5(m *MsgSliceFloat64Custom, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded5(m, mSrc *MsgSliceFloat64Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch5(m, mSrc *MsgSliceFloat64Custom, b []byte) uint64 {
@@ -2366,6 +2684,19 @@ func unmarshal6(m *MsgSliceFloat32Custom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded6(m, mSrc *MsgSliceFloat32Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch6(m, mSrc *MsgSliceFloat32Custom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -2449,6 +2780,19 @@ func unmarshal7(m *MsgSliceInt8Custom, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded7(m, mSrc *MsgSliceInt8Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch7(m, mSrc *MsgSliceInt8Custom, b []byte) uint64 {
@@ -2536,6 +2880,19 @@ func unmarshal8(m *MsgSliceUint8Custom2, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded8(m, mSrc *MsgSliceUint8Custom2) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch8(m, mSrc *MsgSliceUint8Custom2, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -2621,6 +2978,19 @@ func unmarshal9(m *MsgSliceUint8Custom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded9(m, mSrc *MsgSliceUint8Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch9(m, mSrc *MsgSliceUint8Custom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -2690,6 +3060,19 @@ func unmarshal10(m *MsgArrayFloat64Custom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded10(m, mSrc *MsgArrayFloat64Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch10(m, mSrc *MsgArrayFloat64Custom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -2748,6 +3131,19 @@ func unmarshal11(m *MsgArrayFloat32Custom, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded11(m, mSrc *MsgArrayFloat32Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch11(m, mSrc *MsgArrayFloat32Custom, b []byte) uint64 {
@@ -2810,6 +3206,19 @@ func unmarshal12(m *MsgArrayInt8Custom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded12(m, mSrc *MsgArrayInt8Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch12(m, mSrc *MsgArrayInt8Custom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -2870,6 +3279,19 @@ func unmarshal13(m *MsgArrayUint8Custom2, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded13(m, mSrc *MsgArrayUint8Custom2) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch13(m, mSrc *MsgArrayUint8Custom2, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -2928,6 +3350,19 @@ func unmarshal14(m *MsgArrayUint8Custom, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded14(m, mSrc *MsgArrayUint8Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch14(m, mSrc *MsgArrayUint8Custom, b []byte) uint64 {
@@ -3030,6 +3465,19 @@ func unmarshal15(m *MsgMapCustom, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded15(m, mSrc *MsgMapCustom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch15(m, mSrc *MsgMapCustom, b []byte) uint64 {
@@ -3137,6 +3585,19 @@ func unmarshal16(m *MsgSliceCustom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded16(m, mSrc *MsgSliceCustom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch16(m, mSrc *MsgSliceCustom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -3212,6 +3673,19 @@ func unmarshal17(m *MsgArrayCustom, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded17(m, mSrc *MsgArrayCustom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch17(m, mSrc *MsgArrayCustom, b []byte) uint64 {
@@ -3295,6 +3769,19 @@ func unmarshal18(m *MsgStringCustom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded18(m, mSrc *MsgStringCustom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch18(m, mSrc *MsgStringCustom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -3365,6 +3852,19 @@ func unmarshal19(m *MsgFloat32Custom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded19(m, mSrc *MsgFloat32Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch19(m, mSrc *MsgFloat32Custom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -3423,6 +3923,19 @@ func unmarshal20(m *MsgFloat64Custom, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded20(m, mSrc *MsgFloat64Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch20(m, mSrc *MsgFloat64Custom, b []byte) uint64 {
@@ -3487,6 +4000,18 @@ func unmarshal21(m *MsgBoolCustom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded21(m, mSrc *MsgBoolCustom) bool {
+	{
+		// Value
+
+		if m.Value != mSrc.Value {
+			return true
+		}
+	}
+
+	return false
+}
+
 func makePatch21(m, mSrc *MsgBoolCustom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -3542,6 +4067,19 @@ func unmarshal22(m *MsgInt8Custom, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded22(m, mSrc *MsgInt8Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch22(m, mSrc *MsgInt8Custom, b []byte) uint64 {
@@ -3607,6 +4145,19 @@ func unmarshal23(m *MsgInt16Custom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded23(m, mSrc *MsgInt16Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch23(m, mSrc *MsgInt16Custom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -3666,6 +4217,19 @@ func unmarshal24(m *MsgInt32Custom, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded24(m, mSrc *MsgInt32Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch24(m, mSrc *MsgInt32Custom, b []byte) uint64 {
@@ -3729,6 +4293,19 @@ func unmarshal25(m *MsgInt64Custom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded25(m, mSrc *MsgInt64Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch25(m, mSrc *MsgInt64Custom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -3785,6 +4362,19 @@ func unmarshal26(m *MsgUint8Custom, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded26(m, mSrc *MsgUint8Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch26(m, mSrc *MsgUint8Custom, b []byte) uint64 {
@@ -3850,6 +4440,19 @@ func unmarshal27(m *MsgUint16Custom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded27(m, mSrc *MsgUint16Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch27(m, mSrc *MsgUint16Custom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -3911,6 +4514,19 @@ func unmarshal28(m *MsgUint32Custom, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded28(m, mSrc *MsgUint32Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch28(m, mSrc *MsgUint32Custom, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -3970,6 +4586,19 @@ func unmarshal29(m *MsgUint64Custom, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded29(m, mSrc *MsgUint64Custom) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch29(m, mSrc *MsgUint64Custom, b []byte) uint64 {
@@ -4361,6 +4990,73 @@ func unmarshal31(m *MsgMixed, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded31(m, mSrc *MsgMixed) bool {
+	{
+		// Value1
+
+		if !reflect.DeepEqual(m.Value1, mSrc.Value1) {
+			return true
+		}
+
+	}
+	{
+		// Value2
+
+		if !reflect.DeepEqual(m.Value2, mSrc.Value2) {
+			return true
+		}
+
+	}
+	{
+		// Value3
+
+		if !reflect.DeepEqual(m.Value3, mSrc.Value3) {
+			return true
+		}
+
+	}
+	{
+		// Value4
+
+		if !reflect.DeepEqual(m.Value4, mSrc.Value4) {
+			return true
+		}
+
+	}
+	{
+		// Value5
+
+		if !reflect.DeepEqual(m.Value5, mSrc.Value5) {
+			return true
+		}
+
+	}
+	{
+		// Value6
+
+		if m.Value6 != mSrc.Value6 {
+			return true
+		}
+	}
+	{
+		// Value7
+
+		if m.Value7 != mSrc.Value7 {
+			return true
+		}
+	}
+	{
+		// Value8
+
+		if !reflect.DeepEqual(m.Value8, mSrc.Value8) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch31(m, mSrc *MsgMixed, b []byte) uint64 {
 	var o uint64 = 2
 	{
@@ -4750,6 +5446,19 @@ func unmarshal32(m *MsgSliceFloat64, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded32(m, mSrc *MsgSliceFloat64) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch32(m, mSrc *MsgSliceFloat64, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -4833,6 +5542,19 @@ func unmarshal33(m *MsgSliceFloat32, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded33(m, mSrc *MsgSliceFloat32) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch33(m, mSrc *MsgSliceFloat32, b []byte) uint64 {
@@ -4920,6 +5642,19 @@ func unmarshal34(m *MsgSliceInt8, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded34(m, mSrc *MsgSliceInt8) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch34(m, mSrc *MsgSliceInt8, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -5005,6 +5740,19 @@ func unmarshal35(m *MsgSliceUint8, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded35(m, mSrc *MsgSliceUint8) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch35(m, mSrc *MsgSliceUint8, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -5074,6 +5822,19 @@ func unmarshal36(m *MsgArrayFloat64, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded36(m, mSrc *MsgArrayFloat64) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch36(m, mSrc *MsgArrayFloat64, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -5132,6 +5893,19 @@ func unmarshal37(m *MsgArrayFloat32, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded37(m, mSrc *MsgArrayFloat32) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch37(m, mSrc *MsgArrayFloat32, b []byte) uint64 {
@@ -5194,6 +5968,19 @@ func unmarshal38(m *MsgArrayInt8, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded38(m, mSrc *MsgArrayInt8) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch38(m, mSrc *MsgArrayInt8, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -5252,6 +6039,19 @@ func unmarshal39(m *MsgArrayUint8, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded39(m, mSrc *MsgArrayUint8) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch39(m, mSrc *MsgArrayUint8, b []byte) uint64 {
@@ -5330,6 +6130,27 @@ func unmarshal42(m *MsgStructAnonymous, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded42(m, mSrc *MsgStructAnonymous) bool {
+	{
+		// SubMsg
+
+		if !reflect.DeepEqual(m.SubMsg, mSrc.SubMsg) {
+			return true
+		}
+
+	}
+	{
+		// Value2
+
+		if !reflect.DeepEqual(m.Value2, mSrc.Value2) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch42(m, mSrc *MsgStructAnonymous, b []byte) uint64 {
@@ -5560,6 +6381,27 @@ func unmarshal44(m *MsgStruct, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded44(m, mSrc *MsgStruct) bool {
+	{
+		// Value1
+
+		if !reflect.DeepEqual(m.Value1, mSrc.Value1) {
+			return true
+		}
+
+	}
+	{
+		// Value2
+
+		if !reflect.DeepEqual(m.Value2, mSrc.Value2) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch44(m, mSrc *MsgStruct, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -5693,6 +6535,19 @@ func unmarshal45(m *MsgMapString, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded45(m, mSrc *MsgMapString) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch45(m, mSrc *MsgMapString, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -5818,6 +6673,19 @@ func unmarshal46(m *MsgMap, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded46(m, mSrc *MsgMap) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch46(m, mSrc *MsgMap, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -5914,6 +6782,19 @@ func unmarshal47(m *MsgSlice, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded47(m, mSrc *MsgSlice) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch47(m, mSrc *MsgSlice, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -5994,6 +6875,19 @@ func unmarshal48(m *MsgArray, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded48(m, mSrc *MsgArray) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch48(m, mSrc *MsgArray, b []byte) uint64 {
@@ -6083,6 +6977,19 @@ func unmarshal49(m *MsgString, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded49(m, mSrc *MsgString) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch49(m, mSrc *MsgString, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -6153,6 +7060,19 @@ func unmarshal50(m *MsgFloat32, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded50(m, mSrc *MsgFloat32) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch50(m, mSrc *MsgFloat32, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -6211,6 +7131,19 @@ func unmarshal51(m *MsgFloat64, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded51(m, mSrc *MsgFloat64) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch51(m, mSrc *MsgFloat64, b []byte) uint64 {
@@ -6399,6 +7332,81 @@ func unmarshal52(m *MsgBool10, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded52(m, mSrc *MsgBool10) bool {
+	{
+		// Value1
+
+		if m.Value1 != mSrc.Value1 {
+			return true
+		}
+	}
+	{
+		// Value2
+
+		if m.Value2 != mSrc.Value2 {
+			return true
+		}
+	}
+	{
+		// Value3
+
+		if m.Value3 != mSrc.Value3 {
+			return true
+		}
+	}
+	{
+		// Value4
+
+		if m.Value4 != mSrc.Value4 {
+			return true
+		}
+	}
+	{
+		// Value5
+
+		if m.Value5 != mSrc.Value5 {
+			return true
+		}
+	}
+	{
+		// Value6
+
+		if m.Value6 != mSrc.Value6 {
+			return true
+		}
+	}
+	{
+		// Value7
+
+		if m.Value7 != mSrc.Value7 {
+			return true
+		}
+	}
+	{
+		// Value8
+
+		if m.Value8 != mSrc.Value8 {
+			return true
+		}
+	}
+	{
+		// Value9
+
+		if m.Value9 != mSrc.Value9 {
+			return true
+		}
+	}
+	{
+		// Value10
+
+		if m.Value10 != mSrc.Value10 {
+			return true
+		}
+	}
+
+	return false
 }
 
 func makePatch52(m, mSrc *MsgBool10, b []byte) uint64 {
@@ -6632,6 +7640,32 @@ func unmarshal53(m *MsgBool3, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded53(m, mSrc *MsgBool3) bool {
+	{
+		// Value1
+
+		if m.Value1 != mSrc.Value1 {
+			return true
+		}
+	}
+	{
+		// Value2
+
+		if m.Value2 != mSrc.Value2 {
+			return true
+		}
+	}
+	{
+		// Value3
+
+		if m.Value3 != mSrc.Value3 {
+			return true
+		}
+	}
+
+	return false
+}
+
 func makePatch53(m, mSrc *MsgBool3, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -6721,6 +7755,19 @@ func unmarshal54(m *MsgInt8, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded54(m, mSrc *MsgInt8) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch54(m, mSrc *MsgInt8, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -6784,6 +7831,19 @@ func unmarshal55(m *MsgInt16, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded55(m, mSrc *MsgInt16) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch55(m, mSrc *MsgInt16, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -6843,6 +7903,19 @@ func unmarshal56(m *MsgInt32, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded56(m, mSrc *MsgInt32) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch56(m, mSrc *MsgInt32, b []byte) uint64 {
@@ -6906,6 +7979,19 @@ func unmarshal57(m *MsgInt64, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded57(m, mSrc *MsgInt64) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch57(m, mSrc *MsgInt64, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -6962,6 +8048,19 @@ func unmarshal58(m *MsgUint8, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded58(m, mSrc *MsgUint8) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch58(m, mSrc *MsgUint8, b []byte) uint64 {
@@ -7027,6 +8126,19 @@ func unmarshal59(m *MsgUint16, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded59(m, mSrc *MsgUint16) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch59(m, mSrc *MsgUint16, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -7088,6 +8200,19 @@ func unmarshal60(m *MsgUint32, b []byte) uint64 {
 	return o
 }
 
+func isPatchNeeded60(m, mSrc *MsgUint32) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func makePatch60(m, mSrc *MsgUint32, b []byte) uint64 {
 	var o uint64 = 1
 	{
@@ -7147,6 +8272,19 @@ func unmarshal61(m *MsgUint64, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded61(m, mSrc *MsgUint64) bool {
+	{
+		// Value
+
+		if !reflect.DeepEqual(m.Value, mSrc.Value) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch61(m, mSrc *MsgUint64, b []byte) uint64 {
@@ -7298,6 +8436,35 @@ func unmarshal41(m *pkg2.SubMsg, b []byte) uint64 {
 	}
 
 	return o
+}
+
+func isPatchNeeded41(m, mSrc *pkg2.SubMsg) bool {
+	{
+		// Value1
+
+		if !reflect.DeepEqual(m.Value1, mSrc.Value1) {
+			return true
+		}
+
+	}
+	{
+		// Value2
+
+		if !reflect.DeepEqual(m.Value2, mSrc.Value2) {
+			return true
+		}
+
+	}
+	{
+		// Value3
+
+		if !reflect.DeepEqual(m.Value3, mSrc.Value3) {
+			return true
+		}
+
+	}
+
+	return false
 }
 
 func makePatch41(m, mSrc *pkg2.SubMsg, b []byte) uint64 {

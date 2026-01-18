@@ -18,6 +18,7 @@ import (
 	"github.com/outofforest/proton/helpers"
 	"github.com/outofforest/proton/methods"
 	"github.com/outofforest/proton/methods/applypatch"
+	"github.com/outofforest/proton/methods/ispatchneeded"
 	"github.com/outofforest/proton/methods/makepatch"
 	"github.com/outofforest/proton/methods/marshal"
 	"github.com/outofforest/proton/methods/size"
@@ -215,6 +216,8 @@ func generateMsg(msg Msg, tm *types.TypeMap, isRoot bool) ([]byte, []Msg, error)
 	b.Write(unmarshal.Build(cfg, tm))
 	if isRoot {
 		b.WriteString("\n\n")
+		b.Write(ispatchneeded.Build(cfg, tm))
+		b.WriteString("\n\n")
 		b.Write(makepatch.Build(cfg, tm))
 		b.WriteString("\n\n")
 		b.Write(applypatch.Build(cfg, tm))
@@ -382,6 +385,21 @@ func (m Marshaller) Unmarshal(id uint64, buf []byte) (retMsg any, retSize uint64
 }
 `
 
+	const isPatchNeededHeader = `
+// IsPatchNeeded checks if non-empty patch exists.
+func (m Marshaller) IsPatchNeeded(msgDst, msgSrc any) (bool, error) {
+	switch msg2 := msgDst.(type) {
+`
+	const isPatchNeededFooter = `	default:
+		return false, errors.Errorf("unknown message type %T", msgDst)
+	}
+}
+`
+
+	const isPatchNeededTemplate = `	case *%[1]s:
+		return %[2]s(msg2, msgSrc.(*%[1]s)), nil
+`
+
 	const makePatchHeader = `
 // MakePatch creates a patch.
 func (m Marshaller) MakePatch(msgDst, msgSrc any, buf []byte) (retID, retSize uint64, retErr error) {
@@ -516,6 +534,30 @@ func (m Marshaller) ApplyPatch(msg any, buf []byte) (retSize uint64, retErr erro
 	if _, err := out.Write([]byte(unmarshalFooter)); err != nil {
 		return errors.WithStack(err)
 	}
+
+	// ===================
+
+	if _, err := fmt.Fprint(out, isPatchNeededHeader); err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, msg := range msgs {
+		methodName := "isPatchNeeded"
+		if len(msg.IgnoreFields) > 0 {
+			methodName += "i"
+		}
+
+		if _, err := fmt.Fprintf(out, isPatchNeededTemplate, tm.TypeName(msg.MsgType),
+			tm.VarName(msg.MsgType, methodName)); err != nil {
+			return errors.WithStack(err)
+		}
+	}
+
+	if _, err := out.Write([]byte(isPatchNeededFooter)); err != nil {
+		return errors.WithStack(err)
+	}
+
+	// ====================
 
 	if _, err := fmt.Fprint(out, makePatchHeader); err != nil {
 		return errors.WithStack(err)
