@@ -425,6 +425,11 @@ func TestPatch3Bools1(t *testing.T) {
 		Value3: false,
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -456,6 +461,11 @@ func TestPatch3Bools2(t *testing.T) {
 		Value2: true,
 		Value3: true,
 	}
+
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
 
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
@@ -489,6 +499,11 @@ func TestPatch3Bools3(t *testing.T) {
 		Value3: true,
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -520,6 +535,11 @@ func TestPatch3Bools4(t *testing.T) {
 		Value2: false,
 		Value3: false,
 	}
+
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
 
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
@@ -553,6 +573,11 @@ func TestPatch3Bools5(t *testing.T) {
 		Value3: false,
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -584,6 +609,11 @@ func TestPatch3Bools6(t *testing.T) {
 		Value2: false,
 		Value3: true,
 	}
+
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
 
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
@@ -617,6 +647,11 @@ func TestPatch3Bools7(t *testing.T) {
 		Value3: false,
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -648,6 +683,8 @@ func TestPatch3Bools8(t *testing.T) {
 		Value2: false,
 		Value3: false,
 	}
+
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
 
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
@@ -681,6 +718,8 @@ func TestPatch3Bools9(t *testing.T) {
 		Value3: true,
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -713,6 +752,8 @@ func TestPatch3Bools10(t *testing.T) {
 		Value3: true,
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -744,6 +785,8 @@ func TestPatch3Bools11(t *testing.T) {
 		Value2: true,
 		Value3: false,
 	}
+
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
 
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
@@ -791,6 +834,11 @@ func TestPatch10Bools1(t *testing.T) {
 		Value10: false,
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -836,6 +884,11 @@ func TestPatch10Bools2(t *testing.T) {
 		Value9:  false,
 		Value10: true,
 	}
+
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
 
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
@@ -883,6 +936,8 @@ func TestPatch10Bools3(t *testing.T) {
 		Value10: false,
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -929,6 +984,11 @@ func TestPatch10Bools4(t *testing.T) {
 		Value10: true,
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -968,6 +1028,24 @@ func TestPatchIgnored1(t *testing.T) {
 		Value3:        "A",
 		Value4Ignored: "",
 	}
+
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
+
+	requireT.False(m.IsPatchNeeded(msgSrc, &pkg1.MsgIgnore{
+		Value1:        false,
+		Value2Ignored: false,
+		Value3:        "",
+		Value4Ignored: "A",
+	}))
+	requireT.False(m.IsPatchNeeded(msgDst, &pkg1.MsgIgnore{
+		Value1:        true,
+		Value2Ignored: true,
+		Value3:        "A",
+		Value4Ignored: "A",
+	}))
 
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
@@ -1009,6 +1087,11 @@ func TestPatchIgnored2(t *testing.T) {
 		Value4Ignored: "",
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.False(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.False(m.IsPatchNeeded(msgDst, msgSrc))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -1048,6 +1131,24 @@ func TestPatchIgnored3(t *testing.T) {
 		Value3:        "C",
 		Value4Ignored: "",
 	}
+
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
+
+	requireT.False(m.IsPatchNeeded(msgSrc, &pkg1.MsgIgnore{
+		Value1:        true,
+		Value2Ignored: false,
+		Value3:        "A",
+		Value4Ignored: "A",
+	}))
+	requireT.False(m.IsPatchNeeded(msgDst, &pkg1.MsgIgnore{
+		Value1:        false,
+		Value2Ignored: true,
+		Value3:        "C",
+		Value4Ignored: "A",
+	}))
 
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
@@ -1091,6 +1192,8 @@ func TestPatchMixed1(t *testing.T) {
 		Value8: "A",
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgDst))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -1132,6 +1235,11 @@ func TestPatchMixed2(t *testing.T) {
 		Value7: false,
 		Value8: "B",
 	}
+
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
 
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
@@ -1180,6 +1288,11 @@ func TestPatchMixed3(t *testing.T) {
 		Value8: "A",
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -1227,6 +1340,8 @@ func TestPatchStrings1(t *testing.T) {
 		Value10: "",
 	}
 
+	requireT.False(m.IsPatchNeeded(msgSrc, msgDst))
+
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
 	id, l, err := m.MakePatch(msgDst, &msgSrc2, b)
@@ -1272,6 +1387,11 @@ func TestPatchStrings2(t *testing.T) {
 		Value9:  "I",
 		Value10: "J",
 	}
+
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
 
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
@@ -1321,6 +1441,11 @@ func TestPatchStrings3(t *testing.T) {
 		Value9:  "I",
 		Value10: "J",
 	}
+
+	requireT.False(m.IsPatchNeeded(msgSrc, msgSrc))
+	requireT.False(m.IsPatchNeeded(msgDst, msgDst))
+	requireT.True(m.IsPatchNeeded(msgSrc, msgDst))
+	requireT.True(m.IsPatchNeeded(msgDst, msgSrc))
 
 	msgSrc2 := *msgSrc
 	b := make([]byte, maxPatchSize)
