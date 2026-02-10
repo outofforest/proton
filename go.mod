@@ -8,7 +8,7 @@ require (
 	github.com/samber/lo v1.52.0
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/mod v0.32.0
-	golang.org/x/text v0.33.0
+	golang.org/x/text v0.34.0
 )
 
 require (
