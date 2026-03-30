@@ -2,8 +2,10 @@ package makepatch
 
 import (
 	"bytes"
-	"fmt"
+	_ "embed"
 	"reflect"
+	"text/template"
+	"text/template/parse"
 
 	"github.com/samber/lo"
 
@@ -13,24 +15,53 @@ import (
 	"github.com/outofforest/proton/types/factory"
 )
 
-const (
-	header = `func {{ .FuncName}}(m, mSrc *{{ .TypeName }}, b []byte) uint64 {
-`
-)
+//go:embed template.gotmpl
+var tmpl string
+
+type Bool struct {
+	Field string
+	Index uint64
+	And   uint64
+	Or    uint64
+}
+
+type Template struct {
+	Field    string
+	Index    uint64
+	And      uint64
+	Or       uint64
+	Name     string
+	Variable string
+	Data     any
+}
 
 // Build generates code of Marshal method.
 func Build(cfg methods.Config, tm *types.TypeMap) []byte {
-	code := &bytes.Buffer{}
+	methodName := "makePatch"
+	if len(cfg.IgnoreFields) > 0 {
+		methodName += "i"
+	}
 
 	boolOffset := methods.BitMapLength(cfg.NumOfFields)
 	dataOffset := boolOffset + methods.BitMapLength(cfg.NumOfBooleanFields)
-	if dataOffset == 0 {
-		_, _ = fmt.Fprint(code, "	var o uint64\n")
-	} else {
-		_, _ = fmt.Fprintf(code, "	var o uint64 = %d\n", dataOffset)
+
+	data := struct {
+		Reflect    string
+		FuncName   string
+		TypeName   string
+		DataOffset uint64
+		Bools      []Bool
+		Templates  []Template
+	}{
+		Reflect:    tm.Import("reflect"),
+		FuncName:   tm.VarName(cfg.Type, methodName),
+		TypeName:   tm.TypeName(cfg.Type),
+		DataOffset: dataOffset,
 	}
 
 	var presenceIndex, boolIndex uint64
+	trees := map[string]*parse.Tree{}
+	varIndex := new(uint64)
 	lo.Must0(helpers.ForEachField(cfg.Type, func(field reflect.StructField) error {
 		if cfg.IgnoreFields[field.Name] {
 			return nil
@@ -40,16 +71,12 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 			byteIndex, bitIndex := methods.BitMapPosition(boolIndex)
 			boolIndex++
 
-			_, _ = fmt.Fprintf(code, `	{
-		// %[1]s
-
-		if m.%[1]s == mSrc.%[1]s {
-			b[%[2]d] &= 0x%02[4]X
-		} else {
-			b[%[2]d] |= 0x%02[3]X
-		}
-	}
-`, field.Name, boolOffset+byteIndex, 0x01<<bitIndex, 0xFF^(0x01<<bitIndex))
+			data.Bools = append(data.Bools, Bool{
+				Field: field.Name,
+				Index: boolOffset + byteIndex,
+				And:   0xFF ^ (0x01 << bitIndex),
+				Or:    0x01 << bitIndex,
+			})
 			return nil
 		}
 
@@ -61,41 +88,30 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 			return err
 		}
 
-		marshalCode := builder.MarshalCode(new(uint64))
-
-		reflect := tm.Import("reflect")
-		_, _ = fmt.Fprintf(code, `	{
-		// %[2]s
-
-		if %[1]s.DeepEqual(m.%[2]s, mSrc.%[2]s) {
-			b[%[3]d] &= 0x%02[5]X
-		} else {
-			b[%[3]d] |= 0x%02[4]X
-`, reflect, field.Name, byteIndex, 0x01<<bitIndex, 0xFF^(0x01<<bitIndex))
-		helpers.Execute(code, types.AddIndent(marshalCode, 3), "m."+field.Name)
-		_, _ = fmt.Fprint(code, "\n		}\n	}\n")
-
+		fieldTrees, fieldData := builder.MarshalCode(new(uint64))
+		tmplName := types.Var("tmpl", varIndex)
+		trees[tmplName] = fieldTrees["unmarshal"]
+		for k, v := range fieldTrees {
+			trees[k] = v
+		}
+		data.Templates = append(data.Templates, Template{
+			Field:    field.Name,
+			Index:    byteIndex,
+			And:      0xFF ^ (0x01 << bitIndex),
+			Or:       0x01 << bitIndex,
+			Name:     tmplName,
+			Variable: "m." + field.Name,
+			Data:     fieldData,
+		})
 		return nil
 	}))
 
-	methodName := "makePatch"
-	if len(cfg.IgnoreFields) > 0 {
-		methodName += "i"
+	funcTemplate := lo.Must(template.New("").Parse(tmpl))
+	for k, v := range trees {
+		funcTemplate = lo.Must(funcTemplate.AddParseTree(k, v))
 	}
 
 	b := &bytes.Buffer{}
-	helpers.Execute(b, header, struct {
-		FuncName string
-		TypeName string
-	}{
-		FuncName: tm.VarName(cfg.Type, methodName),
-		TypeName: tm.TypeName(cfg.Type),
-	})
-
-	if code.Len() > 0 {
-		lo.Must(code.WriteTo(b))
-	}
-
-	_, _ = fmt.Fprint(b, "\n	return o\n}")
+	lo.Must0(funcTemplate.Execute(b, data))
 	return b.Bytes()
 }

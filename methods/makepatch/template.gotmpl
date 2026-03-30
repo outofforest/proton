@@ -1,0 +1,25 @@
+func {{ .FuncName }}(m, mSrc *{{ .TypeName }}, b []byte) uint64 {
+{{- if .DataOffset -}}
+    var o uint64 = {{ .DataOffset }}
+{{- else -}}
+    var o uint64
+{{- end -}}
+{{- range .Bools -}}
+    // {{ .Field }}
+    if m.{{ .Field }} == mSrc.{{ .Field }} {
+        b[{{ .Index }}] &= {{ .And }}
+    } else {
+        b[{{ .Index }}] |= {{ .Or }}
+    }
+{{- end -}}
+{{ $reflect := .Reflect }}
+{{- range .Templates -}}
+    // {{ .Field }}
+    if {{ $reflect }}.DeepEqual(m.{{ .Field }}, mSrc.{{ .Field }}) {
+        b[{{ .Index }}] &= {{ .And }}
+    } else {
+        b[{{ .Index }}] |= {{ .Or }}
+        {{ template .Name . }}
+    }
+{{- end -}}
+}

@@ -7,7 +7,7 @@ func {{ .FuncName }}(m *{{ .TypeName }}) uint64 {
 {{- range .Templates -}}
     {
         // {{ .Field }}
-        {{ template .Name .Data }}
+        {{ template .Name . }}
     }
 {{- end -}}
     return n

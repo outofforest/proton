@@ -12,8 +12,8 @@ func {{ .FuncName }}(m *{{ .TypeName }}, b []byte) uint64 {
 {{- end -}}
 {{- range .Templates -}}
     // {{ .Field }}
-    if b[{{ .Index }}]&{{ .Offset }} != 0 {
-        {{ template .Name .Data }}
+    if b[{{ .Index }}]&{{ .And }} != 0 {
+        {{ template .Name . }}
     }
 {{- end -}}
 }

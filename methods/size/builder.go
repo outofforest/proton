@@ -19,9 +19,10 @@ import (
 var tmpl string
 
 type Template struct {
-	Field string
-	Name  string
-	Data  any
+	Field    string
+	Name     string
+	Variable string
+	Data     any
 }
 
 // Build generates code of Size method.
@@ -74,9 +75,10 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 				trees[k] = v
 			}
 			data.Templates = append(data.Templates, Template{
-				Field: field.Name,
-				Name:  tmplName,
-				Data:  fieldData,
+				Field:    field.Name,
+				Name:     tmplName,
+				Variable: "m." + field.Name,
+				Data:     fieldData,
 			})
 		}
 		return nil

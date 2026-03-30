@@ -19,17 +19,18 @@ import (
 var tmpl string
 
 type Bool struct {
-	Field  string
-	Index  uint64
-	Offset uint64
+	Field string
+	Index uint64
+	And   uint64
 }
 
 type Template struct {
-	Field  string
-	Index  uint64
-	Offset uint64
-	Name   string
-	Data   any
+	Field    string
+	Index    uint64
+	And      uint64
+	Name     string
+	Variable string
+	Data     any
 }
 
 // Build generates code of Unmarshal method.
@@ -67,9 +68,9 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 			boolIndex++
 
 			data.Bools = append(data.Bools, Bool{
-				Field:  field.Name,
-				Index:  boolOffset + byteIndex,
-				Offset: 0x01 << bitIndex,
+				Field: field.Name,
+				Index: boolOffset + byteIndex,
+				And:   0x01 << bitIndex,
 			})
 			return nil
 		}
@@ -89,11 +90,12 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 			trees[k] = v
 		}
 		data.Templates = append(data.Templates, Template{
-			Field:  field.Name,
-			Index:  byteIndex,
-			Offset: 0x01 << bitIndex,
-			Name:   tmplName,
-			Data:   fieldData,
+			Field:    field.Name,
+			Index:    byteIndex,
+			And:      0x01 << bitIndex,
+			Name:     tmplName,
+			Variable: "m." + field.Name,
+			Data:     fieldData,
 		})
 		return nil
 	}))
