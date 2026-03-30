@@ -6,13 +6,11 @@ func {{ .FuncName }}(m *{{ .TypeName }}, b []byte) uint64 {
 {{- end -}}
 {{- range .Bools -}}
     // {{ .Field }}
-    if b[{{ .Index }}]&{{ .Offset }} != 0 {
-        m.{{ .Field }} = !m.{{ .Field }}
-    }
+    m.{{ .Field }} = b[{{ .Index }}]&{{ .Offset }} != 0
 {{- end -}}
 {{- range .Templates -}}
-    // {{ .Field }}
-    if b[{{ .Index }}]&{{ .Offset }} != 0 {
+    {
+        // {{ .Field }}
         {{ template .Name .Data }}
     }
 {{- end -}}
