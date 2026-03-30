@@ -1,8 +1,11 @@
 {{- define "size" -}}
+helpers.Int64Size({{ .Variable }}, &n)
 {{- end -}}
 
 {{- define "marshal" -}}
+helpers.Int64Marshal({{ .Variable }}, b, &o)
 {{- end -}}
 
 {{- define "unmarshal" -}}
+helpers.Int64Unmarshal(&{{ .Variable }}, b, &o)
 {{- end -}}

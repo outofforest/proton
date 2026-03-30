@@ -1,8 +1,9 @@
-{{- define "size" -}}
-{{- end -}}
-
 {{- define "marshal" -}}
+b[o] = byte({{ .Variable }})
+o++
 {{- end -}}
 
 {{- define "unmarshal" -}}
+{{ .Variable }} = {{ .Data.Type }}(b[o])
+o++
 {{- end -}}

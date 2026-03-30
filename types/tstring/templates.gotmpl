@@ -1,8 +1,27 @@
 {{- define "size" -}}
+{
+    l := uint64(len({{ .Variable }}))
+    helpers.UInt64Size(l, &n)
+    n += l
+}
 {{- end -}}
 
 {{- define "marshal" -}}
+{
+    l := uint64(len({{ .Variable }}))
+    helpers.UInt64Marshal(l, b, &o)
+    copy(b[o:o+l], {{ .Variable }})
+    o += l
+}
 {{- end -}}
 
 {{- define "unmarshal" -}}
+{
+    var l uint64
+    helpers.UInt64Unmarshal(&l, b, &o)
+    if l > 0 {
+        {{ .Variable }} = {{ .Data.Type }}(b[o:o+l])
+        o += l
+    }
+}
 {{- end -}}
