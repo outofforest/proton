@@ -61,7 +61,8 @@ func (b Builder) ConstantSize() uint64 {
 
 // SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
-func (b Builder) SizeCode(varIndex *uint64) (string, bool) {
+func (b Builder) SizeCode(varIndex *uint64) *parse.Tree {
+	return t["size"]
 	code := `l := uint64(len({{ . }}))
 	helpers.UInt64Size(l, &n)
 `
@@ -110,7 +111,8 @@ func (b Builder) SizeCode(varIndex *uint64) (string, bool) {
 }
 
 // MarshalCode returns code template marshaling the data.
-func (b Builder) MarshalCode(varIndex *uint64) string {
+func (b Builder) MarshalCode(varIndex *uint64) *parse.Tree {
+	return t["marshal"]
 	keyTpl := b.keyBuilder.MarshalCode(varIndex)
 	elementTpl := b.elementBuilder.MarshalCode(varIndex)
 
@@ -135,7 +137,8 @@ func (b Builder) MarshalCode(varIndex *uint64) string {
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
-func (b Builder) UnmarshalCode(varIndex *uint64) string {
+func (b Builder) UnmarshalCode(varIndex *uint64) *parse.Tree {
+	return t["unmarshal"]
 	keyTpl := b.keyBuilder.UnmarshalCode(varIndex)
 	elementTpl := b.elementBuilder.UnmarshalCode(varIndex)
 

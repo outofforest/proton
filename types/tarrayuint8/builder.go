@@ -42,7 +42,8 @@ func (b Builder) ConstantSize() uint64 {
 }
 
 // MarshalCode returns code template marshaling the data.
-func (b Builder) MarshalCode(_ *uint64) string {
+func (b Builder) MarshalCode(_ *uint64) *parse.Tree {
+	return t["marshal"]
 	unsafe := b.tm.Import("unsafe")
 
 	if b.fieldType.Elem().Name() == "uint8" {
@@ -54,7 +55,8 @@ o += %[2]d`, unsafe, b.fieldType.Len())
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
-func (b Builder) UnmarshalCode(_ *uint64) string {
+func (b Builder) UnmarshalCode(_ *uint64) *parse.Tree {
+	return t["unmarshal"]
 	unsafe := b.tm.Import("unsafe")
 
 	if b.fieldType.Elem().Name() == "uint8" {
