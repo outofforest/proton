@@ -2,7 +2,6 @@ package tsliceuint8
 
 import (
 	_ "embed"
-	"fmt"
 	"reflect"
 	"text/template/parse"
 
@@ -46,55 +45,27 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	return `l := uint64(len({{ . }}))
-helpers.UInt64Size(l, &n)
-n += l`, true
+	return t, nil
 }
 
 // MarshalCode returns code template marshaling the data.
 func (b Builder) MarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	code := `l := uint64(len({{ . }}))
-helpers.UInt64Marshal(l, b, &o)
-`
-
-	unsafe := b.tm.Import("unsafe")
-	code += "if l > 0 {\n	"
-
-	if b.fieldType.Elem().Name() == uint8Name {
-		code += fmt.Sprintf(`copy(b[o:o+l], %[1]s.Slice(&{{ . }}[0], l))
-	o += l`, unsafe)
-	} else {
-		code += fmt.Sprintf(`copy(b[o:o+l], %[1]s.Slice((*byte)(&{{ . }}[0]), l))
-	o += l`, unsafe)
+	return t, struct {
+		Unsafe string
+		Type   string
+	}{
+		Unsafe: b.tm.Import("unsafe"),
+		Type:   b.tm.TypeName(b.fieldType.Elem()),
 	}
-
-	code += "\n}"
-
-	return code
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
 func (b Builder) UnmarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	code := `var l uint64
-helpers.UInt64Unmarshal(&l, b, &o)
-`
-
-	code += fmt.Sprintf(`if l > 0 {
-	{{ . }} = make([]%[1]s, l)
-`, b.tm.TypeName(b.fieldType.Elem()))
-	if b.fieldType.Elem().Name() == uint8Name {
-		code += `	copy({{ . }}, b[o:o+l])`
-	} else {
-		unsafe := b.tm.Import("unsafe")
-		code += fmt.Sprintf(`	copy(%[1]s.Slice((*byte)(&{{ . }}[0]), l), b[o:o+l])`, unsafe)
+	return t, struct {
+		Unsafe string
+		Type   string
+	}{
+		Unsafe: b.tm.Import("unsafe"),
+		Type:   b.tm.TypeName(b.fieldType.Elem()),
 	}
-
-	code += `
-	o += l
-}`
-
-	return code
 }

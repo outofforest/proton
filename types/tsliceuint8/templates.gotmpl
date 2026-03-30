@@ -1,8 +1,31 @@
-{{- define "size" -}}z
+{{- define "size" -}}
+l := uint64(len({{ .Variable }}))
+helpers.UInt64Size(l, &n)
+n += l
 {{- end -}}
 
 {{- define "marshal" -}}
+l := uint64(len({{ .Variable }}))
+helpers.UInt64Marshal(l, b, &o)
+if l > 0 {
+{{- if eq .Data.Type "uint8" -}}
+    copy(b[o:o+l], {{ .Data.Unsafe }}.Slice(&{{ .Variable }}[0], l))
+{{- else -}}
+    copy(b[o:o+l], {{ .Data.Unsafe }}.Slice((*byte)(&{{ .Variable }}[0]), l))
+{{- end -}}
+    o += l
+}
 {{- end -}}
 
 {{- define "unmarshal" -}}
+var l uint64
+helpers.UInt64Unmarshal(&l, b, &o)
+if l > 0 {
+{{- if eq .Data.Type "uint8" -}}
+    copy({{ .Variable }}, b[o:o+l])
+{{- else -}}
+    copy({{ .Data.Unsafe }}.Slice((*byte)(&{{ .Variable }}[0]), l), b[o:o+l])
+{{- end -}}
+    o += l
+}
 {{- end -}}
