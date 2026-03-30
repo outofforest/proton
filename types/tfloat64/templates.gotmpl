@@ -1,8 +1,9 @@
-{{- define "size" -}}
-{{- end -}}
-
 {{- define "marshal" -}}
+*(*{{ .Data.Type }})({{ .Data.Unsafe }}.Pointer(&b[o])) = {{ .Variable }}
+o += 8
 {{- end -}}
 
 {{- define "unmarshal" -}}
+{{ .Variable }} = *(*{{ .Data.Type }})({{ .Data.Unsafe }}.Pointer(&b[o]))
+o += 8
 {{- end -}}
