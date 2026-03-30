@@ -1,8 +1,17 @@
-{{- define "size" -}}
-{{- end -}}
-
 {{- define "marshal" -}}
+{{- if eq .Data.Type "uint8 "}}
+copy(b[o:o+{{ .Data.Len }}], {{ .Data.Unsafe }}.Slice(&{{ .Variable }}[0], {{ .Data.Len }}))
+{{- else -}}
+copy(b[o:o+{{ .Data.Len }}], {{ .Data.Unsafe }}.Slice((*byte)(&{{ .Variable }}[0]), {{ .Data.Len }}))
+{{- end -}}
+o += {{ .Data.Len }}
 {{- end -}}
 
 {{- define "unmarshal" -}}
+{{- if eq .Data.Type "uint8 "}}
+copy({{ .Data.Unsafe }}.Slice(&{{ .Variable }}[0], {{ .Data.Len }}), b[o:o+{{ .Data.Len }}])
+{{- else -}}
+copy({{ .Data.Unsafe }}.Slice((*byte)(&{{ .Variable }}[0]), {{ .Data.Len }}), b[o:o+{{ .Data.Len }}])
+{{- end -}}
+o += {{ .Data.Len }}
 {{- end -}}

@@ -1,8 +1,9 @@
-{{- define "size" -}}
-{{- end -}}
-
 {{- define "marshal" -}}
+copy(b[o:o+{{ .Data.Len }}], {{ .Data.Unsafe }}.Slice((*byte)({{ .Data.Unsafe }}.Pointer(&{{ .Variable }}[0])), {{ .Data.Len }}))
+o += {{ .Data.Len }}
 {{- end -}}
 
 {{- define "unmarshal" -}}
+copy({{ .Data.Unsafe }}.Slice((*byte)({{ .Data.Unsafe }}.Pointer(&{{ .Variable }}[0])), {{ .Data.Len }}), b[o:o+{{ .Data.Len }}])
+o += {{ .Data.Len }}
 {{- end -}}

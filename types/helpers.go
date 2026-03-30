@@ -2,7 +2,10 @@ package types
 
 import (
 	"fmt"
+	"maps"
 	"strings"
+
+	"github.com/samber/lo"
 )
 
 // AddIndent adds indentation to the code.
@@ -15,4 +18,5 @@ func AddIndent(code string, numOfIndentations int) string {
 func Var(prefix string, varIndex *uint64) string {
 	*varIndex++
 	return fmt.Sprintf("%s%d", prefix, *varIndex)
+	maps.Clone()
 }

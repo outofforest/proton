@@ -2,7 +2,6 @@ package tarrayuint8
 
 import (
 	_ "embed"
-	"fmt"
 	"reflect"
 	"text/template/parse"
 
@@ -43,26 +42,26 @@ func (b Builder) ConstantSize() uint64 {
 
 // MarshalCode returns code template marshaling the data.
 func (b Builder) MarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	unsafe := b.tm.Import("unsafe")
-
-	if b.fieldType.Elem().Name() == "uint8" {
-		return fmt.Sprintf(`copy(b[o:o+%[2]d], %[1]s.Slice(&{{ . }}[0], %[2]d))
-o += %[2]d`, unsafe, b.fieldType.Len())
+	return t, struct {
+		Unsafe string
+		Type   string
+		Len    int
+	}{
+		Unsafe: b.tm.Import("unsafe"),
+		Type:   b.fieldType.Elem().Name(),
+		Len:    b.fieldType.Len(),
 	}
-	return fmt.Sprintf(`copy(b[o:o+%[2]d], %[1]s.Slice((*byte)(&{{ . }}[0]), %[2]d))
-o += %[2]d`, unsafe, b.fieldType.Len())
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
 func (b Builder) UnmarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	unsafe := b.tm.Import("unsafe")
-
-	if b.fieldType.Elem().Name() == "uint8" {
-		return fmt.Sprintf(`copy(%[1]s.Slice(&{{ . }}[0], %[2]d), b[o:o+%[2]d])
-o += %[2]d`, unsafe, b.fieldType.Len())
+	return t, struct {
+		Unsafe string
+		Type   string
+		Len    int
+	}{
+		Unsafe: b.tm.Import("unsafe"),
+		Type:   b.fieldType.Elem().Name(),
+		Len:    b.fieldType.Len(),
 	}
-	return fmt.Sprintf(`copy(%[1]s.Slice((*byte)(&{{ . }}[0]), %[2]d), b[o:o+%[2]d])
-o += %[2]d`, unsafe, b.fieldType.Len())
 }

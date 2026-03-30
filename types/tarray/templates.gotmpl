@@ -5,7 +5,14 @@ for _, {{ .Data.Variable }} := range {{ .Variable }} {
 {{- end -}}
 
 {{- define "marshal" -}}
+for _, {{ .Data.Variable }} := range {{ .Variable }} {
+    {{ template .Data.Template .Data }}
+}
 {{- end -}}
 
 {{- define "unmarshal" -}}
+{{ .Data.ElementVariable }} := &{{ .Variable }}
+for {{ .Data.I }} := range {{ .Data.Length }} {
+    {{ template .Data.Template .Data }}
+}
 {{- end -}}

@@ -2,7 +2,6 @@ package tarrayfloat32
 
 import (
 	_ "embed"
-	"fmt"
 	"reflect"
 	"text/template/parse"
 
@@ -43,16 +42,22 @@ func (b Builder) ConstantSize() uint64 {
 
 // MarshalCode returns code template marshaling the data.
 func (b Builder) MarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	unsafe := b.tm.Import("unsafe")
-	return fmt.Sprintf(`copy(b[o:o+%[2]d], %[1]s.Slice((*byte)(%[1]s.Pointer(&{{ . }}[0])), %[2]d))
-o += %[2]d`, unsafe, b.fieldType.Len()*4)
+	return t, struct {
+		Unsafe string
+		Len    int
+	}{
+		Unsafe: b.tm.Import("unsafe"),
+		Len:    b.fieldType.Len() * 4,
+	}
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
 func (b Builder) UnmarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	unsafe := b.tm.Import("unsafe")
-	return fmt.Sprintf(`copy(%[1]s.Slice((*byte)(%[1]s.Pointer(&{{ . }}[0])), %[2]d), b[o:o+%[2]d])
-o += %[2]d`, unsafe, b.fieldType.Len()*4)
+	return t, struct {
+		Unsafe string
+		Len    int
+	}{
+		Unsafe: b.tm.Import("unsafe"),
+		Len:    b.fieldType.Len() * 4,
+	}
 }
