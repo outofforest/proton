@@ -48,7 +48,13 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCode(varIndex *uint64) (map[string]*parse.Tree, any) {
-	return t
+	return t, struct {
+		ConstSize uint64
+		Variable  string
+	}{
+		ConstSize: b.elementBuilder.ConstantSize(),
+		Variable:  types.Var("sv", varIndex),
+	}
 	code := `l := uint64(len({{ . }}))
 helpers.UInt64Size(l, &n)
 `

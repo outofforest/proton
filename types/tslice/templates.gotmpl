@@ -1,4 +1,15 @@
 {{- define "size" -}}
+l := uint64(len({{ .Variable }}))
+helpers.UInt64Size(l, &n)
+{{- if eq .Data.ConstSize 1 -}}
+n += l
+{{- end -}}
+{{- if gt .Data.ConstSize 1 -}}
+n += l * {{ .Data.ConstSize}}
+{{- end -}}
+for _, {{ .Data.Variable }} := range {{ .Variable }} {
+    {{ template .Data.Template .Data }}
+}
 {{- end -}}
 
 {{- define "marshal" -}}
