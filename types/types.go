@@ -14,9 +14,9 @@ import (
 type BuilderFactory interface {
 	Dependencies() []reflect.Type
 	ConstantSize() uint64
-	SizeCodeTemplate(varIndex *uint64) (string, bool)
-	MarshalCodeTemplate(varIndex *uint64) string
-	UnmarshalCodeTemplate(varIndex *uint64) string
+	SizeCode(varIndex *uint64) (string, bool)
+	MarshalCode(varIndex *uint64) string
+	UnmarshalCode(varIndex *uint64) string
 }
 
 // BuilderFactoryConstant is the relaxed interface implemented by builders representing types requiring only
@@ -24,17 +24,17 @@ type BuilderFactory interface {
 type BuilderFactoryConstant interface {
 	Dependencies() []reflect.Type
 	ConstantSize() uint64
-	MarshalCodeTemplate(varIndex *uint64) string
-	UnmarshalCodeTemplate(varIndex *uint64) string
+	MarshalCode(varIndex *uint64) string
+	UnmarshalCode(varIndex *uint64) string
 }
 
 // BuilderFactoryNonConstant is the relaxed interface implemented by builders representing types requiring only
 // non-constant size of buffer.
 type BuilderFactoryNonConstant interface {
 	Dependencies() []reflect.Type
-	SizeCodeTemplate(varIndex *uint64) string
-	MarshalCodeTemplate(varIndex *uint64) string
-	UnmarshalCodeTemplate(varIndex *uint64) string
+	SizeCode(varIndex *uint64) string
+	MarshalCode(varIndex *uint64) string
+	UnmarshalCode(varIndex *uint64) string
 }
 
 // TypeMap implements type mapping required by go code.

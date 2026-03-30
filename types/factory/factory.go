@@ -154,16 +154,16 @@ func (b constantAdapter) ConstantSize() uint64 {
 	return b.builder.ConstantSize()
 }
 
-func (b constantAdapter) SizeCodeTemplate(_ *uint64) (string, bool) {
+func (b constantAdapter) SizeCode(_ *uint64) (string, bool) {
 	return "", false
 }
 
-func (b constantAdapter) MarshalCodeTemplate(varIndex *uint64) string {
-	return b.builder.MarshalCodeTemplate(varIndex)
+func (b constantAdapter) MarshalCode(varIndex *uint64) string {
+	return b.builder.MarshalCode(varIndex)
 }
 
-func (b constantAdapter) UnmarshalCodeTemplate(varIndex *uint64) string {
-	return b.builder.UnmarshalCodeTemplate(varIndex)
+func (b constantAdapter) UnmarshalCode(varIndex *uint64) string {
+	return b.builder.UnmarshalCode(varIndex)
 }
 
 func newNonConstantAdapter(builder types.BuilderFactoryNonConstant) nonConstantAdapter {
@@ -184,14 +184,14 @@ func (b nonConstantAdapter) ConstantSize() uint64 {
 	return 0
 }
 
-func (b nonConstantAdapter) SizeCodeTemplate(varIndex *uint64) (string, bool) {
-	return b.builder.SizeCodeTemplate(varIndex), true
+func (b nonConstantAdapter) SizeCode(varIndex *uint64) (string, bool) {
+	return b.builder.SizeCode(varIndex), true
 }
 
-func (b nonConstantAdapter) MarshalCodeTemplate(varIndex *uint64) string {
-	return b.builder.MarshalCodeTemplate(varIndex)
+func (b nonConstantAdapter) MarshalCode(varIndex *uint64) string {
+	return b.builder.MarshalCode(varIndex)
 }
 
-func (b nonConstantAdapter) UnmarshalCodeTemplate(varIndex *uint64) string {
-	return b.builder.UnmarshalCodeTemplate(varIndex)
+func (b nonConstantAdapter) UnmarshalCode(varIndex *uint64) string {
+	return b.builder.UnmarshalCode(varIndex)
 }

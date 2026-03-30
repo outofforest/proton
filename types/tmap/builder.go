@@ -49,9 +49,9 @@ func (b Builder) ConstantSize() uint64 {
 	return 1 // covers the first byte of length
 }
 
-// SizeCodeTemplate returns code template computing the required size of buffer
+// SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
-func (b Builder) SizeCodeTemplate(varIndex *uint64) (string, bool) {
+func (b Builder) SizeCode(varIndex *uint64) (string, bool) {
 	code := `l := uint64(len({{ . }}))
 	helpers.UInt64Size(l, &n)
 `
@@ -61,8 +61,8 @@ func (b Builder) SizeCodeTemplate(varIndex *uint64) (string, bool) {
 		code += fmt.Sprintf("n += l * %d", constSize)
 	}
 
-	keyTpl, keyOK := b.keyBuilder.SizeCodeTemplate(varIndex)
-	elementTpl, elementOK := b.elementBuilder.SizeCodeTemplate(varIndex)
+	keyTpl, keyOK := b.keyBuilder.SizeCode(varIndex)
+	elementTpl, elementOK := b.elementBuilder.SizeCode(varIndex)
 
 	if keyOK || elementOK {
 		if constSize > 0 {
@@ -99,10 +99,10 @@ func (b Builder) SizeCodeTemplate(varIndex *uint64) (string, bool) {
 	return code, true
 }
 
-// MarshalCodeTemplate returns code template marshaling the data.
-func (b Builder) MarshalCodeTemplate(varIndex *uint64) string {
-	keyTpl := b.keyBuilder.MarshalCodeTemplate(varIndex)
-	elementTpl := b.elementBuilder.MarshalCodeTemplate(varIndex)
+// MarshalCode returns code template marshaling the data.
+func (b Builder) MarshalCode(varIndex *uint64) string {
+	keyTpl := b.keyBuilder.MarshalCode(varIndex)
+	elementTpl := b.elementBuilder.MarshalCode(varIndex)
 
 	code := `helpers.UInt64Marshal(uint64(len({{ . }})), b, &o)
 `
@@ -124,10 +124,10 @@ func (b Builder) MarshalCodeTemplate(varIndex *uint64) string {
 	return code
 }
 
-// UnmarshalCodeTemplate returns code template unmarshaling the data.
-func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
-	keyTpl := b.keyBuilder.UnmarshalCodeTemplate(varIndex)
-	elementTpl := b.elementBuilder.UnmarshalCodeTemplate(varIndex)
+// UnmarshalCode returns code template unmarshaling the data.
+func (b Builder) UnmarshalCode(varIndex *uint64) string {
+	keyTpl := b.keyBuilder.UnmarshalCode(varIndex)
+	elementTpl := b.elementBuilder.UnmarshalCode(varIndex)
 
 	code := `var l uint64
 helpers.UInt64Unmarshal(&l, b, &o)

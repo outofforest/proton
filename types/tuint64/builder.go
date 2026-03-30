@@ -22,18 +22,18 @@ func (b Builder) ConstantSize() uint64 {
 	return 1 // size always takes at least one byte
 }
 
-// SizeCodeTemplate returns code template computing the required size of buffer
+// SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
-func (b Builder) SizeCodeTemplate(_ *uint64) (string, bool) {
+func (b Builder) SizeCode(_ *uint64) (string, bool) {
 	return `helpers.UInt64Size({{ . }}, &n)`, true
 }
 
-// MarshalCodeTemplate returns code template marshaling the data.
-func (b Builder) MarshalCodeTemplate(_ *uint64) string {
+// MarshalCode returns code template marshaling the data.
+func (b Builder) MarshalCode(_ *uint64) string {
 	return `helpers.UInt64Marshal({{ . }}, b, &o)`
 }
 
-// UnmarshalCodeTemplate returns code template unmarshaling the data.
-func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
+// UnmarshalCode returns code template unmarshaling the data.
+func (b Builder) UnmarshalCode(_ *uint64) string {
 	return `helpers.UInt64Unmarshal(&{{ . }}, b, &o)`
 }
