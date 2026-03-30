@@ -1,8 +1,11 @@
 {{- define "size" -}}
+n += {{ .Data.Function }}(&{{ .Variable }})
 {{- end -}}
 
 {{- define "marshal" -}}
+o += {{ .Data.Function }}(&{{ .Variable }}, b[o:])
 {{- end -}}
 
 {{- define "unmarshal" -}}
+o += {{ .Data.Function }}(&{{ .Variable }}, b[o:])
 {{- end -}}

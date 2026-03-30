@@ -2,7 +2,6 @@ package tstruct
 
 import (
 	_ "embed"
-	"fmt"
 	"reflect"
 	"text/template/parse"
 
@@ -41,18 +40,27 @@ func (b Builder) Dependencies() []reflect.Type {
 // SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	return fmt.Sprintf("n += %[1]s(&{{ . }})", b.tm.VarName(b.fieldType, "size"))
+	return t, struct {
+		Function string
+	}{
+		Function: b.tm.VarName(b.fieldType, "size"),
+	}
 }
 
 // MarshalCode returns code template marshaling the data.
 func (b Builder) MarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	return fmt.Sprintf("o += %[1]s(&{{ . }}, b[o:])", b.tm.VarName(b.fieldType, "marshal"))
+	return t, struct {
+		Function string
+	}{
+		Function: b.tm.VarName(b.fieldType, "marshal"),
+	}
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
 func (b Builder) UnmarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	return fmt.Sprintf(`o += %[1]s(&{{ . }}, b[o:])`, b.tm.VarName(b.fieldType, "unmarshal"))
+	return t, struct {
+		Function string
+	}{
+		Function: b.tm.VarName(b.fieldType, "unmarshal"),
+	}
 }
