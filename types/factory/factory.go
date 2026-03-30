@@ -2,6 +2,7 @@ package factory
 
 import (
 	"reflect"
+	"text/template/parse"
 	"time"
 
 	"github.com/pkg/errors"
@@ -154,15 +155,15 @@ func (b constantAdapter) ConstantSize() uint64 {
 	return b.builder.ConstantSize()
 }
 
-func (b constantAdapter) SizeCode(_ *uint64) (string, bool) {
-	return "", false
+func (b constantAdapter) SizeCode(_ *uint64) (map[string]*parse.Tree, any) {
+	return nil, nil
 }
 
-func (b constantAdapter) MarshalCode(varIndex *uint64) string {
+func (b constantAdapter) MarshalCode(varIndex *uint64) (map[string]*parse.Tree, any) {
 	return b.builder.MarshalCode(varIndex)
 }
 
-func (b constantAdapter) UnmarshalCode(varIndex *uint64) string {
+func (b constantAdapter) UnmarshalCode(varIndex *uint64) (map[string]*parse.Tree, any) {
 	return b.builder.UnmarshalCode(varIndex)
 }
 
@@ -184,14 +185,14 @@ func (b nonConstantAdapter) ConstantSize() uint64 {
 	return 0
 }
 
-func (b nonConstantAdapter) SizeCode(varIndex *uint64) (string, bool) {
-	return b.builder.SizeCode(varIndex), true
+func (b nonConstantAdapter) SizeCode(varIndex *uint64) (map[string]*parse.Tree, any) {
+	return b.builder.SizeCode(varIndex)
 }
 
-func (b nonConstantAdapter) MarshalCode(varIndex *uint64) string {
+func (b nonConstantAdapter) MarshalCode(varIndex *uint64) (map[string]*parse.Tree, any) {
 	return b.builder.MarshalCode(varIndex)
 }
 
-func (b nonConstantAdapter) UnmarshalCode(varIndex *uint64) string {
+func (b nonConstantAdapter) UnmarshalCode(varIndex *uint64) (map[string]*parse.Tree, any) {
 	return b.builder.UnmarshalCode(varIndex)
 }
