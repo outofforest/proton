@@ -2,7 +2,6 @@ package tslicefloat32
 
 import (
 	_ "embed"
-	"fmt"
 	"reflect"
 	"text/template/parse"
 
@@ -44,41 +43,25 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	return `l := uint64(len({{ . }}))
-helpers.UInt64Size(l, &n)
-n += l * 4`, true
+	return t, nil
 }
 
 // MarshalCode returns code template marshaling the data.
 func (b Builder) MarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	code := `l := uint64(len({{ . }}))
-helpers.UInt64Marshal(l, b, &o)
-`
-
-	unsafe := b.tm.Import("unsafe")
-	code += fmt.Sprintf(`if l > 0 {
-	copy(b[o:o+l*4], %[1]s.Slice((*byte)(%[1]s.Pointer(&{{ . }}[0])), l*4))
-	o += l * 4
-}`, unsafe)
-
-	return code
+	return t, struct {
+		Unsafe string
+	}{
+		Unsafe: b.tm.Import("unsafe"),
+	}
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
 func (b Builder) UnmarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
-	return t
-	code := `var l uint64
-helpers.UInt64Unmarshal(&l, b, &o)
-`
-
-	unsafe := b.tm.Import("unsafe")
-	code += fmt.Sprintf(`if l > 0 {
-	{{ . }} = make([]%[2]s, l)
-	copy(%[1]s.Slice((*byte)(%[1]s.Pointer(&{{ . }}[0])), l*4), b[o:o+l*4])
-	o += l * 4
-}`, unsafe, b.tm.TypeName(b.fieldType.Elem()))
-
-	return code
+	return t, struct {
+		Unsafe string
+		Type   string
+	}{
+		Unsafe: b.tm.Import("unsafe"),
+		Type:   b.tm.TypeName(b.fieldType.Elem()),
+	}
 }
