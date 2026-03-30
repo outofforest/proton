@@ -2,8 +2,10 @@ package size
 
 import (
 	"bytes"
-	"fmt"
+	_ "embed"
 	"reflect"
+	"text/template"
+	"text/template/parse"
 
 	"github.com/samber/lo"
 
@@ -13,10 +15,14 @@ import (
 	"github.com/outofforest/proton/types/factory"
 )
 
-const (
-	header = `func {{ .FuncName }}(m *{{ .TypeName }}) uint64 {
-`
-)
+//go:embed template.gotmpl
+var tmpl string
+
+type Template struct {
+	Field string
+	Name  string
+	Data  any
+}
 
 // Build generates code of Size method.
 func Build(cfg methods.Config, tm *types.TypeMap) []byte {
@@ -25,7 +31,9 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 		n += methods.BitMapLength(cfg.NumOfBooleanFields)
 	}
 
-	code := &bytes.Buffer{}
+	var templates []Template
+	trees := map[string]*parse.Tree{}
+	varIndex := new(uint64)
 	lo.Must0(helpers.ForEachField(cfg.Type, func(field reflect.StructField) error {
 		if cfg.IgnoreFields[field.Name] {
 			return nil
@@ -43,12 +51,18 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 
 		n += builder.ConstantSize()
 
-		sizeCode, ok := builder.SizeCode(new(uint64))
-		if ok {
-			_, _ = fmt.Fprint(code, "	{\n		// "+field.Name+"\n\n")
-			helpers.Execute(code, types.AddIndent(sizeCode, 2), "m."+field.Name)
-			_, _ = fmt.Fprint(code, "\n	}")
-			_, _ = fmt.Fprint(code, "\n")
+		fieldTrees, fieldData := builder.SizeCode(varIndex)
+		if fieldTrees != nil {
+			tmplName := types.Var("tmpl", varIndex)
+			trees[tmplName] = fieldTrees["size"]
+			for k, v := range fieldTrees {
+				trees[k] = v
+			}
+			templates = append(templates, Template{
+				Field: field.Name,
+				Name:  tmplName,
+				Data:  fieldData,
+			})
 		}
 		return nil
 	}))
@@ -58,25 +72,22 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 		methodName += "i"
 	}
 
+	funcTemplate := lo.Must(template.New("").Parse(tmpl))
+	for k, v := range trees {
+		funcTemplate = lo.Must(funcTemplate.AddParseTree(k, v))
+	}
+
 	b := &bytes.Buffer{}
-	helpers.Execute(b, header, struct {
-		FuncName string
-		TypeName string
+	lo.Must0(funcTemplate.Execute(b, struct {
+		FuncName  string
+		TypeName  string
+		N         uint64
+		Templates []Template
 	}{
-		FuncName: tm.VarName(cfg.Type, methodName),
-		TypeName: tm.TypeName(cfg.Type),
-	})
-
-	if n > 0 {
-		_, _ = fmt.Fprintf(b, "	var n uint64 = %d\n", n)
-	} else {
-		_, _ = fmt.Fprint(b, "	var n uint64\n")
-	}
-
-	if code.Len() > 0 {
-		lo.Must(code.WriteTo(b))
-	}
-
-	_, _ = fmt.Fprint(b, "	return n\n}")
+		FuncName:  tm.VarName(cfg.Type, methodName),
+		TypeName:  tm.TypeName(cfg.Type),
+		N:         n,
+		Templates: templates,
+	}))
 	return b.Bytes()
 }

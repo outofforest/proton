@@ -1,0 +1,14 @@
+func {{ .FuncName }}(m *{{ .TypeName }}) uint64 {
+{{- if .N -}}
+    var n uint64 = {{ .N }}
+{{- else -}}
+    var n uint64
+{{- end -}}
+{{- range .Templates -}}
+    {
+        // {{ .Field }}
+        {{ template .Name .Data }}
+    }
+{{- end -}}
+    return n
+}
