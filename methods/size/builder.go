@@ -31,7 +31,22 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 		n += methods.BitMapLength(cfg.NumOfBooleanFields)
 	}
 
-	var templates []Template
+	methodName := "size"
+	if len(cfg.IgnoreFields) > 0 {
+		methodName += "i"
+	}
+
+	data := struct {
+		FuncName  string
+		TypeName  string
+		N         uint64
+		Templates []Template
+	}{
+		FuncName: tm.VarName(cfg.Type, methodName),
+		TypeName: tm.TypeName(cfg.Type),
+		N:        n,
+	}
+
 	trees := map[string]*parse.Tree{}
 	varIndex := new(uint64)
 	lo.Must0(helpers.ForEachField(cfg.Type, func(field reflect.StructField) error {
@@ -58,7 +73,7 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 			for k, v := range fieldTrees {
 				trees[k] = v
 			}
-			templates = append(templates, Template{
+			data.Templates = append(data.Templates, Template{
 				Field: field.Name,
 				Name:  tmplName,
 				Data:  fieldData,
@@ -67,27 +82,12 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 		return nil
 	}))
 
-	methodName := "size"
-	if len(cfg.IgnoreFields) > 0 {
-		methodName += "i"
-	}
-
 	funcTemplate := lo.Must(template.New("").Parse(tmpl))
 	for k, v := range trees {
 		funcTemplate = lo.Must(funcTemplate.AddParseTree(k, v))
 	}
 
 	b := &bytes.Buffer{}
-	lo.Must0(funcTemplate.Execute(b, struct {
-		FuncName  string
-		TypeName  string
-		N         uint64
-		Templates []Template
-	}{
-		FuncName:  tm.VarName(cfg.Type, methodName),
-		TypeName:  tm.TypeName(cfg.Type),
-		N:         n,
-		Templates: templates,
-	}))
+	lo.Must0(funcTemplate.Execute(b, data))
 	return b.Bytes()
 }
