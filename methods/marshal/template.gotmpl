@@ -1,0 +1,21 @@
+func {{ .FuncName }}(m *{{ .TypeName }}, b []byte) uint64 {
+{{- if .DataOffset -}}
+    var o uint64 = {{ .DataOffset }}
+{{- else -}}
+    var o uint64
+{{- end -}}
+{{- range .Bools -}}
+    // {{ .Field }}
+    if m.{{ .Field }} {
+        b[{{ .Index }}] |= {{ .Od }}
+    } else {
+        b[{{ .Index }}] &= {{ .And }}
+    }
+{{- end -}}
+{{- range .Templates -}}
+    {
+        // {{ .Field }}
+        {{ template .Name . }}
+    }
+{{- end -}}
+}

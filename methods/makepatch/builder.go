@@ -88,9 +88,9 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 			return err
 		}
 
-		fieldTrees, fieldData := builder.MarshalCode(new(uint64))
+		fieldTrees, fieldData := builder.MarshalCode(varIndex)
 		tmplName := types.Var("tmpl", varIndex)
-		trees[tmplName] = fieldTrees["unmarshal"]
+		trees[tmplName] = fieldTrees["marshal"]
 		for k, v := range fieldTrees {
 			trees[k] = v
 		}
