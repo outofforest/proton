@@ -1,15 +1,13 @@
 package tslice
 
 import (
-	"bytes"
 	_ "embed"
-	"fmt"
+	"maps"
 	"reflect"
 	"text/template/parse"
 
 	"github.com/samber/lo"
 
-	"github.com/outofforest/proton/helpers"
 	"github.com/outofforest/proton/types"
 )
 
@@ -48,87 +46,70 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCode(varIndex *uint64) (map[string]*parse.Tree, any) {
+	elementTrees, elementData := b.elementBuilder.SizeCode(varIndex)
+	trees := t
+	var elementTreeName string
+	if elementTrees != nil {
+		elementTreeName = types.Var("tmpl", varIndex)
+		trees = maps.Clone(elementTrees)
+		trees[elementTreeName] = elementTrees["size"]
+		trees["size"] = t["size"]
+	}
 	return t, struct {
 		ConstSize uint64
 		Variable  string
+		Data      any
+		Template  string
 	}{
 		ConstSize: b.elementBuilder.ConstantSize(),
 		Variable:  types.Var("sv", varIndex),
+		Data:      elementData,
+		Template:  elementTreeName,
 	}
-	code := `l := uint64(len({{ . }}))
-helpers.UInt64Size(l, &n)
-`
-
-	constSize := b.elementBuilder.ConstantSize()
-	switch {
-	case constSize > 1:
-		code += fmt.Sprintf("n += l * %d", constSize)
-	case constSize == 1:
-		code += "n += l"
-	}
-
-	elementTpl, elementOK := b.elementBuilder.SizeCode(varIndex)
-
-	if !elementOK {
-		return code, true
-	}
-
-	if constSize > 0 {
-		code += "\n"
-	}
-
-	sv := types.Var("sv", varIndex)
-	code += fmt.Sprintf("for _, %s := range {{ . }} {\n", sv)
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, elementTpl, sv)
-
-	code += types.AddIndent(buf.String(), 1) + "\n}"
-
-	return code, true
 }
 
 // MarshalCode returns code template marshaling the data.
 func (b Builder) MarshalCode(varIndex *uint64) (map[string]*parse.Tree, any) {
-	return t
-	elementTpl := b.elementBuilder.MarshalCode(varIndex)
-
-	code := `helpers.UInt64Marshal(uint64(len({{ . }})), b, &o)
-`
-
-	sv := types.Var("sv", varIndex)
-	code += fmt.Sprintf("for _, %s := range {{ . }} {\n", sv)
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, elementTpl, sv)
-	code += types.AddIndent(buf.String(), 1) + "\n"
-
-	code += "}"
-
-	return code
+	elementTrees, elementData := b.elementBuilder.MarshalCode(varIndex)
+	elementTreeName := types.Var("tmpl", varIndex)
+	trees := maps.Clone(elementTrees)
+	trees[elementTreeName] = elementTrees["marshal"]
+	trees["marshal"] = t["marshal"]
+	return trees, struct {
+		Variable string
+		Data     any
+		Template string
+	}{
+		Variable: types.Var("av", varIndex),
+		Data:     elementData,
+		Template: elementTreeName,
+	}
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
 func (b Builder) UnmarshalCode(varIndex *uint64) (map[string]*parse.Tree, any) {
-	return t
-	elementTpl := b.elementBuilder.UnmarshalCode(varIndex)
-
-	code := `var l uint64
-helpers.UInt64Unmarshal(&l, b, &o)
-if l > 0 {
-`
-	code += fmt.Sprintf(`	{{ . }} = make([]%[1]s, l)
-`, b.tm.TypeName(b.fieldType.Elem()))
-
+	elementTrees, elementData := b.elementBuilder.UnmarshalCode(varIndex)
+	elementTreeName := types.Var("tmpl", varIndex)
+	trees := maps.Clone(elementTrees)
+	trees[elementTreeName] = elementTrees["unmarshal"]
+	trees["unmarshal"] = t["unmarshal"]
+	variable := types.Var("sv", varIndex)
 	i := types.Var("i", varIndex)
-	code += fmt.Sprintf("	for %[1]s := range l {\n", i)
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, elementTpl, fmt.Sprintf("{{ . }}[%s]", i))
-	code += types.AddIndent(buf.String(), 2) + "\n"
-
-	code += `	}
-}`
-
-	return code
+	return trees, struct {
+		Type            string
+		ElementVariable string
+		Len             int
+		I               string
+		Variable        string
+		Data            any
+		Template        string
+	}{
+		Type:            b.tm.TypeName(b.fieldType.Elem()),
+		ElementVariable: variable,
+		Len:             b.fieldType.Len(),
+		I:               i,
+		Variable:        "(*" + variable + ")[" + i + "]",
+		Data:            elementData,
+		Template:        elementTreeName,
+	}
 }

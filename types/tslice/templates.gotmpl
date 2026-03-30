@@ -7,13 +7,28 @@ n += l
 {{- if gt .Data.ConstSize 1 -}}
 n += l * {{ .Data.ConstSize}}
 {{- end -}}
+{{- if .Data.Template }}
+for _, {{ .Data.Variable }} := range {{ .Variable }} {
+    {{ template .Data.Template .Data }}
+}
+{{- end -}}
+{{- end -}}
+
+{{- define "marshal" -}}
+helpers.UInt64Marshal(uint64(len({{ .Variable }})), b, &o)
 for _, {{ .Data.Variable }} := range {{ .Variable }} {
     {{ template .Data.Template .Data }}
 }
 {{- end -}}
 
-{{- define "marshal" -}}
-{{- end -}}
-
 {{- define "unmarshal" -}}
+var l uint64
+helpers.UInt64Unmarshal(&l, b, &o)
+if l > 0 {
+    {{ .Variable }} = make([]{{ .Data.Type }}, l)
+    {{ .Data.ElementVariable }} := &{{ .Variable }}
+    for {{ .Data.I }} := range l {
+        {{ template .Data.Template .Data }}
+    }
+}
 {{- end -}}

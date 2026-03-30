@@ -101,7 +101,7 @@ func (b Builder) UnmarshalCode(varIndex *uint64) (map[string]*parse.Tree, any) {
 		ElementVariable: variable,
 		Len:             b.fieldType.Len(),
 		I:               i,
-		Variable:        variable + "[" + i + "]",
+		Variable:        "(*" + variable + ")[" + i + "]",
 		Data:            elementData,
 		Template:        elementTreeName,
 	}
