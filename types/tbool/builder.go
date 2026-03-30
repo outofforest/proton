@@ -1,6 +1,18 @@
 package tbool
 
-import "reflect"
+import (
+	_ "embed"
+	"reflect"
+	"text/template/parse"
+
+	"github.com/samber/lo"
+)
+
+var (
+	//go:embed templates.gotmpl
+	tmpl string
+	t    = lo.Must(parse.Parse("", tmpl, "{{", "}}"))
+)
 
 // New returns new code builder.
 func New() Builder {
@@ -21,17 +33,11 @@ func (b Builder) ConstantSize() uint64 {
 }
 
 // MarshalCode returns code template marshaling the data.
-func (b Builder) MarshalCode(_ *uint64) string {
-	return `if {{ . }} {
-	b[o] = 0x01
-} else {
-	b[o] = 0x00
-}
-o++`
+func (b Builder) MarshalCode(_ *uint64) *parse.Tree {
+	return t["marshal"]
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
-func (b Builder) UnmarshalCode(_ *uint64) string {
-	return `{{ . }} = b[o] != 0x00
-o++`
+func (b Builder) UnmarshalCode(_ *uint64) *parse.Tree {
+	return t["unmarshal"]
 }

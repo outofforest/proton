@@ -1,10 +1,20 @@
 package tsliceint8
 
 import (
+	_ "embed"
 	"fmt"
 	"reflect"
+	"text/template/parse"
+
+	"github.com/samber/lo"
 
 	"github.com/outofforest/proton/types"
+)
+
+var (
+	//go:embed templates.gotmpl
+	tmpl string
+	t    = lo.Must(parse.Parse("", tmpl, "{{", "}}"))
 )
 
 // New returns new code builder.

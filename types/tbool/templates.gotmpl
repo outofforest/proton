@@ -1,0 +1,13 @@
+{{- define "marshal" -}}
+if {{ .Variable }} {
+    b[o] = 0x01
+} else {
+    b[o] = 0x00
+}
+o++
+{{- end -}}
+
+{{- define "unmarshal" -}}
+{{ .Variable }} = b[o] != 0x00
+o++
+{{- end -}}
