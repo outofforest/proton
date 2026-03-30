@@ -33,10 +33,10 @@ func (b Builder) ConstantSize() uint64 {
 	return uint64(b.fieldType.Len()) * b.elementBuilder.ConstantSize()
 }
 
-// SizeCodeTemplate returns code template computing the required size of buffer
+// SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
-func (b Builder) SizeCodeTemplate(varIndex *uint64) (string, bool) {
-	elementTpl, elementOK := b.elementBuilder.SizeCodeTemplate(varIndex)
+func (b Builder) SizeCode(varIndex *uint64) (string, bool) {
+	elementTpl, elementOK := b.elementBuilder.SizeCode(varIndex)
 	if !elementOK {
 		return "", false
 	}
@@ -52,9 +52,9 @@ func (b Builder) SizeCodeTemplate(varIndex *uint64) (string, bool) {
 	return code, true
 }
 
-// MarshalCodeTemplate returns code template marshaling the data.
-func (b Builder) MarshalCodeTemplate(varIndex *uint64) string {
-	elementTpl := b.elementBuilder.MarshalCodeTemplate(varIndex)
+// MarshalCode returns code template marshaling the data.
+func (b Builder) MarshalCode(varIndex *uint64) string {
+	elementTpl := b.elementBuilder.MarshalCode(varIndex)
 
 	av := types.Var("av", varIndex)
 	code := fmt.Sprintf("for _, %s := range {{ . }} {\n", av)
@@ -68,9 +68,9 @@ func (b Builder) MarshalCodeTemplate(varIndex *uint64) string {
 	return code
 }
 
-// UnmarshalCodeTemplate returns code template unmarshaling the data.
-func (b Builder) UnmarshalCodeTemplate(varIndex *uint64) string {
-	elementTpl := b.elementBuilder.UnmarshalCodeTemplate(varIndex)
+// UnmarshalCode returns code template unmarshaling the data.
+func (b Builder) UnmarshalCode(varIndex *uint64) string {
+	elementTpl := b.elementBuilder.UnmarshalCode(varIndex)
 
 	i := types.Var("i", varIndex)
 	code := fmt.Sprintf("for %[1]s := range %[2]d {\n", i, b.fieldType.Len())

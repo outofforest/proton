@@ -31,14 +31,14 @@ func (b Builder) ConstantSize() uint64 {
 	return 1
 }
 
-// MarshalCodeTemplate returns code template marshaling the data.
-func (b Builder) MarshalCodeTemplate(_ *uint64) string {
+// MarshalCode returns code template marshaling the data.
+func (b Builder) MarshalCode(_ *uint64) string {
 	return `b[o] = byte({{ . }})
 o++`
 }
 
-// UnmarshalCodeTemplate returns code template unmarshaling the data.
-func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
+// UnmarshalCode returns code template unmarshaling the data.
+func (b Builder) UnmarshalCode(_ *uint64) string {
 	t := b.tm.TypeName(b.fieldType)
 	return fmt.Sprintf(`{{ . }} = %[1]s(b[o])
 o++`, t)

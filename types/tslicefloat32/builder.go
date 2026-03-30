@@ -31,16 +31,16 @@ func (b Builder) ConstantSize() uint64 {
 	return 1 // covers the first byte of length
 }
 
-// SizeCodeTemplate returns code template computing the required size of buffer
+// SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
-func (b Builder) SizeCodeTemplate(_ *uint64) (string, bool) {
+func (b Builder) SizeCode(_ *uint64) (string, bool) {
 	return `l := uint64(len({{ . }}))
 helpers.UInt64Size(l, &n)
 n += l * 4`, true
 }
 
-// MarshalCodeTemplate returns code template marshaling the data.
-func (b Builder) MarshalCodeTemplate(_ *uint64) string {
+// MarshalCode returns code template marshaling the data.
+func (b Builder) MarshalCode(_ *uint64) string {
 	code := `l := uint64(len({{ . }}))
 helpers.UInt64Marshal(l, b, &o)
 `
@@ -54,8 +54,8 @@ helpers.UInt64Marshal(l, b, &o)
 	return code
 }
 
-// UnmarshalCodeTemplate returns code template unmarshaling the data.
-func (b Builder) UnmarshalCodeTemplate(_ *uint64) string {
+// UnmarshalCode returns code template unmarshaling the data.
+func (b Builder) UnmarshalCode(_ *uint64) string {
 	code := `var l uint64
 helpers.UInt64Unmarshal(&l, b, &o)
 `

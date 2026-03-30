@@ -61,7 +61,7 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 			return err
 		}
 
-		marshalCode := builder.MarshalCodeTemplate(new(uint64))
+		marshalCode := builder.MarshalCode(new(uint64))
 
 		reflect := tm.Import("reflect")
 		_, _ = fmt.Fprintf(code, `	{

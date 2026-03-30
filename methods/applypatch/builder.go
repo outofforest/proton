@@ -54,7 +54,7 @@ func Build(cfg methods.Config, tm *types.TypeMap) []byte {
 			return err
 		}
 
-		marshalCode := builder.UnmarshalCodeTemplate(new(uint64))
+		marshalCode := builder.UnmarshalCode(new(uint64))
 
 		_, _ = fmt.Fprintf(code, `	{
 		// %[1]s
