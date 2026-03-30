@@ -1,15 +1,13 @@
 package tmap
 
 import (
-	"bytes"
 	_ "embed"
-	"fmt"
+	"maps"
 	"reflect"
 	"text/template/parse"
 
 	"github.com/samber/lo"
 
-	"github.com/outofforest/proton/helpers"
 	"github.com/outofforest/proton/types"
 )
 
@@ -62,115 +60,173 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCode(varIndex *uint64) (map[string]*parse.Tree, any) {
-	return t
-	code := `l := uint64(len({{ . }}))
-	helpers.UInt64Size(l, &n)
-`
-
-	constSize := b.keyBuilder.ConstantSize() + b.elementBuilder.ConstantSize()
-	if constSize > 0 {
-		code += fmt.Sprintf("n += l * %d", constSize)
+	keyTrees, keyData := b.keyBuilder.SizeCode(varIndex)
+	elementTrees, elementData := b.elementBuilder.SizeCode(varIndex)
+	trees := maps.Clone(t)
+	var keyTreeName, elementTreeName string
+	if keyTrees != nil {
+		keyTreeName = types.Var("tmpl", varIndex)
+		trees[keyTreeName] = keyTrees["size"]
+		for k, v := range keyTrees {
+			if k != "size" {
+				trees[k] = v
+			}
+		}
 	}
-
-	keyTpl, keyOK := b.keyBuilder.SizeCode(varIndex)
-	elementTpl, elementOK := b.elementBuilder.SizeCode(varIndex)
-
-	if keyOK || elementOK {
-		if constSize > 0 {
-			code += "\n"
+	if elementTrees != nil {
+		elementTreeName = types.Var("tmpl", varIndex)
+		trees[elementTreeName] = elementTrees["size"]
+		for k, v := range elementTrees {
+			if k != "size" {
+				trees[k] = v
+			}
 		}
-
-		mk := types.Var("mk", varIndex)
-		mv := types.Var("mv", varIndex)
-		switch {
-		case keyOK && elementOK:
-			code += fmt.Sprintf("for %[1]s, %[2]s := range {{ . }} {\n", mk, mv)
-		case keyOK:
-			code += fmt.Sprintf("for %s := range {{ . }} {\n", mk)
-		case elementOK:
-			code += fmt.Sprintf("for _, %s := range {{ . }} {\n", mv)
-		}
-
-		if keyOK {
-			b := &bytes.Buffer{}
-			helpers.Execute(b, keyTpl, mk)
-			code += types.AddIndent(b.String(), 1)
-		}
-		if keyOK && elementOK {
-			code += "\n"
-		}
-		if elementOK {
-			b := &bytes.Buffer{}
-			helpers.Execute(b, elementTpl, mv)
-			code += types.AddIndent(b.String(), 1)
-		}
-		code += "\n}"
 	}
-
-	return code, true
+	return t, struct {
+		ConstSize uint64
+		Key       struct {
+			Variable string
+			Data     any
+		}
+		Element struct {
+			Variable string
+			Data     any
+		}
+		KeyTemplate     string
+		ElementTemplate string
+	}{
+		ConstSize: b.keyBuilder.ConstantSize() + b.elementBuilder.ConstantSize(),
+		Key: struct {
+			Variable string
+			Data     any
+		}{
+			Variable: types.Var("mk", varIndex),
+			Data:     keyData,
+		},
+		Element: struct {
+			Variable string
+			Data     any
+		}{
+			Variable: types.Var("mv", varIndex),
+			Data:     elementData,
+		},
+		KeyTemplate:     keyTreeName,
+		ElementTemplate: elementTreeName,
+	}
 }
 
 // MarshalCode returns code template marshaling the data.
 func (b Builder) MarshalCode(varIndex *uint64) (map[string]*parse.Tree, any) {
-	return t
-	keyTpl := b.keyBuilder.MarshalCode(varIndex)
-	elementTpl := b.elementBuilder.MarshalCode(varIndex)
-
-	code := `helpers.UInt64Marshal(uint64(len({{ . }})), b, &o)
-`
-
-	mk := types.Var("mk", varIndex)
-	mv := types.Var("mv", varIndex)
-	code += fmt.Sprintf("for %[1]s, %[2]s := range {{ . }} {\n", mk, mv)
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, keyTpl, mk)
-	code += types.AddIndent(buf.String(), 1) + "\n"
-
-	buf = &bytes.Buffer{}
-	helpers.Execute(buf, elementTpl, mv)
-	code += types.AddIndent(buf.String(), 1) + "\n"
-
-	code += "}"
-
-	return code
+	keyTrees, keyData := b.keyBuilder.MarshalCode(varIndex)
+	elementTrees, elementData := b.elementBuilder.MarshalCode(varIndex)
+	trees := maps.Clone(t)
+	var keyTreeName, elementTreeName string
+	if keyTrees != nil {
+		keyTreeName = types.Var("tmpl", varIndex)
+		trees[keyTreeName] = keyTrees["marshal"]
+		for k, v := range keyTrees {
+			if k != "marshal" {
+				trees[k] = v
+			}
+		}
+	}
+	if elementTrees != nil {
+		elementTreeName = types.Var("tmpl", varIndex)
+		trees[elementTreeName] = elementTrees["marshal"]
+		for k, v := range elementTrees {
+			if k != "marshal" {
+				trees[k] = v
+			}
+		}
+	}
+	return t, struct {
+		Key struct {
+			Variable string
+			Data     any
+		}
+		Element struct {
+			Variable string
+			Data     any
+		}
+		KeyTemplate     string
+		ElementTemplate string
+	}{
+		Key: struct {
+			Variable string
+			Data     any
+		}{
+			Variable: types.Var("mk", varIndex),
+			Data:     keyData,
+		},
+		Element: struct {
+			Variable string
+			Data     any
+		}{
+			Variable: types.Var("mv", varIndex),
+			Data:     elementData,
+		},
+		KeyTemplate:     keyTreeName,
+		ElementTemplate: elementTreeName,
+	}
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
 func (b Builder) UnmarshalCode(varIndex *uint64) (map[string]*parse.Tree, any) {
-	return t
-	keyTpl := b.keyBuilder.UnmarshalCode(varIndex)
-	elementTpl := b.elementBuilder.UnmarshalCode(varIndex)
-
-	code := `var l uint64
-helpers.UInt64Unmarshal(&l, b, &o)
-`
-
-	mk := types.Var("mk", varIndex)
-	mv := types.Var("mv", varIndex)
-
-	code += fmt.Sprintf(`if l > 0 {
-	{{ . }} = make(%[1]s, l)
-
-	var %[2]s %[4]s
-	var %[3]s %[5]s
-
-	for range l {
-`, b.tm.TypeName(b.fieldType), mk, mv, b.tm.TypeName(b.fieldType.Key()), b.tm.TypeName(b.fieldType.Elem()))
-
-	buf := &bytes.Buffer{}
-	helpers.Execute(buf, keyTpl, mk)
-	code += types.AddIndent(buf.String(), 2) + "\n"
-
-	buf = &bytes.Buffer{}
-	helpers.Execute(buf, elementTpl, mv)
-	code += types.AddIndent(buf.String(), 2) + "\n"
-
-	code += fmt.Sprintf("		{{ . }}[%[1]s] = %[2]s", mk, mv)
-
-	code += `
+	keyTrees, keyData := b.keyBuilder.UnmarshalCode(varIndex)
+	elementTrees, elementData := b.elementBuilder.UnmarshalCode(varIndex)
+	trees := maps.Clone(t)
+	var keyTreeName, elementTreeName string
+	if keyTrees != nil {
+		keyTreeName = types.Var("tmpl", varIndex)
+		trees[keyTreeName] = keyTrees["marshal"]
+		for k, v := range keyTrees {
+			if k != "marshal" {
+				trees[k] = v
+			}
+		}
 	}
-}`
-
-	return code
+	if elementTrees != nil {
+		elementTreeName = types.Var("tmpl", varIndex)
+		trees[elementTreeName] = elementTrees["marshal"]
+		for k, v := range elementTrees {
+			if k != "marshal" {
+				trees[k] = v
+			}
+		}
+	}
+	return t, struct {
+		Type string
+		Key  struct {
+			Variable string
+			Data     any
+		}
+		Element struct {
+			Variable string
+			Data     any
+		}
+		KeyType         string
+		ElementType     string
+		KeyTemplate     string
+		ElementTemplate string
+	}{
+		Type: b.tm.TypeName(b.fieldType),
+		Key: struct {
+			Variable string
+			Data     any
+		}{
+			Variable: types.Var("mk", varIndex),
+			Data:     keyData,
+		},
+		Element: struct {
+			Variable string
+			Data     any
+		}{
+			Variable: types.Var("mv", varIndex),
+			Data:     elementData,
+		},
+		KeyType:         b.tm.TypeName(b.fieldType.Key()),
+		ElementType:     b.tm.TypeName(b.fieldType.Elem()),
+		KeyTemplate:     keyTreeName,
+		ElementTemplate: elementTreeName,
+	}
 }

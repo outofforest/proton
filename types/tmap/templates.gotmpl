@@ -1,8 +1,46 @@
 {{- define "size" -}}
+l := uint64(len({{ . }}))
+helpers.UInt64Size(l, &n)
+{{- if .Data.ConstSize -}}
+n += l * {{ .Data.ConstSize }}
+{{- end -}}
+{{- if and .Data.KeyTemplate .Data.ElementTemplate -}}
+    for {{ .Data.Key.Variable }}, {{ .Data.Element.Variable }} := range {{ .Variable }} {
+{{- end -}}
+{{- if and .Data.KeyTemplate not .Data.ElementTemplate -}}
+    for {{ .Data.Key.Variable }} := range {{ .Variable }} {
+{{- end -}}
+{{- if and not .Data.KeyTemplate .Data.ElementTemplate -}}
+    for _, {{ .Data.Element.Variable }} := range {{ .Variable }} {
+{{- end -}}
+{{- if .Data.KeyTemplate -}}
+        {{ template .Data.KeyTemplate .Data.Key }}
+{{- end -}}
+{{- if .Data.ElementTemplate -}}
+    {{ template .Data.ElementTemplate .Data.Element }}
+{{- end -}}
+    }
 {{- end -}}
 
 {{- define "marshal" -}}
+helpers.UInt64Marshal(uint64(len({{ .Variable }})), b, &o)
+for {{ .Data.Key.Variable }}, {{ .Data.ElementVariable }} := range {{ .Variable }} {
+    {{ template .Data.KeyTemplate .Data.Key }}
+    {{ template .Data.ElementTemplate .Data.Element }}
+}
 {{- end -}}
 
 {{- define "unmarshal" -}}
+var l uint64
+helpers.UInt64Unmarshal(&l, b, &o)
+if l > 0 {
+    {{ .Variable }} = make({{ .Data.Type }}, l)
+    var {{ .Data.Key.Variable }} {{ .Data.KeyType }}
+    var {{ .Data.Element.Variable }} {{ .Data.ElementType }}
+    for range l {
+        {{ template .Data.KeyTemplate .Data.Key }}
+        {{ template .Data.ElementTemplate .Data.Element }}
+        {{ .Variable }}[{{ .Data.Key.Variable }}] = {{ .Data.Element.Variable }}
+    }
+}
 {{- end -}}
