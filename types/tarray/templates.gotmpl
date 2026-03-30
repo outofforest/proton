@@ -1,4 +1,7 @@
 {{- define "size" -}}
+for _, {{ .Data.Variable }} := range {{ .Variable }} {
+    {{ template .Data.Template .Data }}
+}
 {{- end -}}
 
 {{- define "marshal" -}}

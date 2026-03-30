@@ -5,6 +5,7 @@ import (
 	_ "embed"
 	"fmt"
 	"reflect"
+	"text/template"
 	"text/template/parse"
 
 	"github.com/samber/lo"
@@ -45,11 +46,20 @@ func (b Builder) ConstantSize() uint64 {
 
 // SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
-func (b Builder) SizeCode(varIndex *uint64) (*parse.Tree, any) {
-	return t["size"]
-	elementTpl, elementOK := b.elementBuilder.SizeCode(varIndex)
-	if !elementOK {
-		return "", false
+func (b Builder) SizeCode(varIndex *uint64) (map[string]*parse.Tree, any) {
+	elementTree, elementData := b.elementBuilder.SizeCode(varIndex)
+	if elementData == nil {
+		return nil, nil
+	}
+
+	return t["size"], struct {
+		Variable string
+		Data     any
+		Template string
+	}{
+		Variable: types.Var("av", varIndex),
+		Data:     elementData,
+		Template: types.Var("tmpl", varIndex),
 	}
 
 	av := types.Var("av", varIndex)
@@ -64,7 +74,7 @@ func (b Builder) SizeCode(varIndex *uint64) (*parse.Tree, any) {
 }
 
 // MarshalCode returns code template marshaling the data.
-func (b Builder) MarshalCode(varIndex *uint64) (*parse.Tree, any) {
+func (b Builder) MarshalCode(varIndex *uint64) (map[string]*parse.Tree, any) {
 	return t["marshal"]
 	elementTpl := b.elementBuilder.MarshalCode(varIndex)
 
@@ -81,7 +91,7 @@ func (b Builder) MarshalCode(varIndex *uint64) (*parse.Tree, any) {
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
-func (b Builder) UnmarshalCode(varIndex *uint64) (*parse.Tree, any) {
+func (b Builder) UnmarshalCode(varIndex *uint64) (map[string]*parse.Tree, any) {
 	return t["unmarshal"]
 	elementTpl := b.elementBuilder.UnmarshalCode(varIndex)
 

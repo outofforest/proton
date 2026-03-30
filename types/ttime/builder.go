@@ -43,8 +43,8 @@ func (b Builder) ConstantSize() uint64 {
 
 // SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
-func (b Builder) SizeCode(_ *uint64) (*parse.Tree, any) {
-	return t["size"], struct {
+func (b Builder) SizeCode(_ *uint64) (map[string]*parse.Tree, any) {
+	return t, struct {
 		SecondsOffset int64
 	}{
 		SecondsOffset: secondsOffset,
@@ -52,8 +52,8 @@ func (b Builder) SizeCode(_ *uint64) (*parse.Tree, any) {
 }
 
 // MarshalCode returns code template marshaling the data.
-func (b Builder) MarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["marshal"], struct {
+func (b Builder) MarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
+	return t, struct {
 		SecondsOffset int64
 	}{
 		SecondsOffset: secondsOffset,
@@ -61,8 +61,8 @@ func (b Builder) MarshalCode(_ *uint64) (*parse.Tree, any) {
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
-func (b Builder) UnmarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["unmarshal"], struct {
+func (b Builder) UnmarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
+	return t, struct {
 		Time          string
 		SecondsOffset int64
 	}{

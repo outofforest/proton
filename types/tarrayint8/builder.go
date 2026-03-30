@@ -42,16 +42,16 @@ func (b Builder) ConstantSize() uint64 {
 }
 
 // MarshalCode returns code template marshaling the data.
-func (b Builder) MarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["marshal"]
+func (b Builder) MarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
+	return t
 	unsafe := b.tm.Import("unsafe")
 	return fmt.Sprintf(`copy(b[o:o+%[2]d], %[1]s.Slice((*byte)(%[1]s.Pointer(&{{ . }}[0])), %[2]d))
 o += %[2]d`, unsafe, b.fieldType.Len())
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
-func (b Builder) UnmarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["unmarshal"]
+func (b Builder) UnmarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
+	return t
 	unsafe := b.tm.Import("unsafe")
 	return fmt.Sprintf(`copy(%[1]s.Slice((*byte)(%[1]s.Pointer(&{{ . }}[0])), %[2]d), b[o:o+%[2]d])
 o += %[2]d`, unsafe, b.fieldType.Len())

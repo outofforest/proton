@@ -5,6 +5,7 @@ import (
 	"path"
 	"reflect"
 	"strconv"
+	"text/template/parse"
 
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -14,9 +15,9 @@ import (
 type BuilderFactory interface {
 	Dependencies() []reflect.Type
 	ConstantSize() uint64
-	SizeCode(varIndex *uint64) (string, bool)
-	MarshalCode(varIndex *uint64) string
-	UnmarshalCode(varIndex *uint64) string
+	SizeCode(varIndex *uint64) (map[string]*parse.Tree, any)
+	MarshalCode(varIndex *uint64) (map[string]*parse.Tree, any)
+	UnmarshalCode(varIndex *uint64) (map[string]*parse.Tree, any)
 }
 
 // BuilderFactoryConstant is the relaxed interface implemented by builders representing types requiring only
@@ -24,17 +25,17 @@ type BuilderFactory interface {
 type BuilderFactoryConstant interface {
 	Dependencies() []reflect.Type
 	ConstantSize() uint64
-	MarshalCode(varIndex *uint64) string
-	UnmarshalCode(varIndex *uint64) string
+	MarshalCode(varIndex *uint64) (map[string]*parse.Tree, any)
+	UnmarshalCode(varIndex *uint64) (map[string]*parse.Tree, any)
 }
 
 // BuilderFactoryNonConstant is the relaxed interface implemented by builders representing types requiring only
 // non-constant size of buffer.
 type BuilderFactoryNonConstant interface {
 	Dependencies() []reflect.Type
-	SizeCode(varIndex *uint64) string
-	MarshalCode(varIndex *uint64) string
-	UnmarshalCode(varIndex *uint64) string
+	SizeCode(varIndex *uint64) (map[string]*parse.Tree, any)
+	MarshalCode(varIndex *uint64) (map[string]*parse.Tree, any)
+	UnmarshalCode(varIndex *uint64) (map[string]*parse.Tree, any)
 }
 
 // TypeMap implements type mapping required by go code.

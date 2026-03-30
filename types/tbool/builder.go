@@ -33,11 +33,11 @@ func (b Builder) ConstantSize() uint64 {
 }
 
 // MarshalCode returns code template marshaling the data.
-func (b Builder) MarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["marshal"], nil
+func (b Builder) MarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
+	return t, nil
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
-func (b Builder) UnmarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["unmarshal"], nil
+func (b Builder) UnmarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
+	return t, nil
 }

@@ -41,8 +41,8 @@ func (b Builder) ConstantSize() uint64 {
 }
 
 // MarshalCode returns code template marshaling the data.
-func (b Builder) MarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["marshal"], struct {
+func (b Builder) MarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
+	return t, struct {
 		Unsafe string
 		Type   string
 	}{
@@ -52,8 +52,8 @@ func (b Builder) MarshalCode(_ *uint64) (*parse.Tree, any) {
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
-func (b Builder) UnmarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["unmarshal"], struct {
+func (b Builder) UnmarshalCode(_ *uint64) (map[string]*parse.Tree, any) {
+	return t, struct {
 		Unsafe string
 		Type   string
 	}{
