@@ -1,0 +1,16 @@
+func {{ .FuncName }}(m, mSrc *{{ .TypeName }}) bool {
+{{- range .Bools -}}
+    // {{ .Field }}
+    if m.{{ .Field }} != mSrc.{{ .Field }} {
+        return true
+    }
+{{- end -}}
+{{ $reflect := .Reflect }}
+{{- range .Templates -}}
+    // {{ .Field }}
+    if !{{ $reflect }}.DeepEqual(m.{{ .Field }}, mSrc.{{ .Field }}) {
+        return true
+    }
+{{- end -}}
+    return false
+}

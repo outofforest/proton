@@ -2,8 +2,9 @@ package ispatchneeded
 
 import (
 	"bytes"
-	"fmt"
+	_ "embed"
 	"reflect"
+	"text/template"
 
 	"github.com/samber/lo"
 
@@ -12,70 +13,57 @@ import (
 	"github.com/outofforest/proton/types"
 )
 
-const (
-	header = `func {{ .FuncName}}(m, mSrc *{{ .TypeName }}) bool {
-`
-)
+//go:embed template.gotmpl
+var tmpl string
+
+type Bool struct {
+	Field string
+}
+
+type Template struct {
+	Field string
+}
 
 // Build generates code of Marshal method.
 func Build(cfg methods.Config, tm *types.TypeMap) []byte {
-	code := &bytes.Buffer{}
+	methodName := "isPatchNeeded"
+	if len(cfg.IgnoreFields) > 0 {
+		methodName += "i"
+	}
 
-	boolOffset := methods.BitMapLength(cfg.NumOfFields)
+	data := struct {
+		Reflect   string
+		FuncName  string
+		TypeName  string
+		Bools     []Bool
+		Templates []Template
+	}{
+		Reflect:  tm.Import("reflect"),
+		FuncName: tm.VarName(cfg.Type, methodName),
+		TypeName: tm.TypeName(cfg.Type),
+	}
 
-	var boolIndex uint64
 	lo.Must0(helpers.ForEachField(cfg.Type, func(field reflect.StructField) error {
 		if cfg.IgnoreFields[field.Name] {
 			return nil
 		}
 
 		if field.Type.Kind() == reflect.Bool {
-			byteIndex, bitIndex := methods.BitMapPosition(boolIndex)
-			boolIndex++
-
-			_, _ = fmt.Fprintf(code, `	{
-		// %[1]s
-
-		if m.%[1]s != mSrc.%[1]s {
-			return true
-		}
-	}
-`, field.Name, boolOffset+byteIndex, 0x01<<bitIndex, 0xFF^(0x01<<bitIndex))
+			data.Bools = append(data.Bools, Bool{
+				Field: field.Name,
+			})
 			return nil
 		}
 
-		reflect := tm.Import("reflect")
-		_, _ = fmt.Fprintf(code, `	{
-		// %[2]s
-
-		if !%[1]s.DeepEqual(m.%[2]s, mSrc.%[2]s) {
-			return true
-		}
-`, reflect, field.Name)
-
-		_, _ = fmt.Fprint(code, "\n	}\n")
-
+		data.Templates = append(data.Templates, Template{
+			Field: field.Name,
+		})
 		return nil
 	}))
 
-	methodName := "isPatchNeeded"
-	if len(cfg.IgnoreFields) > 0 {
-		methodName += "i"
-	}
+	funcTemplate := lo.Must(template.New("").Parse(tmpl))
 
 	b := &bytes.Buffer{}
-	helpers.Execute(b, header, struct {
-		FuncName string
-		TypeName string
-	}{
-		FuncName: tm.VarName(cfg.Type, methodName),
-		TypeName: tm.TypeName(cfg.Type),
-	})
-
-	if code.Len() > 0 {
-		lo.Must(code.WriteTo(b))
-	}
-
-	_, _ = fmt.Fprint(b, "\n	return false\n}")
+	lo.Must0(funcTemplate.Execute(b, data))
 	return b.Bytes()
 }
