@@ -22,4 +22,5 @@ func {{ .FuncName }}(m, mSrc *{{ .TypeName }}, b []byte) uint64 {
         {{ template .Name . }}
     }
 {{- end -}}
+    return o
 }

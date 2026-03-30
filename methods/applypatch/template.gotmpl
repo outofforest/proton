@@ -16,4 +16,5 @@ func {{ .FuncName }}(m *{{ .TypeName }}, b []byte) uint64 {
         {{ template .Name . }}
     }
 {{- end -}}
+    return o
 }
