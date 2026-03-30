@@ -1,8 +1,11 @@
 {{- define "size" -}}
+helpers.UInt32Size({{ .Variable }}, &n)
 {{- end -}}
 
 {{- define "marshal" -}}
+helpers.UInt32Marshal({{ .Variable }}, b, &o)
 {{- end -}}
 
 {{- define "unmarshal" -}}
+helpers.UInt32Unmarshal(&{{ .Variable }}, b, &o)
 {{- end -}}

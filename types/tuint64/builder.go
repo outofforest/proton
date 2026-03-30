@@ -35,18 +35,15 @@ func (b Builder) ConstantSize() uint64 {
 // SizeCode returns code template computing the required size of buffer
 // (above constant size) required to marshal the data.
 func (b Builder) SizeCode(_ *uint64) (*parse.Tree, any) {
-	return t["size"]
-	return `helpers.UInt64Size({{ . }}, &n)`, true
+	return t["size"], nil
 }
 
 // MarshalCode returns code template marshaling the data.
 func (b Builder) MarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["marshal"]
-	return `helpers.UInt64Marshal({{ . }}, b, &o)`
+	return t["marshal"], nil
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
 func (b Builder) UnmarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["unmarshal"]
-	return `helpers.UInt64Unmarshal(&{{ . }}, b, &o)`
+	return t["unmarshal"], nil
 }

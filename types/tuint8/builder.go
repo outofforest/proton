@@ -2,7 +2,6 @@ package tuint8
 
 import (
 	_ "embed"
-	"fmt"
 	"reflect"
 	"text/template/parse"
 
@@ -43,24 +42,18 @@ func (b Builder) ConstantSize() uint64 {
 
 // MarshalCode returns code template marshaling the data.
 func (b Builder) MarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["marshal"]
-	t := b.tm.TypeName(b.fieldType)
-	if t == "uint8" {
-		return `b[o] = {{ . }}
-o++`
+	return t["marshal"], struct {
+		Type string
+	}{
+		Type: b.tm.TypeName(b.fieldType),
 	}
-	return `b[o] = byte({{ . }})
-o++`
 }
 
 // UnmarshalCode returns code template unmarshaling the data.
 func (b Builder) UnmarshalCode(_ *uint64) (*parse.Tree, any) {
-	return t["unmarshal"]
-	t := b.tm.TypeName(b.fieldType)
-	if t == "uint8" {
-		return `{{ . }} = b[o]
-o++`
+	return t["unmarshal"], struct {
+		Type string
+	}{
+		Type: b.tm.TypeName(b.fieldType),
 	}
-	return fmt.Sprintf(`{{ . }} = %[1]s(b[o])
-o++`, t)
 }

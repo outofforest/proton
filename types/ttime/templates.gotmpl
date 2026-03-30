@@ -1,8 +1,17 @@
 {{- define "size" -}}
+helpers.Int64Size({{ .Variable }}.Unix() - {{ .Data.SecondsOffset }}, &n)
+helpers.UInt32Size(uint32({{ .Variable }}.Nanosecond()), &n)
 {{- end -}}
 
 {{- define "marshal" -}}
+helpers.Int64Marshal({{ .Variable }}.Unix() - {{ .Data.SecondsOffset }}, b, &o)
+helpers.UInt32Marshal(uint32({{ .Variable }}.Nanosecond()), b, &o)
 {{- end -}}
 
 {{- define "unmarshal" -}}
+var seconds int64
+var nanoseconds uint32
+helpers.Int64Unmarshal(&seconds, b, &o)
+helpers.UInt32Unmarshal(&nanoseconds, b, &o)
+{{ .Variable }} = {{ .Data.Time }}.Unix(seconds + {{ .Data.SecondsOffset }}, int64(nanoseconds))
 {{- end -}}

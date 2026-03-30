@@ -1,8 +1,17 @@
-{{- define "size" -}}
-{{- end -}}
-
 {{- define "marshal" -}}
+{{- if eq .Data.Type "uint8" -}}
+b[o] = {{ .Variable }}
+{{- else -}}
+b[o] = byte({{ .Variable }})
+{{- end -}}
+o++
 {{- end -}}
 
 {{- define "unmarshal" -}}
+{{- if eq .Data.Type "uint8" -}}
+{{ .Variable }} = b[o]
+{{- else -}}
+{{ .Variable }} = {{ .Data.Type }}(b[o])
+{{- end -}}
+o++
 {{- end -}}
